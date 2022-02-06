@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+## Data Analysis, summer 2022
 
-You can use the [editor on GitHub](https://github.com/flee-group/vu_datenanalyse/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+**Instructors** Gabriel Singer, Matthew Talluto, Karin König
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+**Meeting location** Virtual
 
-### Markdown
+### Course description
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+TBD
 
-```markdown
-Syntax highlighted code block
+### Learning objectives
 
-# Header 1
-## Header 2
-### Header 3
+TBD
 
-- Bulleted
-- List
+### Schedule
 
-1. Numbered
-2. List
+Morning sessions will be from 9-12, afternoon from 13-16.
 
-**Bold** and _Italic_ and `Code` text
+|Date  |Lecture Topics|Exercises |Instructor|
+| :--- |  :---|   :---    | :--- |
+|21.02 morning|Intro<br/>R Basics<br/>Populations & Samples<br/>Central Limit Theorem|R Base Graphics<br/>Programming basics<br/>Sampling|Matt|
+|21.02 afternoon|Confidence Intervals<br/>Significance tests<br/>Type I & II Errors<br/>Univariate Tests| |Gabriel| 
+|22.02 morning|Data structures<br/>Visualisation basics<br/>Correlation & Regression|Programming II<br/>(Reshape, vectorisation)<br/>Linear models|Matt|
+|22.02 afternoon|1- and 2-way Analysis of variance<br/>ANCOVA||Gabriel|
+|23.02 morning|Multiple regression<br/>Model selection||Gabriel|
+|23.02 afternoon|**Beyond normality**<br/>(Categorical data, counts, proportions)<br/>Bootstrapping & randomisation||Matt|
+|24.02|Multivariate statistics<br/>PCA, CCA, RDA, DCCA|In Canoco|Karin|
+|25.02|Multivariate statistics<br/>Distance-based|In R|Gabriel|
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/flee-group/vu_datenanalyse/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### Course materials
