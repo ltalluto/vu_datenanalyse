@@ -1,0 +1,333 @@
+---
+title: "Introduction to R"
+author: "Matthew Talluto"
+date: "11.02.2022"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: ../assets/rmd_style.css
+  beamer_presentation: default
+---
+
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+library(knitr)
+library(kableExtra)
+```
+
+
+## Course Introduction
+
+* We will cover two major branches of stats
+* **Descriptive** statistics seeks to summarize natural variation in some variable/quantity of interest
+   - e.g., What is the typical summer temperature of Alpine lakes in Tirol? 
+   - How much variability is there in the temperature?
+* **Inferential** statistics uses the laws of probability, combined with observations, to test hypotheses
+   - Lakes from one region/ecozone are colder than lakes from another.
+
+### Grading
+* Each half-day will be split between lecture and exercises.
+* Your grade in the course will be based on completion of the exercises and submission of a short written protocol each day.
+
+
+## Course Schedule
+<div class="left lt">
+
+![](../img/sched1.png){width=80%}
+</div>
+
+<div class="right rt">
+![](../img/sched2.png){width=80%}
+</div>
+
+
+## Introduction to R
+
+* `R` is two things:
+   1. A statistical programming language
+   2. A software package implementing the R language (available at [https://cran.r-project.org/](https://cran.r-project.org/))
+* `RStudio` is a comprehensive working environment for R ([https://rstudio.com/products/rstudio/](https://rstudio.com/products/rstudio/))
+   - An editor, for writing R programs
+   - Tools to help you write and analyse code
+   - An R console and interpreter
+
+
+### Helpful vocabulary
+
+* **console**: A window where you can type commands and view (text) results and output
+* **interpreter**: Software that translates R commands into instructions for your computer in real time
+* **script**: a text file containing a program, or series of commands
+   - can be run **interactively** (sending commands one at a time to the console)
+   - or in **batch mode** (all commands run, one after the other)
+* **working directory**: location on your computer where R will search for files, data, etc.
+
+
+## Recommendations
+* Create an RStudio project to organize your work for the course (File => New Project).
+* Store all files in the project folder (your project will be **self-contained**).
+* Save related commands together in a script.
+* Annotate your code with comments. Write more comments than you need.
+   - In R, anything after the `#` character is a comment and will be ignored by the interpreter.
+* (For the adventurous) Write your protocols using **Rmarkdown** (combines text, code, output, and graphics).
+   - There will be an example during the exercises.
+   
+   
+   
+   
+
+## Programming in R: Variables
+
+<div class="left lt">
+* A **variable** is a name that points to some data. 
+  - Variable names can contain lower- or upper-case letters, numbers, and the `_` symbol.
+  - Names must start with letters and (when possible) should be descriptive
+* Variables are given values by **assignment** using either the `=` or `<-` symbol
+</div>
+
+<div class="right rt">
+
+```{r error=TRUE}
+# Comments in R start with the # symbol; anything after # will not be executed
+# Comments are a useful way to annotate your code so you know what is happening
+
+# Legal variable names
+x = 1
+y0 = 5
+time_of_day = "20:15"
+dayOfWeek <- "Monday"
+
+# error
+0y = 5
+my name = "Matt"
+```
+</div>
+
+
+## Programming in R: Data types
+
+* All variables have a type
+* `numeric`: integers and floating-point (decimal) numbers
+* `logical`: yes/no, true/false data; in R represented by the special values `TRUE` and `FALSE`
+* `character`: strings, text
+* `factor`: special variable type for categorical (nominal & ordinal) data
+
+
+
+## Programming in R: Operators
+
+<div class="left lt">
+* We use **operators** to perform computations on variables and constants
+* Common examples:
+   - Assignment: `=`, `<-`
+   - Math: `+`, `-`, `*`, `/`, `^`, `%%`
+   - Comparison: `==`, `!=`, `<`, `>`, `<=`, `>=`
+   - Logical: `&`, `|`, `!`
+   - Precedence: `()`
+
+```{r echo = FALSE, results='asis'}
+mat_and = matrix(c(F,F,F,T), nrow=2, dimnames=list(c("f", "t"), c("f", "t")))
+kable(mat_and, caption = "Logical & (and)")
+```
+
+```{r echo = FALSE, results='asis'}
+mat_and = matrix(c(F,T,T,T), nrow=2, dimnames=list(c("f", "t"), c("f", "t")))
+kable(mat_and, caption = "Logical | (or)")
+```
+
+
+</div>
+
+<div class="right rt">
+
+```{r}
+# assignment
+x = 5
+
+# math
+x + 2
+(3 + x) * 2
+3^2
+10 %% 3
+
+# comparison
+x < 7
+x == 5.1
+
+# logical
+TRUE & TRUE
+TRUE & FALSE
+FALSE & FALSE
+
+TRUE | FALSE
+x == 3 | x > 4
+
+!TRUE
+```
+
+</div>
+
+
+
+
+
+## Programming in R: Functions
+
+<div class="left lt">
+* **Functions** take a series of **arguments** (which can be variables or constants).
+* The function performs computations on the arguments.
+* Functions can **return** a result, have **side-effects**, or both.
+
+**Mathematical & functions**
+
+* `sin()`, `cos()`
+* `log()`, `exp()`, `sqrt()`
+
+Get help on a function with `?` or `help()`, for example: `?log` or `help(log)`.
+If you don´t know a function´s name, you can search for a (likely/suspected) string in its name with `??`.
+
+
+</div>
+
+<div class="right rt">
+
+```{r}
+x = 5
+
+# The print() function takes one or more arguments, in this case the variable x
+# It returns no value, but has the side effect of printing the value of x to the
+# screen
+print(x)
+
+# compute the natural logarithm of x, store it in y, then print the result
+y = log(x)
+print(y)
+
+# functions can take multiple arguments, and arguments can be named; in this case,
+# we change the base of the logarithm
+log(x, base = 10)
+```
+
+</div>
+
+
+
+
+
+## Programming in R: Basic data structures
+
+<div class="left lt">
+* A **data structure** is a way of organizing multiple pieces of data into a single variable
+* Can get very complex; we will start with the two most important types
+* A `vector` holds one or more values of a single data type
+    - You can test both data types and data structures using `is` functions
+    - You can **coerce** one data type or data structure to another using `as` functions
+    - You can **subset** vectors `[]`
+
+</div>
+
+<div class="right rt">
+
+```{r}
+## Creating vectors
+(one_to_ten = 1:10)
+
+five_numbers = c(3, 2, 8.6, 4, 9.75)
+
+# Get part of a vector using []
+five_numbers[3]
+five_numbers[3:5]
+five_numbers[c(1,4)]
+
+## get vector length
+length(five_numbers)
+
+## sequences and repeats
+seq(1, 5, 0.4)
+rep(0, 3)
+
+## testing and coersion
+x = 5.5
+is.vector(x) ## even a single value is a vector in R
+is.integer(x)
+as.integer(x)
+
+
+```
+
+</div>
+
+
+## Programming in R: Working with data frames
+
+<div class="left lt">
+* A `data.frame` holds tabular data
+   - Each `row` of a data frame is a single **case** (i.e., an observation)
+   - Each `column` of a data frame is a single variable (i.e., a `vector`, all the same data type)
+* `head` shows the first few rows of a data frame
+
+</div>
+
+<div class="right rt">
+   
+```{r, results = "hide"}
+## Load a built-in data frame named 'iris'
+data(iris)
+head(iris)
+```
+
+```{r echo = FALSE, results = 'asis'}
+kable_styling(kable(head(iris)), font_size = 12)
+```
+
+
+
+</div>
+
+
+## Programming in R: Working with data frames
+
+<div class="left lt">
+
+* `str` gives you a summary of the **str**ucture of the data
+* Access an individual variable using `$` or `[]`
+* `nrow`, `ncol`, `dim` give you dimensions of the data frame
+* `View` shows the data frame in a graphical window
+
+
+
+</div>
+
+<div class="right rt">
+
+
+```{r}
+str(iris)
+
+## data frame dimensions
+nrow(iris)
+ncol(iris)
+dim(iris)
+```
+
+```{r, results = "hide"}
+# accessing variables
+## all of these are identical
+iris$Sepal.Length
+iris[,1] ## [,1] means get every row in the first column
+iris[,"Sepal.Length"] ## another way to access by name
+```
+```{r echo = FALSE, results = 'asis'}
+kable_styling(kable(matrix(iris$Sepal.Length, nrow=10)), font_size = 12)
+```
+
+</div>
+
+
+
+
+
+
+
