@@ -4,11 +4,18 @@
 
 ### Course description
 
-TBD
+This course covers various univariate and multivariate statistical analyses appropriate for common applied problems in ecology. We discuss the theoretical foundations of the analyses, assumptions, applications. We also introduce data preparation and visualisation. Via worked examples, students learn to perform analyses in R, as well as in Canoco (for some multivariate analyses). 
 
 ### Learning objectives
+Following the course, students should be able to:
 
-TBD
+* Describe common univariate statistical tests, including the hypotheses tested and assumptions required.
+* Implement tests in R, including reading and preparing data.
+* Interpret the output of tests, draw conclusions in terms of the ecological hypotheses being tested, and describe the results in plain language.
+* Use visualisation tools in R for exploratory analysis and final presentation.
+* Decide when the structure of the data requires multivariate analysis, and choose an appropriate method.
+* Apply multivariate statistics in R or Canoco.
+* Interpret (with the help of visualisation) multivariate analyses in terms of the original variables.
 
 ### Schedule
 
