@@ -1,4 +1,4 @@
-**Instructors** Gabriel Singer, Matthew Talluto, Karin König
+**Instructors** Gabriel Singer, Matthew Talluto, Karin Koinig
 
 **Meeting location** Virtual
 
