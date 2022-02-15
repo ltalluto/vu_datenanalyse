@@ -17,6 +17,9 @@ Following the course, students should be able to:
 * Apply multivariate statistics in R or Canoco.
 * Interpret (with the help of visualisation) multivariate analyses in terms of the original variables.
 
+### Assessment
+Students will be graded based on their participation during the exercise sessions (40%) and on a final group project and presentation (60%). Project details will be provided the first day of class. Note that attendence is mandatory.
+
 ### Schedule
 
 Morning sessions will be from 9-12, afternoon from 13-16.
@@ -27,7 +30,7 @@ Morning sessions will be from 9-12, afternoon from 13-16.
 |22.02 Tuesday|Data structures<br/>Visualisation basics<br/>Correlation & Regression<br/>Association|1- and 2-way Analysis of variance|Programming II<br/>(Reshape, vectorisation)<br/>Linear models|
 |23.02 Wednesday|Multiple regression<br/>ANCOVA<br/>Model selection|Models for counts, proportions<br/>Bootstrapping & randomisation|MLR<br/>Bootstrap t-test|
 |24.02 Thursday|Multivariate statistics I <br/><small>PCA, RDA</small>|Multivariate statistics II<br/><small>Distance-based methods</small>|Multivariate stats in R|
-|25.02|Multivariate statistics<br/><small>PCA, CCA, RDA, DCCA</small>||Multivariate stats in Canoco|
+|25.02 Friday|Multivariate statistics<br/><small>PCA, CCA, RDA, DCCA</small>||Multivariate stats in Canoco|
 
 
 
