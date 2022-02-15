@@ -41,3 +41,7 @@ vignettes/*.pdf
 *.Rproj
 
 *.DS_Store
+
+## ruby crap
+Gemfile*
+_site/*

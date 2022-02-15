@@ -21,16 +21,13 @@ Following the course, students should be able to:
 
 Morning sessions will be from 9-12, afternoon from 13-16.
 
-|Date  |Lecture Topics|Exercises |Instructor|
+|Date  |Morning Lecture|Afternoon Lecture|Exercises |
 | :--- |  :---|   :---    | :--- |
-|21.02 morning|• [Introduction to R](unit_1/1a_intro_r.html)<br/>• [Populations, samples, central tendency](unit_1/1b_population_samples.html)|R Base Graphics<br/>Programming basics<br/>Sampling|Matt|
-|21.02 afternoon|Confidence Intervals<br/>Significance tests<br/>Type I & II Errors<br/>Univariate Tests| |Gabriel| 
-|22.02 morning|Data structures<br/>Visualisation basics<br/>Correlation & Regression|Programming II<br/>(Reshape, vectorisation)<br/>Linear models|Matt|
-|22.02 afternoon|1- and 2-way Analysis of variance<br/>ANCOVA||Gabriel|
-|23.02 morning|Multiple regression<br/>Model selection||Gabriel|
-|23.02 afternoon|**Beyond normality**<br/>(Categorical data, counts, proportions)<br/>Bootstrapping & randomisation||Matt|
-|24.02|Multivariate statistics<br/>PCA, CCA, RDA, DCCA|In Canoco|Karin|
-|25.02|Multivariate statistics<br/>Distance-based|In R|Gabriel|
+|21.02 Monday|[Introduction to R](unit_1/1a_intro_r.html)<br/>[Populations, samples, central tendency](unit_1/1b_population_samples.html)|[Univariate statistics](unit_1/1c_univariate.html)<br/><small>Confidence intervals<br/>Significance testings<br/>Type I and II errors</small>|[Exercise sheet 1](unit_1/worksheet_1.html)<br/><small>R Base Graphics<br/>Programming basics<br/>Sampling</small>|
+|22.02 Tuesday|Data structures<br/>Visualisation basics<br/>Correlation & Regression<br/>Association|1- and 2-way Analysis of variance|Programming II<br/>(Reshape, vectorisation)<br/>Linear models|
+|23.02 Wednesday|Multiple regression<br/>ANCOVA<br/>Model selection|Models for counts, proportions<br/>Bootstrapping & randomisation|MLR<br/>Bootstrap t-test|
+|24.02 Thursday|Multivariate statistics I <br/><small>PCA, RDA</small>|Multivariate statistics II<br/><small>Distance-based methods</small>|Multivariate stats in R|
+|25.02|Multivariate statistics<br/><small>PCA, CCA, RDA, DCCA</small>||Multivariate stats in Canoco|
 
 
 

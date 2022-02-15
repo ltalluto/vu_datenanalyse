@@ -1,0 +1,171 @@
+---
+title: "Worksheet 1"
+author: "Matthew Talluto"
+date: "18.01.2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 0: Setting up your environment
+
+The scripts here will assume you have set up an RStudio project. 
+
+1. In RStudio, choose File->New Project, then select "New Directory".
+2. Create the folder wherever you like on your computer; I have used "datenanalyse"
+3. Go to OLAT and download the files for unit 1. Place them into a new folder inside "datenanalyse"
+
+# Task 1: Central Limit Theorem
+
+For this task, we will use a simulated population of measurements. Observe that the values are strongly non-normal.
+
+> if here we use a fixed dataset for all, we can generate CIs at the end and illustrate alpha by counting how many students miss mu in their CI.
+
+```{r}
+set.seed(23432)
+t1_population = rlnorm(10000, log(10), 0.3)
+hist(t1_population, breaks=50, col="gray")
+```
+
+### 1a. Population statistics
+
+Compute the population mean and standard deviation from the variable t1_population, and store them in variables named `mu` and `sigma`. What are the values?
+
+*Hint*: The `sd` function computes the *sample* standard deviation; you will need to compute this manually using the formula:
+
+$$
+\sigma = \sqrt \frac{\sum \left(x - \mu \right )^2}{n}
+$$
+
+What is the theoretical standard error of the mean, assuming a sample size of 25? Use the $\sigma$ you computed above.
+
+### 1b. Taking a sample
+
+The following code collects a sample of size n, from our population, then computes the sample mean and standard deviation.
+
+```{r}
+n = 25
+samp = sample(t1_population, n)
+mean(samp)
+sd(samp)
+```
+
+Run this code in your console a few (~5) times. 
+
+* What range of values do you get for the sample mean and sd? 
+* How do they compare to the population means and sds?
+
+### 1c. Simulating more samples
+
+Now we will simulate taking 200 samples using a `for` loop
+
+```{r}
+n = 25
+num_samples = 200
+
+# create two empty vectors to hold the results
+sample_means = numeric(num_samples)
+sample_sds = numeric(num_samples)
+```
+
+* View the `sample_means` vector in your console. What does it look like?
+
+```{r}
+for(i in 1:num_samples) {
+	samp = sample(t1_population, n)
+	sample_means[i] = mean(samp)
+	sample_sds[i] = sd(samp)
+}
+```
+
+* Compute the mean of `sample_means` and `sample_sds`. How do they compare to the population mean and sd from **1a**?
+* Compute the standard deviation of `sample_means` (using the `sd` function). How does that compare to the theoretical standard error from **1a**?
+
+* Create histograms using the `hist` function for both `sample_means` and `sample_sds`. 
+* Add a density curve using `lines(density(sample_means))`
+* Do the histograms look normally distributed? Try re-running with n=10 and n=50? How do the histograms change?
+
+
+# Task 2: Coral reef fish diversity
+
+We will use the dataset `coral_fish.csv` for this exercise. Load the file using the `read.csv` command, and save it in a variable named `fish`. Note that you might have to change the file name depending on how your working directory is set up.
+
+It's also a good idea to have a look at the data after you read it; use the `str`, `head`, and `View` functions. Note that you should only use `View` directly in Rstudio, you should not save it as part of a script.
+
+```{r}
+## You may have to set or change your working directory, or change the file name to include the folder as well
+fish = read.csv("coral_fish.csv")
+## str(fish)
+head(fish)
+## View(fish)
+```
+
+The data contains two variables: `richness` is the fish species richness (i.e., the total number of species, a measure of $\alpha$-diversity) for 214 coral reefs in the African biogeographical region. The other variable, `type` indicates whether the reef is tropical or subtropical. 
+
+One of the most well-known global biogeographical patterns is known as the latitudinal diversity gradient; as one moves towards the tropics, biodiversity tends to increase. However, the pattern does not always hold for marine organisms. We will use the fish diversity data to test the hypothesis that reef fish diversity is higher in the tropics.
+
+### 2a. Exploratory figures
+
+Make some figures exploring the data. Be sure that your figures are near publication quality; axes should be labelled with units (if appropriate), use of colour is encouraged but should help clarify, not confuse the figure, and extraneous elements should be minimised. Use this exercise to get comfortable with some of the plotting options in R.
+
+```{r, eval = FALSE}
+## many of these options can be inserted in any plot call
+## more options
+## xlim = c(min, max) - set the axis lmits
+## bty = 'n' - eliminate or change the box around the plot
+## col = "green" - sets the primary color to green
+## see ?plot, ?par, ?hist, ?boxplot for other options
+hist(y, main = "Plot Title", xlab = "x-axis label", ylab = "y-axis label")
+```
+
+
+At a minimum, make a boxplot for richness grouped by reef type, and make histograms for the two reef types. Do you see evidence that diversity differs from one reef type to the other? What about the distribution of the data? Do you think species richness is approximately normally distributed?
+
+### 2b. Summary statistics
+
+Compute summary statistics (e.g., mean, sd, range, median, etc.) for both reef types. You are free to report any statistics you feel are appropriate, but at minimum you will need the mean and standard error. The easiest way to do this is to use tapply:
+
+```{r}
+tapply(fish$richness, fish$type, mean)
+```
+
+### 2c. Testing the hypothesis
+
+1. Write out appropriate null and alternate hypotheses for this exercise. Is the alternate one- or two-sided?
+2. Use the $t$-distribution to construct a 95% confidence interval for each mean. 
+
+$$
+C.I. = \bar{x} \pm t_{\alpha, n-1}\frac{s}{\sqrt{n}}
+$$
+
+$\alpha$ is the Type I error rate, and $n-1$ is the degrees of freedom. You can get the $t$ quantile for any confidence interval using the `qt()` function.
+
+```{r}
+n = table(fish$type)
+alpha = 0.05
+
+# the confidence interval is two-sided, so we take half alpha on each side
+qt(c(alpha/2, 1-alpha/2), n["tropical"] - 1)  ## can change to subtropical for the other value
+```
+
+The confidence intervals do not test the null hypothesis directly, but what do they suggest about the null hypothesis?
+
+3. Before comparing the mean richness, we need to know if the variance of the two samples is equal. You can use `var.test` to test the null hypothesis that the variance is equal. We have no real reason to suspect one group is larger than the other, so we use a two-sided test.
+
+```{r eval = FALSE}
+var.test(richness ~ type, data=fish, alternative = "two.sided")
+```
+
+The `richness ~ type` syntax is called a `formula`, and it specifies that you are asking to compare the variance of `richness` for each `type`. This syntax is used in many tests, so it is useful to know.
+
+Is the variance equal among the two groups?
+
+4. Perform a t-test of the hypothesis you wrote in question 1. Use the R function `t.test`; the syntax is very similar to `var.test`. Be sure to check the help with `?t.test` before you start. In particular, pay attention to the options `alternative`, `paired`, and `var.equal`. How should you set them for this particular problem?
+
+Report the results of the test: t-statistic, p-value, and conclusions.
+
+5. One assumption of the t-test is that the samples come from populations that are normally distributed. Do you think that is true for these samples?
+
+The t-test is robust to violations of this assumption assuming sample sizes are large, however, non-parametric alternatives are also available. Do you get different results if you run a two-sample Wilcoxon (a.k.a. Mann-Whitney) test? Use `wilcox.test`
