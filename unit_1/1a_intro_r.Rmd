@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R"
 author: "Matthew Talluto"
-date: "11.02.2022"
+date: "21.02.2022"
 output:
   slidy_presentation:
     theme: cerulean
@@ -28,20 +28,16 @@ library(kableExtra)
 * **Inferential** statistics uses the laws of probability, combined with observations, to test hypotheses
    - Lakes from one region/ecozone are colder than lakes from another.
 
-### Grading
-* Each half-day will be split between lecture and exercises.
-* Your grade in the course will be based on completion of the exercises and submission of a short written protocol each day.
+### Course structure
+* Each day will be split between lectures and exercise sessions
+* During exercises, we will split into smaller breakout groups and work through problems
+* Grading: 40% participation, 60% group project/presentation
 
+### Website and course materials
 
-## Course Schedule
-<div class="left lt">
-
-![](../img/sched1.png){width=80%}
-</div>
-
-<div class="right rt">
-![](../img/sched2.png){width=80%}
-</div>
+All course materials are available on the 
+[website](https://flee-group.github.io/vu_datenanalyse) and via 
+[GitHub](https://github.com/flee-groupvu_datenanalyse) (demo incoming).
 
 
 ## Introduction to R
@@ -64,6 +60,8 @@ library(kableExtra)
    - or in **batch mode** (all commands run, one after the other)
 * **working directory**: location on your computer where R will search for files, data, etc.
 
+The code in the course files assumes your working directory is set to the *unit* you are working on. So, for today's exercises, you should run the following in the console: `setwd("unit_1")`.
+
 
 ## Recommendations
 * Create an RStudio project to organize your work for the course (File => New Project).
@@ -72,8 +70,7 @@ library(kableExtra)
 * Annotate your code with comments. Write more comments than you need.
    - In R, anything after the `#` character is a comment and will be ignored by the interpreter.
 * (For the adventurous) Write your protocols using **Rmarkdown** (combines text, code, output, and graphics).
-   - There will be an example during the exercises.
-   
+
    
    
    
@@ -85,6 +82,12 @@ library(kableExtra)
   - Variable names can contain lower- or upper-case letters, numbers, and the `_` symbol.
   - Names must start with letters and (when possible) should be descriptive
 * Variables are given values by **assignment** using either the `=` or `<-` symbol
+
+### Recommendations
+* Use descriptive variable names instead of comments.
+* Avoid 1- and 2- letter names.
+* Separate words with underscores.
+* Use a consistent assignment operator (`=` or `<-`, not both)
 </div>
 
 <div class="right rt">
@@ -99,10 +102,19 @@ y0 = 5
 time_of_day = "20:15"
 dayOfWeek <- "Monday"
 
+# bad!
+# d is the diversity in our site, in species
+d = 8
+
+# better!
+site_diversity = 8
+
+
 # error
 0y = 5
 my name = "Matt"
 ```
+
 </div>
 
 
@@ -111,6 +123,7 @@ my name = "Matt"
 * All variables have a type
 * `numeric`: integers and floating-point (decimal) numbers
 * `logical`: yes/no, true/false data; in R represented by the special values `TRUE` and `FALSE`
+	- `T` and `F` (no quotes) can be used as shortcuts for `TRUE`/`FALSE`, but you should avoid this!
 * `character`: strings, text
 * `factor`: special variable type for categorical (nominal & ordinal) data
 
@@ -119,25 +132,11 @@ my name = "Matt"
 ## Programming in R: Operators
 
 <div class="left lt">
-* We use **operators** to perform computations on variables and constants
-* Common examples:
-   - Assignment: `=`, `<-`
-   - Math: `+`, `-`, `*`, `/`, `^`, `%%`
-   - Comparison: `==`, `!=`, `<`, `>`, `<=`, `>=`
-   - Logical: `&`, `|`, `!`
-   - Precedence: `()`
+We use **operators** to perform computations on variables and constants
 
-```{r echo = FALSE, results='asis'}
-mat_and = matrix(c(F,F,F,T), nrow=2, dimnames=list(c("f", "t"), c("f", "t")))
-kable(mat_and, caption = "Logical & (and)")
-```
-
-```{r echo = FALSE, results='asis'}
-mat_and = matrix(c(F,T,T,T), nrow=2, dimnames=list(c("f", "t"), c("f", "t")))
-kable(mat_and, caption = "Logical | (or)")
-```
-
-
+* Assignment: `=`, `<-`
+* Math: `+`, `-`, `*`, `/`, `^`, `%%`
+* Comparison: `==`, `!=`, `<`, `>`, `<=`, `>=`
 </div>
 
 <div class="right rt">
@@ -156,21 +155,49 @@ x + 2
 x < 7
 x == 5.1
 
-# logical
-TRUE & TRUE
-TRUE & FALSE
-FALSE & FALSE
-
-TRUE | FALSE
-x == 3 | x > 4
-
-!TRUE
 ```
 
 </div>
 
+## Programming in R: Logic
 
+<div class="left lt">
+* Logical comparisons can be made with and (`&`), or (`|`), and not (`!`).
+* You can use logic to help your script make decision based on the outcome of a computation
 
+</div>
+
+<div class="right rt">
+
+```{r}
+# and: both must be true
+TRUE & TRUE
+TRUE & FALSE
+FALSE & FALSE
+
+# or: only one needs to be true
+TRUE | FALSE
+FALSE | FALSE
+
+# not: returns the opposite
+!FALSE
+
+# making decisions
+x = 2^15 + 1
+if(x > 100) {
+	print("x is big")
+} else {
+	print("x is small")
+}
+
+if(x > 100 & x %% 2 == 0) {
+	print("x is big and even")
+} else {
+	print("x is either small or an odd number")
+}
+```
+
+</div>
 
 
 ## Programming in R: Functions
@@ -234,7 +261,9 @@ log(x, base = 10)
 ## Creating vectors
 (one_to_ten = 1:10)
 
-five_numbers = c(3, 2, 8.6, 4, 9.75)
+# The c() function stands for concatenate
+# it groups items together into a vector
+(five_numbers = c(3, 2, 8.6, 4, 9.75))
 
 # Get part of a vector using []
 five_numbers[3]
@@ -289,41 +318,51 @@ kable_styling(kable(head(iris)), font_size = 12)
 
 ## Programming in R: Working with data frames
 
-<div class="left lt">
-
-* `str` gives you a summary of the **str**ucture of the data
-* Access an individual variable using `$` or `[]`
-* `nrow`, `ncol`, `dim` give you dimensions of the data frame
 * `View` shows the data frame in a graphical window
-
-
-
-</div>
-
-<div class="right rt">
-
+* `str` gives you a summary of the **str**ucture of the data
 
 ```{r}
 str(iris)
+```
 
+* `nrow`, `ncol`, `dim` give you dimensions of the data frame
+
+```{r}
 ## data frame dimensions
 nrow(iris)
 ncol(iris)
 dim(iris)
 ```
 
+* Access an individual variable using `$` or `[]`
 ```{r, results = "hide"}
 # accessing variables
 ## all of these are identical
 iris$Sepal.Length
-iris[,1] ## [,1] means get every row in the first column
-iris[,"Sepal.Length"] ## another way to access by name
-```
-```{r echo = FALSE, results = 'asis'}
-kable_styling(kable(matrix(iris$Sepal.Length, nrow=10)), font_size = 12)
+iris[,1] ## [,1] get every row in the first column
 ```
 
-</div>
+```{r}
+iris[1:10,"Sepal.Length"] ## another way to access by name, gets the first 10 entries
+```
+
+
+
+## Programming in R: Working with data frames
+
+The variable `Species` is a factor.
+
+```{r}
+str(iris)
+```
+
+Useful functions for factors include `levels` and `table`.
+
+```{r}
+levels(iris$Species)
+table(iris$Species)
+```
+
 
 
 
