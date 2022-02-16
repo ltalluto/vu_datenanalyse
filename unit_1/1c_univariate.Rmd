@@ -6,7 +6,7 @@ output:
   slidy_presentation:
     theme: cerulean
     toc_depth: 2
-    css: ../rmd_style.css
+    css: ../assets/rmd_style.css
   beamer_presentation: default
 ---
 
