@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 1"
-author: "Matthew Talluto"
-date: "18.01.2021"
+author: "VU Datenanalyse"
+date: ""
 output: html_document
 ---
 
@@ -9,35 +9,38 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Task 0: Setting up your environment
-
-The scripts here will assume you have set up an RStudio project. 
-
-1. In RStudio, choose File->New Project, then select "New Directory".
-2. Create the folder wherever you like on your computer; I have used "datenanalyse"
-3. Go to OLAT and download the files for unit 1. Place them into a new folder inside "datenanalyse"
-
 # Task 1: Central Limit Theorem
 
-For this task, we will use a simulated population of measurements. Observe that the values are strongly non-normal.
-
-> if here we use a fixed dataset for all, we can generate CIs at the end and illustrate alpha by counting how many students miss mu in their CI.
+For this task, we will use a simulated population of measurements. Read them into R with the following code, then plot them with the histogram function. Observe that the values are strongly non-normal.
 
 ```{r}
-set.seed(23432)
-t1_population = rlnorm(10000, log(10), 0.3)
-hist(t1_population, breaks=50, col="gray")
+# remember to set your working directory if needed!
+# setwd("unit_1")
+t1_population = read.csv("data/w1t1.csv")
+hist(t1_population$x, breaks=50, col="gray")
 ```
 
 ### 1a. Population statistics
 
-Compute the population mean and standard deviation from the variable t1_population, and store them in variables named `mu` and `sigma`. What are the values?
+Compute the population mean and standard deviation from the variable x in t1_population, and store them in variables named `mu` and `sigma`. What are the values?
 
 *Hint*: The `sd` function computes the *sample* standard deviation; you will need to compute this manually using the formula:
 
 $$
 \sigma = \sqrt \frac{\sum \left(x - \mu \right )^2}{n}
 $$
+In code:
+
+```{r}
+n = nrow(t1_population)
+(mu = mean(t1_population$x))
+sq_diff = (t1_population$x - mu)^2 # squared deviations from the mean
+numerator = sum(sq_diff)
+(sigma = sqrt(numerator/n))
+
+# or all on one line:
+sqrt(sum((t1_population$x - mean(t1_population$x))^2) / nrow(t1_population))
+```
 
 What is the theoretical standard error of the mean, assuming a sample size of 25? Use the $\sigma$ you computed above.
 
@@ -47,7 +50,7 @@ The following code collects a sample of size n, from our population, then comput
 
 ```{r}
 n = 25
-samp = sample(t1_population, n)
+samp = sample(t1_population$x, n)
 mean(samp)
 sd(samp)
 ```
@@ -57,49 +60,50 @@ Run this code in your console a few (~5) times.
 * What range of values do you get for the sample mean and sd? 
 * How do they compare to the population means and sds?
 
-### 1c. Simulating more samples
+### 1c. Performing an 'experiment'
 
-Now we will simulate taking 200 samples using a `for` loop
+Now we will get everyone together to perform a simple experiment to estimate the mean of the *population* from a series of samples. Every student will take a sample (as in 1b), and compute the sample mean, and 95% confidence interval. We will share these, so that we have 25 sample means plus confidence limits in the end. This allows us to simulate what it's like to repeat an experiment many times on one population.
 
 ```{r}
 n = 25
-num_samples = 200
+# take a sample
+my_sample = sample(t1_population$x, n)
 
-# create two empty vectors to hold the results
-sample_means = numeric(num_samples)
-sample_sds = numeric(num_samples)
+# get the standard error
+samp_sd = sd(my_sample)
+st_err = samp_sd/sqrt(n)
+
+# compute mean and confidence limits, save in a data.frame
+# change "yourname" to be your actual name
+samp_mean = mean(my_sample)
+my_stats = data.frame(name = "yourname", mean = samp_mean, sd = samp_sd,
+					  lower = samp_mean - 1.96*st_err, 
+					  upper = samp_mean + 1.96*st_err)
+# save the file to your computer, in the unit_1 folder, so we can share them
+# replace "yourname" with your name
+# write.csv(my_stats, "yourname_t1c.csv")
 ```
 
-* View the `sample_means` vector in your console. What does it look like?
 
-```{r}
-for(i in 1:num_samples) {
-	samp = sample(t1_population, n)
-	sample_means[i] = mean(samp)
-	sample_sds[i] = sd(samp)
-}
-```
+Next, load the shared data set from the whole course, and answer the following:
 
-* Compute the mean of `sample_means` and `sample_sds`. How do they compare to the population mean and sd from **1a**?
-* Compute the standard deviation of `sample_means` (using the `sd` function). How does that compare to the theoretical standard error from **1a**?
-
-* Create histograms using the `hist` function for both `sample_means` and `sample_sds`. 
-* Add a density curve using `lines(density(sample_means))`
-* Do the histograms look normally distributed? Try re-running with n=10 and n=50? How do the histograms change?
-
+1. Compute the mean of the sample means and the sample sds. How do they compare to the population mean and sd from **1a**?
+2. Compute the standard deviation of the sample means (using the `sd` function). How does that compare to the theoretical standard error from **1a**?
+3. Create histograms using the `hist` function for both the sample means and the sample sds.
+	* Do the histograms look normally distributed?
+4. Compute how often (% of time) the **population mean** (from 1a) is between the lower and upper confidence limits.
 
 # Task 2: Coral reef fish diversity
 
-We will use the dataset `coral_fish.csv` for this exercise. Load the file using the `read.csv` command, and save it in a variable named `fish`. Note that you might have to change the file name depending on how your working directory is set up.
+We will use the dataset `coral_fish.csv` for this exercise. Load the file using the `read.csv` command, and save it in a variable named `fish`. 
 
 It's also a good idea to have a look at the data after you read it; use the `str`, `head`, and `View` functions. Note that you should only use `View` directly in Rstudio, you should not save it as part of a script.
 
 ```{r}
-## You may have to set or change your working directory, or change the file name to include the folder as well
-fish = read.csv("coral_fish.csv")
-## str(fish)
+# You may have to set or change your working directory, or change the file name to include the folder as well
+fish = read.csv("data/coral_fish.csv")
+str(fish)
 head(fish)
-## View(fish)
 ```
 
 The data contains two variables: `richness` is the fish species richness (i.e., the total number of species, a measure of $\alpha$-diversity) for 214 coral reefs in the African biogeographical region. The other variable, `type` indicates whether the reef is tropical or subtropical. 
@@ -111,30 +115,38 @@ One of the most well-known global biogeographical patterns is known as the latit
 Make some figures exploring the data. Be sure that your figures are near publication quality; axes should be labelled with units (if appropriate), use of colour is encouraged but should help clarify, not confuse the figure, and extraneous elements should be minimised. Use this exercise to get comfortable with some of the plotting options in R.
 
 ```{r, eval = FALSE}
-## many of these options can be inserted in any plot call
-## more options
-## xlim = c(min, max) - set the axis lmits
-## bty = 'n' - eliminate or change the box around the plot
-## col = "green" - sets the primary color to green
-## see ?plot, ?par, ?hist, ?boxplot for other options
+# many of these options can be inserted in any plot call
+# more options
+# xlim = c(min, max) - set the axis lmits
+# bty = 'n' - eliminate or change the box around the plot
+# col = "green" - sets the primary color to green
+# see ?plot, ?par, ?hist, ?boxplot for other options
 hist(y, main = "Plot Title", xlab = "x-axis label", ylab = "y-axis label")
 ```
 
 
-At a minimum, make a boxplot for richness grouped by reef type, and make histograms for the two reef types. Do you see evidence that diversity differs from one reef type to the other? What about the distribution of the data? Do you think species richness is approximately normally distributed?
+Make a boxplot for richness grouped by reef type. Remember the syntax:
+
+```{r, eval = FALSE}
+boxplot(variable ~ group, data = fish)
+```
+
+Here, `fish` is the name of the dataset, `group` is the name of the variable in `fish` that you should use to group the plots, and `variable` is the value you want plotted (e.g., `richness` and `type`).
+
+Do you see evidence that diversity differs from one reef type to the other? What about the distribution of the data? Do you think species richness is approximately normally distributed?
 
 ### 2b. Summary statistics
 
-Compute summary statistics (e.g., mean, sd, range, median, etc.) for both reef types. You are free to report any statistics you feel are appropriate, but at minimum you will need the mean and standard error. The easiest way to do this is to use tapply:
+Compute summary statistics (at least: mean, sd, standard error) for both reef types. The fastest DRY way to do this is to use tapply:
 
 ```{r}
-tapply(fish$richness, fish$type, mean)
+with(fish, tapply(richness, type, mean))
 ```
 
-### 2c. Testing the hypothesis
+### 2c. Confidence intervals
 
 1. Write out appropriate null and alternate hypotheses for this exercise. Is the alternate one- or two-sided?
-2. Use the $t$-distribution to construct a 95% confidence interval for each mean. 
+2. Construct a 95% confidence interval for each mean. 
 
 $$
 C.I. = \bar{x} \pm t_{\alpha, n-1}\frac{s}{\sqrt{n}}
@@ -142,30 +154,36 @@ $$
 
 $\alpha$ is the Type I error rate, and $n-1$ is the degrees of freedom. You can get the $t$ quantile for any confidence interval using the `qt()` function.
 
+Here we demonstrate another useful feature of R: writing your own functions. Try to take some time to understand what is happening here.
+
 ```{r}
-n = table(fish$type)
-alpha = 0.05
+conf_interval = function(x, alpha = 0.05) {
+	# the default is a 95% confidence interval, can be changed when you call the function
+	n = length(x)
+	mu = mean(x)
+	sem = sd(x)/sqrt(n) # standard error
+	# half of alpha comes from each side of the distribution
+	t_vals = qt(c(alpha/2, 1-alpha/2), n -1)
+	# compute the CI
+	ci = mu + sem * t_vals
+	names(ci) = c("lower", "upper")
+	return(ci)
+}
 
-# the confidence interval is two-sided, so we take half alpha on each side
-qt(c(alpha/2, 1-alpha/2), n["tropical"] - 1)  ## can change to subtropical for the other value
+# use tapply to get a confidence interval for both types
+with(fish, tapply(richness, type, conf_interval))
+
+# change alpha to 0.01, getting a 99% CI
+with(fish, tapply(richness, type, conf_interval, alpha = 0.01))
 ```
 
-The confidence intervals do not test the null hypothesis directly, but what do they suggest about the null hypothesis?
 
-3. Before comparing the mean richness, we need to know if the variance of the two samples is equal. You can use `var.test` to test the null hypothesis that the variance is equal. We have no real reason to suspect one group is larger than the other, so we use a two-sided test.
+2d. Use the `var` function to compute the variance of each group. Are the variances similar?
 
-```{r eval = FALSE}
-var.test(richness ~ type, data=fish, alternative = "two.sided")
-```
+A rule of thumb: you may use equal variance tests if the larger variance is less than roughly 4x the smaller.
 
-The `richness ~ type` syntax is called a `formula`, and it specifies that you are asking to compare the variance of `richness` for each `type`. This syntax is used in many tests, so it is useful to know.
+2e. Perform a t-test of the hypothesis you wrote in question 1. Use the R function `t.test`, and be sure to check the help with `?t.test` before you start. 
 
-Is the variance equal among the two groups?
-
-4. Perform a t-test of the hypothesis you wrote in question 1. Use the R function `t.test`; the syntax is very similar to `var.test`. Be sure to check the help with `?t.test` before you start. In particular, pay attention to the options `alternative`, `paired`, and `var.equal`. How should you set them for this particular problem?
+Pay attention to the options `alternative`, `paired`, and `var.equal`. How should you set them for this particular problem?
 
 Report the results of the test: t-statistic, p-value, and conclusions.
-
-5. One assumption of the t-test is that the samples come from populations that are normally distributed. Do you think that is true for these samples?
-
-The t-test is robust to violations of this assumption assuming sample sizes are large, however, non-parametric alternatives are also available. Do you get different results if you run a two-sample Wilcoxon (a.k.a. Mann-Whitney) test? Use `wilcox.test`

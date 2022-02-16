@@ -1,26 +1,27 @@
 ---
-title: "Descriptive Statistics"
+title: "Populations & Samples"
 author: "Matthew Talluto"
-date: "18.01.2021"
+date: "21.02.2022"
 output:
   slidy_presentation:
     theme: cerulean
     toc_depth: 2
-    css: ../rmd_style.css
+    css: ../assets/rmd_style.css
   beamer_presentation: default
 ---
 
 
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.width=6.5, fig.height=6.5, collapse = TRUE, comment = "##", dev="png")
+knitr::opts_chunk$set(fig.width=6.5, fig.height=6.5, collapse = TRUE, comment = "##", dev="png", error=TRUE, message = FALSE)
 #knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 library(RColorBrewer)
 cols = brewer.pal(8, "Set1")
 
 library(knitr)
 library(kableExtra)
-
+options(digits = 3)
+set.seed(12345)
 ```
 
 ## Populations & Samples
@@ -66,6 +67,169 @@ library(kableExtra)
 ## Describing populations and samples
 <div class="left lt">
 * We can visualise the distribution of values within a population using a **histogram**
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, message=FALSE}
+library(ggplot2)
+# generate some random numbers from the lognormal distribution
+my_var = rlnorm(1000, log(10), 0.5)
+
+p1 = ggplot(data.frame(my_var), aes(x=my_var)) + geom_histogram() + ylab("Frequency") + xlab("Variable of Interest")
+p1
+```
+
+</div>
+
+## Aside: graphics in R
+
+We will use the two dominant graphics packages during this course.
+
+* **base graphics** is built in to R.
+	- Simple to use
+	- Relatively easy syntax
+	- Plots usually need a lot of customization before they are finished
+* **ggplot2** is a library you must install.
+	- More complex syntax
+	- Produces publication-quality graphics with less customization needed.
+	- Plots can be saved in a variable, with customization added as needed.
+
+Here we will work through both, using the histogram as a motivating example.
+
+## Histograms: Base graphics
+<div class="left lt">
+
+* The workhorse function is `hist`
+
+```{r eval = FALSE}
+# generate some random numbers from the lognormal distribution
+my_var = rlnorm(1000, log(10), 0.5)
+hist(my_var)
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE}
+hist(my_var)
+```
+</div>
+
+
+## Histograms: Base graphics
+
+<div class="left lt">
+* The workhorse function is `hist`
+
+The defaults are not very nice, so lets improve things
+
+* `main = ""` disables the title
+* `xlab` and `ylab` control axis labels
+* `breaks` controls the number of bins in the histogram
+* `col` sets the color of the bars
+* `border` sets the color of the borders (`NA`: no border)
+
+```{r eval = FALSE}
+hist(my_var, main = "", xlab="Variable of interest", ylab = "Frequency", 
+	 breaks = 20, col="#999999", border=NA)
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE}
+hist(my_var, main = "", xlab="Variable of interest", ylab = "Frequency", 
+	 breaks = 20, col="#999999", border=NA)
+```
+
+</div>
+
+## Colors
+
+* R supports colors using the common HTML color coding: `#RRGGBB`
+	- RR, GG, BB are the amounts of red, green, and blue
+	- each ranges from `00` (none) to `FF` (most)
+	- Color pickers online help you translate a color in real life to a coded color
+* R also has 657 named colors: `col = rosybrown`
+* see the `colors()` function for the names
+
+```{r}
+head(colors())
+```
+
+```{r echo = FALSE, fig.width=35, fig.height=18}
+library(ggdark)
+d = expand.grid(xl = 1:27, yb = 25:1)
+d$colors = NA
+d$colors[1:657] = colors()
+d = d[complete.cases(d),]
+par(mar = c(0,0,0,0))
+plot(0,0, xlim = c(1,28), ylim = c(1,26), type = 'n', axes = FALSE, xlab = "", ylab = "")
+with(d, rect(xl, yb, 1+xl, 1+yb, col = colors, border = NA))
+with(d, text(xl, yb + 0.5, colors, col = invert_color(colors), cex = 1, adj = 0))
+```
+
+
+
+
+## Histograms: ggplot2
+
+<div class="left lt">
+* `ggplot2` is a **package**: packages extend the base functionality of R
+* You can install packages with `install.packages()` (just once)
+* You load packages with `library` (once per session)
+
+### Using ggplot
+* `ggplot` always works on data.frames, so make sure your data is in one
+* Each plot defines **aesthetics** using `aes`
+	- What to plot
+	- In what position (x-axis, y-axis, etc)
+	- How to visualise structure in data (e.g., color by categories or variables)
+* You then add **geometries** to tell ggplot how to plot the data
+* Here we create a plot, define a single variable plotted in the `x` position, and set a histogram geometry
+* We can easily add other customisations (e.g., axis labels)
+
+</div>
+
+<div class="right rt">
+```{r eval = FALSE}
+# only do this once, if you do not have the package already installed
+# install.packages("gglot2")
+
+# load the package
+library("ggplot2")
+
+# make a data frame with a single variable named my_var
+my_df = data.frame(my_var)
+
+# create a plot and save it in a variable
+x_histogram = ggplot(my_df, aes(x = my_var)) + geom_histogram()
+
+# add some more features
+x_histogram = x_histogram + ylab("Frequency") + xlab("Variable of Interest")
+
+# display the plot
+print(x_histogram)
+```
+
+
+```{r echo = FALSE, message = FALSE}
+my_df = data.frame(my_var)
+x_histogram = ggplot(my_df, aes(x = my_var)) + geom_histogram()
+x_histogram = x_histogram + ylab("Frequency") + xlab("Variable of Interest")
+print(x_histogram)
+```
+
+</div>
+
+
+
+
+
+## Describing populations and samples
+<div class="left lt">
+* We can visualise the distribution of values within a population using a **histogram**
 
 > - We use **summary statistics** to describe the values numerically.
 > - In practise, we must estimate population statistics via sample statistics.
@@ -74,10 +238,8 @@ library(kableExtra)
 </div>
 
 <div class="right rt">
-```{r echo=FALSE}
-x = rlnorm(1000, log(10), 0.5)
-pl1 = 'hist(x, xlab="Variable of interest", col="#999999", border=NA, main="", breaks=20)'
-eval(parse(text=pl1))
+```{r echo = FALSE}
+p1
 ```
 
 </div>
@@ -100,16 +262,15 @@ $$
 <div class="right rt">
 ```{r echo=FALSE}
 lwd=2
-pl1 = paste(pl1, "abline(v=mean(x), col=cols[1], lwd=lwd)", "text(mean(x), 10, 'mean', col=cols[1], pos=4)", sep=';')
-eval(parse(text=pl1))
+p2 = p1 + geom_vline(xintercept = mean(my_var), col = cols[1])
+p2
 ```
 
 ```{r}
-mean(x)
+mean(my_var)
 ```
 
 </div>
-
 
 
 
@@ -119,11 +280,34 @@ mean(x)
 
 * **First moment**: Arithmetic mean. 
 
-The population mean ($\mu$) can be approximated with the **sample mean**:
+### Other location statistics
 
-$$
-\mu \approx \bar{x} = \frac{1}{n}\sum_{i=1}^n x_i
-$$
+The mean can be strongly influenced by outliers.
+
+* median: The 50% quantile (i.e., half the values of x are above the median, half below)
+
+</div>
+
+<div class="right rt">
+```{r echo=FALSE}
+p2 = p2 + geom_vline(xintercept = median(my_var), col = cols[2])
+p2
+```
+
+```{r}
+median(my_var)
+
+```
+
+</div>
+
+
+
+## Summary statistics: location
+
+<div class="left lt">
+
+* **First moment**: Arithmetic mean. 
 
 ### Other location statistics
 
@@ -136,23 +320,37 @@ The mean can be strongly influenced by outliers.
 
 <div class="right rt">
 ```{r echo=FALSE}
-pl2 = paste(pl1, "abline(v=median(x), col=cols[2], lwd=lwd)", "text(median(x), 30, 'median', col=cols[2], pos=4)", sep=';')
-eval(parse(text=pl2))
+my_hist = hist(my_var, breaks = 30, plot = FALSE)
+mode_position = which.max(my_hist$counts)
+md = my_hist$mids[mode_position]
+
+p2 = p2 + geom_vline(xintercept = median(md), col = cols[3])
+p2
 ```
 
 ```{r}
-median(x)
+# mode
+mode(my_var) # wrong!
 
-## mode
-mode(x) ## wrong!
-## we can use the histogram function to approximate the sample mode
-## changing the number of breaks will have a large impact on the results
-x_hist = hist(x, breaks = 20, plot = FALSE)
-x_hist$mids[which.max(x_hist$density)]
+# we can use the histogram function to approximate the sample mode
+# changing the number of breaks will have a large impact on the results
+my_hist = hist(my_var, breaks = 30, plot = FALSE)
 
+# the mids variable gives you the midpoint of each bin
+# counts gives you the count each bin
+# cbind shows them together in columns
+head(cbind(my_hist$mids, my_hist$counts))
+
+# use this to get the mode
+# first find out which one is the tallest with which.max
+(mode_position = which.max(my_hist$counts))
+my_hist$mids[mode_position]
 ```
 
 </div>
+
+
+
 
 
 
@@ -161,12 +359,6 @@ x_hist$mids[which.max(x_hist$density)]
 <div class="left lt">
 
 * **First moment**: Arithmetic mean. 
-
-The population mean ($\mu$) can be approximated with the **sample mean**:
-
-$$
-\mu \approx \bar{x} = \frac{1}{n}\sum_{i=1}^n x_i
-$$
 
 ### Other location statistics
 
@@ -182,21 +374,17 @@ We can compare variables in a way that is *location independent* by **centering*
 </div>
 
 <div class="right rt">
-```{r echo=FALSE}
-pl2 = paste(pl1, "abline(v=median(x), col=cols[2], lwd=lwd)", "text(median(x), 30, 'median', col=cols[2], pos=4)", sep=';')
-eval(parse(text=pl2))
-```
 
 ```{r}
-c(min(x), max(x))
-range(x)
+c(min(my_var), max(my_var))
+range(my_var)
 
-quantile(x, 0.4)
+quantile(my_var, 0.4)
 
-## Centre the variable
-## note! arithmetic operators like `-` are vectorized!
-x_ctr = x - mean(x)
-mean(x_ctr)
+# Centre the variable
+# note! arithmetic operators like `-` are vectorized!
+my_var_ctr = my_var - mean(my_var)
+mean(my_var_ctr)
 
 ```
 
@@ -235,20 +423,25 @@ $$
 <div class="right rt">
 
 ```{r echo=FALSE}
-
-pl3 = paste(pl1, "lines(c(-sd(x), sd(x)) + mean(x), c(50, 50), col=cols[2], lwd=lwd)", 
-            "text(sd(x) + mean(x), 50, '±s', col=cols[2], pos=4)", sep=';')
-eval(parse(text=pl3))
+sdata = data.frame(
+	xm = mean(my_var),
+	x = mean(my_var) + sd(my_var),
+	xe = mean(my_var) - sd(my_var),
+	y = 50
+)
+p3 = p1 + geom_point(data = sdata, aes(x=xm, y =y)) + 
+	geom_segment(data = sdata, aes(x = x, xend = xe, y = y, yend = y), col = cols[1])
+p3
 ```
 
 
 ```{r}
 # Population variance -- biased if x is a sample!
-sum((x-mean(x))^2)/length(x)
+sum((my_var - mean(my_var))^2)/length(my_var)
 
 # These R functions always produce the sample variance and sd
-var(x)
-sd(x)
+var(my_var)
+sd(my_var)
 
 
 ```
@@ -269,32 +462,27 @@ $$
 \frac{s}{|\bar{x}|}
 $$
 
+* A **boxplot** is a nice way to summarize location and dispersion in a dataset
 
 </div>
 <div class="right rt">
 
-```{r echo=FALSE}
-
-pl4 = paste(pl3, "lines(c(min(x), max(x)), c(75, 75), col=cols[3], lwd=lwd)", 
-            "text(max(x) - sd(x), 75, 'range', col=cols[3], pos=3)", 
-            "lines(c(quantile(x, 0.25), quantile(x, 0.75)), c(100, 100), col=cols[4], lwd=lwd)", 
-            "text(quantile(x, 0.75), 100, 'IQR', col=cols[4], pos=4)", sep=';')
-eval(parse(text=pl4))
-```
 
 
 ```{r}
 # the range function gives you the min and max
-## Take the difference to get the statistical range
-diff(range(x))
-max(x) - min(x)
+# Take the difference to get the statistical range
+diff(range(my_var))
+max(my_var) - min(my_var)
 
-IQR(x)
-quantile(x, 0.75) - quantile(x, 0.25)
+IQR(my_var)
+quantile(my_var, 0.75) - quantile(my_var, 0.25)
 
 # coefficient of variation can be done manually
-sd(x)/mean(x)
+sd(my_var)/mean(my_var)
 
+ggplot(my_df, aes(y = my_var)) + geom_boxplot() + 
+	theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
 
 ```
 </div>
@@ -323,10 +511,14 @@ y1 = y1/max(y1)
 y2 = y2/max(y2)
 y3 = y3/max(y3)
 
+layout(matrix(2:1, ncol=1), heights = c(0.2, 1))
+par(mar=c(2.5, 2.5, 0, 0.5), oma = c(0,0,0,0), mgp=c(1, 0.5, 0))
 plot(xx, y3, type='l', col=cols[1], xaxt='n', yaxt='n', ylab="Density", lwd=2, xlab="Variable value", bty='l')
 lines(xx, y1, type='l', col=cols[2], lwd=2)
 lines(xx, y2, type='l', col=cols[3], lwd=2)
-legend("center", legend = c("skew = 0", "right (positive) skew", "left (negative) skew"), lwd=2, bty='n', col=cols[1:3])
+par(mar=c(0,0,0.5,0.5))
+plot(0,0,type='n', axes=FALSE, xlab='', ylab='')
+legend("topleft", legend = c("skew = 0", "right (positive) skew", "left (negative) skew"), cex = 0.8, lwd=2, bty='n', col=cols[1:3])
 
 ```
 
@@ -350,12 +542,17 @@ y3 = dbeta(xx, 3, 3)
 # y2 = y2/max(y2)
 # y3 = y3/max(y3)
 
+# layout(matrix(1:2, nrow=1), widths = c(1, 0.5))
+par(mar=c(2.5, 2.5, 0.5, 0), oma = c(0,0,0,0), mgp=c(1, 0.5, 0))
 plot(xx, y1, type='l', col=cols[1], xaxt='n', yaxt='n', ylab="Density", lwd=2, xlab="Variable value", bty='l', ylim=c(0, max(y2)))
 lines(xx, y2, type='l', col=cols[2], lwd=2)
 lines(xx, y3, type='l', col=cols[3], lwd=2)
-legend("topleft", legend = c("mesokurtic (normal distribution)", 
+# par(mar=c(0,0,0.5,0.5))
+# plot(0,0,type='n', axes=FALSE, xlab='', ylab='')
+legend("topright", legend = c("mesokurtic (normal distribution)", 
                             "leptokurtic (positive kurtosis)", 
-                            "platykurtic (negative kurtosis)"), lwd=2, bty='n', col=cols[1:3])
+                            "platykurtic (negative kurtosis)"), lwd=2, bty='n', 
+				col=cols[1:3], cex = 0.8)
 
 ```
 
@@ -365,39 +562,18 @@ legend("topleft", legend = c("mesokurtic (normal distribution)",
 
 
 
-## Summarizing samples graphically: histograms
-<div class="left lt">
 
-* A **histogram** reports the frequency (or density) of a sample on the y-axis, with the variable on the x-axis.
-* Often the simplest view of the entire distribution of a dataset
-* In R, we use the `hist` function
-  - `col` changes the colour of the bars
-  - `breaks` changes the number of bins, or specifies exactly where the breaks are
-  - `main` gives the plot a title
-
-</div>
-
-<div class="right rt">
-
-```{r}
-data(iris)
-
-## subset the data by a single species
-iris_setosa = subset(iris, Species == "setosa")
-
-## change the bin width and the title
-hist(iris_setosa$Sepal.Length, breaks=20, col="gray", main="Histogram of setosa sepal length")
-```
-</div>
-
-
-
-## Summarizing samples graphically: boxplots
+## More on boxplots
 
 <div class="left lt">
 
 * **Boxplots** (sometimes **box-and-whisker** diagrams) summarize key statistics.
-* They are very useful for comparing variables.
+	- median
+	- first and third quartiles (hinges)
+	- approx. 95% confidence interval for median (notch)
+	- min/max (or quartile + 1.5*IQR) (whiskers)
+* They are very useful for comparing variables among groups.
+* Base graphics: we use the `boxplot` function
 * `y ~ group` is a special data type called a `formula`
 
 </div>
@@ -405,22 +581,27 @@ hist(iris_setosa$Sepal.Length, breaks=20, col="gray", main="Histogram of setosa 
 <div class="right rt">
 
 ```{r, eval = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris)
+boxplot(Sepal.Length ~ Species, data = iris, notch = TRUE)
 ```
 
 ```{r, echo = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4)
+boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4, notch = TRUE)
 ```
 
 </div>
 
 
-## Summarizing samples graphically: boxplots
+## More on boxplots
 
 <div class="left lt">
 
 * **Boxplots** (sometimes **box-and-whisker** diagrams) summarize key statistics.
-* They are very useful for comparing variables.
+	- median
+	- first and third quartiles (hinges)
+	- approx. 95% confidence interval for median (notch)
+	- min/max (or quartile + 1.5*IQR) (whiskers)
+* They are very useful for comparing variables among groups.
+* Base graphics: we use the `boxplot` function
 * `y ~ group` is a special data type called a `formula`
 
 </div>
@@ -428,11 +609,11 @@ boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4)
 <div class="right rt">
 
 ```{r, eval = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris)
+boxplot(Sepal.Length ~ Species, data = iris, notch = TRUE)
 ```
 
 ```{r, echo = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4)
+boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4, notch = TRUE)
 rng = range(iris$Sepal.Length[iris$Species == "setosa"])
 lines(c(0.75, 0.75), rng, col=cols[1])
 text(0.75, rng[2], "range", col=cols[1], pos=2)
@@ -440,11 +621,15 @@ text(0.75, rng[2], "range", col=cols[1], pos=2)
 iqr = quantile(iris$Sepal.Length[iris$Species == "versicolor"], c(0.25, 0.75))
 lines(c(1.75, 1.75), iqr, col=cols[2])
 text(1.75, rng[2], "IQR", col=cols[2], pos=2)
-text(2.25, rng[2], "median", col=cols[3], pos=2)
+med = median(iris$Sepal.Length[iris$Species == "versicolor"])
+text(2.15, med, "median", col=cols[3], pos=4)
 
-text(3, min(iris$Sepal.Length[iris$Species == "virginica"]), 
+lines(c(2.75, 2.75), c(6.35, 6.65), col=cols[4])
+text(2.75, 6.5, "~95 % CI", col = cols[4], pos = 2)
+
+text(3, 0.985*min(iris$Sepal.Length[iris$Species == "virginica"]), 
      "outliers\n x < quartile(x, 0.25) - 1.5*IQR(x)\n x > quartile(x, 0.75) + 1.5*IQR(x)", 
-     pos=1, col=cols[4], cex=0.7)
+     pos=1, col=cols[5], cex=0.7)
 ```
 
 </div>
@@ -467,19 +652,14 @@ text(3, min(iris$Sepal.Length[iris$Species == "virginica"]),
 <div class="right rt">
 
 ```{r}
-## bad!
-col_means = c(
+# bad!
+(col_means = c(
   mean(iris[,1]),
   mean(iris[,2]),
   mean(iris[,3]),
   mean(iris[,1]),  # it's easy to introduce mistakes this way!
-  mean(iris[,5]))
+  mean(iris[,5])))
 ```
-
-```{r echo = FALSE, results = 'asis'}
-kable(matrix(col_means, nrow=1, dimnames=list(NULL, colnames(iris))), digits=3)
-```
-
 
 </div>
 
@@ -490,14 +670,19 @@ kable(matrix(col_means, nrow=1, dimnames=list(NULL, colnames(iris))), digits=3)
 * We want to **apply** the function named `mean` separately to every variable in `iris` 
 * R has many different ways to apply functions, in this case we use `s`imple `apply` (`sapply`)
 
-```{r results=FALSE}
-col_means = sapply(iris, mean) # apply the function mean to each variable in iris
-col_means
+```{r}
+# bad!
+(col_means = c(
+  mean(iris[,1]),
+  mean(iris[,2]),
+  mean(iris[,3]),
+  mean(iris[,1]),  # it's easy to introduce mistakes this way!
+  mean(iris[,5])))
+
+# better
+(col_means = sapply(iris, mean)) # apply the function mean to each variable in iris
 ```
 
-```{r echo = FALSE, results = 'asis'}
-kable(col_means)
-```
 
 
 ## Programming in R: applying functions
@@ -505,29 +690,19 @@ kable(col_means)
 * We want to **apply** the function named `mean` separately to every variable in `iris` 
 * R has many different ways to apply functions, in this case we use `s`imple `apply` (`sapply`)
 * this works with any function that accepts a vector, even when they return more than a single value
-```{r results=FALSE}
+```{r}
 # we use only the first four columns, because these functions throw an error with non-numeric data
 sapply(iris[,1:4], range)
-```
-
-```{r echo = FALSE, results = 'asis'}
-kable_styling(kable(sapply(iris[,1:4], range)), font_size = 14)
-```
-
-```{r results=FALSE}
 sapply(iris[,1:4], quantile, c(0.25, 0.5, 0.75))
 ```
 
-```{r echo = FALSE, results = 'asis'}
-kable_styling(kable(sapply(iris[,1:4], quantile, c(0.25, 0.5, 0.75))), font_size = 14)
-```
 
 
 
 
 
 
-## Programming in R: applying functions to tabular data
+## Programming in R: tabular applies
 
 <div class="left lt">
 * There are three species of iris; it makes more sense to have summary statistics for each one
@@ -539,7 +714,9 @@ kable_styling(kable(sapply(iris[,1:4], quantile, c(0.25, 0.5, 0.75))), font_size
 <div class="right rt">
 
 ```{r}
-tapply(iris$Sepal.Length, iris$Species, mean)
+with(iris, 
+	 tapply(Sepal.Length, Species, mean)
+)
 ```
 
 </div>
@@ -547,48 +724,209 @@ tapply(iris$Sepal.Length, iris$Species, mean)
 
 
 
-## Programming in R: combining applys
+## Probability distributions
 
-* We can combine apply statements
-* `tapply` works with a single variable, 
-* `sapply` can be used to run the same `tapply` on every variable
-   - `sapply(X=iris,FUN=tapply,...)` where arguments for `tapply` replace `...`
+<div class="left lt">
 
-```{r results=FALSE}
-# this runs tapply on each of the four variables in iris
-# it uses the Species variable to tabulate, then runs the mean function on each slice
-mean_by_species = sapply(iris[,1:4], tapply, iris$Species, mean)
-mean_by_species
+**Thought experiment**
+
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4}
+library("plotrix")
+draw_pitch = function() {
+	grn = "#39A83B"
+	xl = c(-50, 50)
+	yl = c(0, 66)
+	par(mar = c(2,0,0,0))
+	plot(0,0, xlim=xl+c(-5, 5), ylim = yl+c(-5, 5), type='n', axes = FALSE, ylab = '', xlab = '', bty='n', asp=1)
+	axis(1, seq(xl[1], xl[2], 25))
+	rect(xl[1]-5, yl[1]-5, xl[2]+5, yl[2]+5, col = grn, border = 'white')
+	rect(xl[1], yl[1], xl[2], yl[2], border = 'white')
+	
+	draw.arc(rep(xl, each=2), rep(yl, 2), 0.5, deg1=c(0, 270, 90, 180), deg2 = c(90, 360, 180, 270), col = 'white')
+	
+	
+	draw.circle(xl[1]+11, median(yl), 9.15, border = 'white')
+	draw.circle(xl[2]-11, median(yl), 9.15, border = 'white')
+	draw.circle(median(xl), median(yl), 9.15, border = 'white')
+	lines(c(0,0), yl, col='white')
+	# penalty boxes
+	pby = median(yl) + c(-1, 1)*(40.3/2)
+	rect(xl[1], pby[1], xl[1]+16.5, pby[2], col = grn, border = 'white')
+	rect(xl[2]-16.5, pby[1], xl[2], pby[2], col = grn, border = 'white')
+	# goal boxes
+	gby = median(yl) + c(-10, 10)
+	rect(xl[1], gby[1], xl[1]+5.5, gby[2], col = grn, border = 'white')
+	rect(xl[2]-5.5, gby[1], xl[2], gby[2], col = grn, border = 'white')
+}
+draw_players = function(px, py) {
+	points(px, py, pch = 16, col="black", cex=0.5)
+}
+draw_pitch()
+ply = seq(1, 65, length.out = 100)
+plx = rep(0, 100)
+draw_players(plx, ply)
+
 ```
 
-```{r echo = FALSE, results='asis'}
-kable(mean_by_species)
+```{r, echo = FALSE, warning = FALSE}
+ggplot(data.frame(plx=plx), aes(x=plx)) + geom_histogram(bins=40) + xlab("Player positions") + xlim(-50, 50)
 ```
+
+</div>
+
 
 
 
 
 ## Probability distributions
+<div class="left lt">
 
 **Thought experiment**
-You and 99 of your closest friends gather on the centre line of a football pitch. The pitch runs north-south, and is 100 m long. We will define the centre line as 0m, the northern boundary +50 m, and the southern boundary as -50 m.
 
-Each person flips a fair coin. If the coin is heads, they take a step north (add 0.5 m to their location), if its tails, they take a step south (subtract 0.5 m from their location). Then we repeat this exercise 100 times (100 people, 100 coin flips each).
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
 
-**Question**: What is the distribution of positions on the field?
+Each person flips a fair coin. If the coin is heads, they take a step east (add 0.5 m to their location), if its tails, they take a step west (subtract 0.5 m from their location). 
+
+**Question**: What is the long-run distribution of positions on the field?
+
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4}
+draw_pitch()
+plx = plx + sample(c(-0.5, 0.5), length(plx), replace = TRUE)
+draw_players(plx, ply)
+
+```
+
+```{r, echo = FALSE, warning = FALSE}
+ggplot(data.frame(plx=plx), aes(x=plx)) + geom_histogram(bins=40) + xlab("Player positions") + xlim(-50, 50)
+```
+
+</div>
+
+
+
+
 
 ## Probability distributions
+<div class="left lt">
 
 **Thought experiment**
-You and 99 of your closest friends gather on the centre line of a football pitch. The pitch runs north-south, and is 100 m long. We will define the centre line as 0m, the northern boundary +50 m, and the southern boundary as -50 m.
 
-Each person flips a fair coin. If the coin is heads, they take a step north (add 0.5 m to their location), if its tails, they take a step south (subtract 0.5 m from their location). Then we repeat this exercise 100 times (100 people, 100 coin flips each).
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
 
-**Question**: What is the distribution of positions on the field?
+Each person flips a fair coin. If the coin is heads, they take a step east (add 0.5 m to their location), if its tails, they take a step west (subtract 0.5 m from their location). 
+
+**Question**: What is the long-run distribution of positions on the field?
+
+t = 10
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4}
+draw_pitch()
+for(i in 1:9)
+	plx = plx + sample(c(-0.5, 0.5), length(plx), replace = TRUE)
+draw_players(plx, ply)
+
+```
+
+```{r, echo = FALSE, warning = FALSE}
+ggplot(data.frame(plx=plx), aes(x=plx)) + geom_histogram(bins=40) + xlab("Player positions") + xlim(-50, 50)
+```
+
+</div>
+
+
+
+
+
+## Probability distributions
+<div class="left lt">
+
+**Thought experiment**
+
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
+
+Each person flips a fair coin. If the coin is heads, they take a step east (add 0.5 m to their location), if its tails, they take a step west (subtract 0.5 m from their location). 
+
+**Question**: What is the long-run distribution of positions on the field?
+
+t = 50
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4}
+draw_pitch()
+for(i in 1:40)
+	plx = plx + sample(c(-0.5, 0.5), length(plx), replace = TRUE)
+draw_players(plx, ply)
+
+```
+
+```{r, echo = FALSE, warning = FALSE}
+ggplot(data.frame(plx=plx), aes(x=plx)) + geom_histogram(bins=40) + xlab("Player positions") + xlim(-50, 50)
+```
+
+</div>
+
+
+
+
+## Probability distributions
+<div class="left lt">
+
+**Thought experiment**
+
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
+
+Each person flips a fair coin. If the coin is heads, they take a step east (add 0.5 m to their location), if its tails, they take a step west (subtract 0.5 m from their location). 
+
+**Question**: What is the long-run distribution of positions on the field?
+
+t = 500
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4}
+draw_pitch()
+for(i in 1:450)
+	plx = plx + sample(c(-0.5, 0.5), length(plx), replace = TRUE)
+draw_players(plx, ply)
+
+```
+
+```{r, echo = FALSE, warning = FALSE}
+ggplot(data.frame(plx=plx), aes(x=plx)) + geom_histogram(bins=40) + xlab("Player positions") + xlim(-50, 50)
+```
+
+</div>
+
+
+
+
+
+
+## Probability distributions
 
 We can simulate this experiment in R. Here is code for doing it for one person:
 
-```{r, results=FALSE}
+```{r}
 position = 0
 for(i in 1:100) {
   coin_flip = sample(c("heads", "tails"), 1)
@@ -605,27 +943,28 @@ position
 
 ## Probability distributions
 <div class="left lt">
-
-**Thought experiment**
-You and 99 of your closest friends gather on the centre line of a football pitch. The pitch runs north-south, and is 100 m long. We will define the centre line as 0m, the northern boundary +50 m, and the southern boundary as -50 m.
-
-Each person flips a fair coin. If the coin is heads, they take a step north (add 0.5 m to their location), if its tails, they take a step south (subtract 0.5 m from their location). Then we repeat this exercise 100 times (100 people, 100 coin flips each).
-
-**Question**: What is the distribution of positions on the field?
-
 We can simulate this experiment in R.
 
-And for a larger sample (2500) friends, doing more coin flips (500 each)
+And for a larger sample (2500) friends, doing more coin flips (500 each), with more concise code.
 
 ```{r include=FALSE}
 set.seed(123)
 ```
 
 ```{r, results=FALSE}
-positions = rep(0, 2500)
-for(i in 1:500) {
-  coin_flips = sample(c("heads", "tails"), length(positions), replace = TRUE)
-  positions = positions + ifelse(coin_flips == "heads", 0.5, -0.5)
+# repeat the initial position 2500 times, one per friend
+n_friends = 2500
+positions = rep(0, n_friends)
+
+# repeat the experiment 500 times
+time_steps = 1:500
+for(i in time_steps) {
+	# flip a coin for each friend; this returns one heads or tails for each n_friends
+	coin_flips = sample(c("heads", "tails"), size = n_friends, replace = TRUE)
+	# compute the steps: +0.5 if the flip is heads, -0.5 if tails
+	moves = ifelse(coin_flips == "heads", 0.5, -0.5)
+	# finally add the moves to the old positions and save the new position
+	positions = positions + moves
 }
 
 ```
@@ -686,7 +1025,6 @@ lines(density(positions, adjust=1.5), col='red', lwd=2)
 * As we take smaller and smaller steps, and do more coin flips, the distribution of values will converge exactly on a normal distribution.
 * Here we add a normal **PDF** based on the sample mean and sd (in blue).
 
-Side note: the curve produced by `density` works in two steps: First, it replaces each observation by a *small* normal **PDF** with the observation as its mean and some given standard deviation (the kernel size). Second, it sums up all those PDFs to get a smooth curve approximating the histogram.
 </div>
 
 <div class="right rt">
@@ -732,12 +1070,6 @@ x_{std} = \frac{(x - \bar{x})}{\sigma}
 $$
 * In R, we can use the `scale` function.
 
-```{r echo=FALSE, fig.height=5}
-plot(seq(-30,0,by=.1),dnorm(seq(-30,0,by=.1),mean=-15,sd=3),type="l",bty="n",xlim=c(-20,20),ylim=c(0,0.7),xlab="",ylab="density")
-lines(seq(-5,5,by=.1),dnorm(seq(-5,5,by=.1)))
-lines(seq(10,20,by=.1),dnorm(seq(10,20,by=.1),mean=15,sd=.6))
-text(-15,0.2,"A",cex=1.5); text(0,0.55,"scale(A)=scale(B)",cex=1.5); text(12,0.3,"B",cex=1.5)
-```
 
 
 ## Normal distributions
@@ -883,7 +1215,7 @@ dnorm(x = 3, mean = 0, sd = 1)
 (probability of observing a value < $q$)
 
 ```{r}
-pnorm(q = 3, mean = 0, sd = 1)
+pnorm(q = -1.96, mean = 0, sd = 1)
 ```
 
 
