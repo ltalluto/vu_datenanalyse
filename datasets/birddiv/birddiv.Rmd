@@ -1,0 +1,18 @@
+---
+title: "birddiv.rmd"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Bird Diversity in xxx
+
+Data from [Matti et al 2017](https://doi.org/10.5061/dryad.ts57v)
+
+
+```{r}
+birddiv = read.csv("birddiv.csv")
+
+```

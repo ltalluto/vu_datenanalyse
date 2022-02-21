@@ -1,0 +1,87 @@
+---
+title: "Worksheet 2"
+author: "Matthew Talluto & Gabriel Singer"
+date: "20.01.2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE)
+```
+
+
+
+
+## Environmental values and environmental education
+
+Load the environmental values dataset (Pinder et al, 2020, https://doi.org/10.5061/dryad.wdbrv15kn).
+
+```{r}
+env_values = read.csv("data/env_values.csv")
+```
+
+University students in Australia were asked various questions about their environmental values, desires for conservation careers, and educational background. We will examine two variables to address the hypothesis that students from families that value the environment rate more highly the quality of their education about environmental values.
+
+The data has two variables:
+
+* `env_education` contains responses to the question, "Thinking back to your schooling overall, how adequate was your education about environmental problems?", ranging from 0 (extremely inadequate) to 5 (extremely adequate).
+* `value_of_env_protection` has responses for, "How important is protecting the environment in your family?", ranging from 0 (not important) to 7 (very important)... note that one student indicated -1 ;-)
+
+1. Produce a histogram for each variable and a scatterplot for both variables. How do you interpret these plots? 
+2. Which type of correlation is most appropriate for these two variables?
+3. Use the function `cor.test` on `env_education` and `value_of_env_protection`. Is there a significant correlation? What direction is it? What is the estimate of the correlation?
+
+**Hint**: Choose the type of correlation using `method` in `cor.test`. There are missing values in the data, you will need to deal with these. 
+
+
+## Hydropsyche width-mass relationship
+
+The following dataset collects head capsule widths and body masses from Hydropsyche (a genus of caddisflies) in the Danube in Austria. Note that this data file is tab delimited, not comma delimited, so you will need `read.table`.
+
+```{r}
+hydrop = read.table("data/Hydropsyche.txt", header = TRUE)
+```
+
+1. As before, do some data exploration; plot the variables against each other, examine histograms, and possibly boxplots as well. How do you interpret these plots? Can you say anything about the relationship between these variables?
+2. Use `lm` to fit a simple linear model (one variable, no transformations), using body mass as the response (y) variable, and width as the predictor. Is the regression significant? Report the statistics as shown in the lecture.
+
+```{r eval = FALSE}
+# use the formula syntax within lm to describe the model you want to fit
+mod1 = lm(weight ~ width, data = hydrop)
+
+# use the summary function to get information from your model
+# how do you interpret the output?
+summary(mod1)
+```
+
+
+3. Produce some diagnostic plots of your model (see slide 18: Regression in R: diagnostics, or use `plot(mod)`). Is this an adequate model? Does it meet the assumptions of the linear model?
+4. Based on what you learned in 3, produce a new model, this time using a transformation of $x$ and/or $y$. Repeat 2 and 3 for the new model. Is the new model better? What does the new model imply about the relationship between mass and size? Is it testing the same hypothesis as the previous model?
+
+**Bonus**: Produce a scatterplot of width (x-axis) and mass (y-axis), on the original scale with no transformations. Add the regression curve from question 3 to your plot.
+
+```{r eval = FALSE}
+# to get you started
+ggplot(hydrop, aes(x = ?, y = ?)) + geom_point() + 
+	geom_smooth(method = "lm", formula = ?)
+```
+
+
+
+## Stoichiometry of microbes
+
+[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but level of replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermedite N:P levels 5 and 50. In addition, in each bottle 20 specimen were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_growth phase_medium_bottle** and codes for the independent replicates in the experimental design.
+
+The response variables in this design are signatures extracted from Raman spectra collected from individual bacterial cells. These are proxies for specific macromolecules: 8 carbohydrates, 4 nucleic acids, 3 proteins (coded by `ca_` and `na_`, `pr_`.)
+
+```{r}
+mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
+```
+
+1. The dataset is fairly large ;-), i.e. *exploration* could take you a while. Therefore start with filtering a subset of intermediate stoichiometry in the medium (either level 5 or 50).
+2. The dataset is multivariate, we are mainly interested in abundance of *nucleic acids*. Could all the nucleic acid Raman signatures be considered to inform about the same property *nucleic acid abundance*? If so, average the signatures to create a new *metavariable*. Consider using `scale` before averaging. 
+3. Measurements of individual bacterial cells are replicates **within** each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 *average* bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average *location*. Not collapsing the dataset to bottle means would mean to use a **pseudoreplicated** dataset.
+4. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
+
+**Bonus**: Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+
