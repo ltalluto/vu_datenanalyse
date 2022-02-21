@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 2"
 author: "Matthew Talluto & Gabriel Singer"
-date: "20.01.2021"
+date: "22.02.2022"
 output: html_document
 ---
 
@@ -66,11 +66,9 @@ ggplot(hydrop, aes(x = ?, y = ?)) + geom_point() +
 	geom_smooth(method = "lm", formula = ?)
 ```
 
-
-
 ## Stoichiometry of microbes
 
-[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but level of replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermedite N:P levels 5 and 50. In addition, in each bottle 20 specimen were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_growth phase_medium_bottle** and codes for the independent replicates in the experimental design.
+[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verucomicrobia are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but level of replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermedite N:P levels 5 and 50. In addition, in each bottle 20 specimen were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_growth phase_medium_bottle** and codes for the independent replicates in the experimental design.
 
 The response variables in this design are signatures extracted from Raman spectra collected from individual bacterial cells. These are proxies for specific macromolecules: 8 carbohydrates, 4 nucleic acids, 3 proteins (coded by `ca_` and `na_`, `pr_`.)
 
@@ -82,6 +80,7 @@ mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
 2. The dataset is multivariate, we are mainly interested in abundance of *nucleic acids*. Could all the nucleic acid Raman signatures be considered to inform about the same property *nucleic acid abundance*? If so, average the signatures to create a new *metavariable*. Consider using `scale` before averaging. 
 3. Measurements of individual bacterial cells are replicates **within** each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 *average* bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average *location*. Not collapsing the dataset to bottle means would mean to use a **pseudoreplicated** dataset.
 4. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
+5. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
 
-**Bonus**: Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+
 
