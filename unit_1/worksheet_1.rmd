@@ -160,12 +160,12 @@ Here we demonstrate another useful feature of R: writing your own functions. Try
 conf_interval = function(x, alpha = 0.05) {
 	# the default is a 95% confidence interval, can be changed when you call the function
 	n = length(x)
-	mu = mean(x)
+	xbar = mean(x)
 	sem = sd(x)/sqrt(n) # standard error
 	# half of alpha comes from each side of the distribution
 	t_vals = qt(c(alpha/2, 1-alpha/2), n -1)
 	# compute the CI
-	ci = mu + sem * t_vals
+	ci = xbar + sem * t_vals
 	names(ci) = c("lower", "upper")
 	return(ci)
 }
