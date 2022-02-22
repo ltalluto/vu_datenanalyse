@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 2"
 author: "Matthew Talluto & Gabriel Singer"
-date: "20.01.2021"
+date: "22.02.2022"
 output: html_document
 ---
 
@@ -60,21 +60,34 @@ Pearson needs continuous data, so it´s not possible to use here. Proper correla
 cor(env$env_education,env$value_of_env_protection,use="na.or.complete",method="spearman")
 
 cor.test(env$env_education,env$value_of_env_protection,method="spearman")
+
+nrow(env)-sum(is.na(env$env_education) | is.na(env$value_of_env_protection)) # sample size without NAs
 ```
 H0: Variables do not correlate.
-There is a significant correlation betwen env_education and value_of_env_protection (Spearman`s rho=0.12, P<0.01).
-Environmental education correlates positively (and significantly) with value of environmental protection (Spearman`s rho=0.12, P<0.01).
+There is a significant correlation betwen env_education and value_of_env_protection (Spearman`s rho=0.12, n=475, P<0.01).
+Environmental education correlates positively (and significantly) with value of environmental protection (Spearman`s rho=0.12, n=475, P<0.01).
 
 If H0/HA formulated one-sided (for instance, HA: positive correlation), then:
 
 ```{r}
 cor.test(env$env_education,env$value_of_env_protection,method="spearman",alternative = "greater")
 
-# alternatively just stick to default (alternative ="two.sided") divide P by 2.
+# alternatively just stick to default (alternative ="two.sided") and divide P by 2.
 cor.test(env$env_education,env$value_of_env_protection,method="spearman")$p.value / 2
 ```
 
 **Hint**: Choose the type of correlation using `method` in `cor.test`. there are missing values in the data, you will need to deal with these. 
+
+```{r}
+# Spearman correlation significance test by permutation (one-sided)
+sc<-rep(NA,1000) # to collect correlation coefficients computed from permuted data
+for(i in 1:1000) {
+  sc[i]<-cor(cbind(sample(env$env_education),env$value_of_env_protection),
+      use="pairwise.complete.obs",method="spearman")[1,2]
+}
+hist(sc)
+sum(sc>=cor(env,use="pairwise.complete.obs",method="spearman")[1,2])/1000
+```
 
 
 ## Hydropsyche width-mass relationship
@@ -106,7 +119,6 @@ plot(weight~width,data=hydrop)
 m1<-lm(weight~width,data=hydrop)
 summary(m1)
 abline(m1)
-
 ```
 
 Notice obviously inadequate fit. We don´t even need diagnostic plots...
@@ -126,10 +138,15 @@ coef(m2)
 plot(log(weight)~log(width),data=hydrop)
 abline(m2)
 
-plot(m2)
+plot(log(weight)~log(width),data=hydrop)
+newdata <- data.frame(width=seq(min(hydrop$width),max(hydrop$width),by=0.1))
+pred<-predict(mod,newdata=newdata,interval="confidence",level=0.95) 
+matlines(log(newdata$width),pred)
+
+plot(m2) # for diagnostics
 ```
 This is a power model.
-y=a*x^b  take log
+y=a*x^b  | take log
 log(y)=log(a)+b*log(x)
 Body mass is directly proportional to volume, volume is a power function of length. This model also makes physical sense!
 Diagnostic plots are much better, indicating no trend in normally distributed residuals and no indication of variance heterogeneity.
@@ -160,7 +177,9 @@ names(mic)
 1. The dataset is fairly large ;-), i.e. *exploration* could take you a while. Therefore start with filtering a subset of intermediate stoichiometry in the medium (either level 5 or 50).
 
 ```{r}
-mic<-subset(mic,subset=NP==50)
+mic$NP<-factor(mic$NP)
+mic<-subset(mic,subset=(NP==5 | NP==50) )
+mic<-droplevels(mic)
 ```
 
 2. The dataset is multivariate, we are mainly interested in aabundance of *nucleic acids*. Could all the nucleic acid Raman signatures be considered to inform about the same property *nucleic acid abundance*? If so, average the signatures to create a new *metavariable*. Consider using `scale` before averaging. 
@@ -168,7 +187,7 @@ mic<-subset(mic,subset=NP==50)
 ```{r}
 plot(mic[,grep("na",names(mic))])
 # strong correlations suggest redundant information in those na-signatures
-na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
+mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
 # this is a good average na-signature, due to scaling all 4 have same weight
 ```
 
@@ -178,52 +197,55 @@ mic$all.treat<-droplevels(mic$all.treat) # some non-used NP levels still in here
 # could check distribution within each
 i<-0
 i<-i+1
-hist(na_avg[mic$all.treat==levels(mic$all.treat)[i]])
+hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]])
 # just rerun last two lines to get some histograms
 # could also just plot all 28
 layout(matrix(1:28,nrow=4,ncol=7))
 par(mar=c(0,0,0,0))
 for(i in 1:28) {
-  hist(na_avg[mic$all.treat==levels(mic$all.treat)[i]],xlab="",ylab="",main="",xaxt="n",yaxt="n",col="grey",freq=FALSE)
-  lines(density(na_avg[mic$all.treat==levels(mic$all.treat)[i]]))
+  hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]],xlab="",ylab="",main="",xaxt="n",yaxt="n",col="grey",freq=FALSE)
+  lines(density(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]]))
 }
 # not all bottles generate ND data, maybe median is better measure for location within each bottle than mean
-# now averaging data within each bottle, see bonus below for usage of aggregate() instead
-na_bt_med<-tapply(na_avg,INDEX=mic$all.treat,median)
+# now averaging data within each bottle
+na_bt_med<-tapply(mic$na_avg,INDEX=mic$all.treat,median)
 species<-factor(substr(names(na_bt_med),start=0,stop=3))
 phase<-factor(substr(names(na_bt_med),start=5,stop=7))
-mic2<-data.frame(species,phase,na_bt_med)
+mic1<-data.frame(species,phase,na_bt_med) # not used any further here
+
+# same operation smarter with aggregate() instead
+mic<-mic[,-c(2)] # aggregation will make this factor meaningless
+mic2<-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
+# compare shape and size of mic vs. mic2!
 ```
 
 4. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
 ```{r}
 # could do separate tests for each species, but two-way ANOVA is more efficient and could help to find an interesting interaction effect
 combfac<-paste(mic2$species,mic2$phase,sep="_")
-bartlett.test(mic2$na_bt_med~combfac)
-boxplot(na_bt_med~species*phase,data=mic2)
-# variances seem homogeneous
-hist(unlist(tapply(na_bt_med,combfac,scale))) # quick and dirt check says ND could be improvable ;-)
-an<-aov(na_bt_med~species*phase,data=mic2)
+bartlett.test(mic2$na_avg~combfac)
+boxplot(na_avg~species*phase,data=mic2)
+# variances are still assumed as homogeneous
+hist(unlist(tapply(mic2$na_avg,combfac,scale))) # quick and dirt check says ND may be given ;-)
+an<-aov(na_avg~species*phase,data=mic2)
 summary(an)
 # interaction borderline not significant, thus in principal no post-hoc tests
-# however graphs really suggest an interaction!
 TukeyHSD(an)
 
 # making an appropriate graph
 # Anova tests differences in locations=means, thus boxplots are not really appropriate
-means<-tapply(na_bt_med,combfac,mean)
-sds<-tapply(na_bt_med,combfac,sd)
-plot(c(1:4),means,xlim=c(0.5,4.5),ylim=c(-1.5,1.5),ylab="avg nucleic acid signature",xlab="",xaxt="n",bty="l")
+means<-tapply(mic2$na_avg,combfac,mean)
+sds<-tapply(mic2$na_avg,combfac,sd)
+plot(c(1:4),means,xlim=c(0.5,4.5),ylim=c(-1.5,1.5),ylab="avg nucleic acid signature", xlab="",xaxt="n",bty="l")
 arrows(x0=c(1:4),y0=means-sds,y1=means+sds,angle=90,code=3)
 axis(side=1,at=c(1:4),labels=names(means))
-text(c(1:4),means,labels=c("a","b","a","a"),pos=4)
+text(c(1:4),means,labels=c("a","b","a","b"),pos=4)
 # obvious some things could still be improved, like using different symbols and symbol colors for the treatments  
 ```
 
 Conclude: ANOVA results show significant main effects and no interaction. The interaction term is just not significant, so we should better be careful with interpreting the main effects. Also, the plot suggests quite different patterns and prompts us to rely on pairwise tests rather than the anova results. The opportunistic species has clearly higher nucleic acid content when in growth phase.
 
-
-**Bonus**: Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+5. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
 ```{r}
 mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
 str(mic)
@@ -232,9 +254,11 @@ mic<-subset(mic,subset=((NP==5 | NP==50) & growthphase=="log"))
 mic<-droplevels(mic)
 mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
 names(mic)
-mic<-mic[,-c(1,2,4)]
-mic_agg<-aggregate(.~all.treat+species+NP,data=mic,FUN=median)
+mic<-mic[,-c(2)]
+mic_agg<-aggregate(.~all.treat+species+growthphase+NP+bottle,data=mic,FUN=median)
 mic_agg$combfac<-paste(substr(mic_agg$species,0,3),mic_agg$NP,sep="_")
+
+table(mic_agg$combfac)
 
 bartlett.test(na_avg~combfac,data=mic_agg)
 boxplot(na_avg~species*NP,data=mic_agg)

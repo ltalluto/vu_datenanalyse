@@ -372,7 +372,7 @@ summary {
 <div id="environmental-values-and-environmental-education" class="section level2">
 <h2>Environmental values and environmental education</h2>
 <p>Load the environmental values dataset (Pinder et al, 2020, <a href="https://doi.org/10.5061/dryad.wdbrv15kn" class="uri">https://doi.org/10.5061/dryad.wdbrv15kn</a>).</p>
-<pre class="r"><code>env_values = read.csv(&quot;data/env_values.csv&quot;)</code></pre>
+<pre class="r"><code>env = read.csv(&quot;data/env_values.csv&quot;)</code></pre>
 <p>University students in Australia were asked various questions about their environmental values, desires for conservation careers, and educational background. We will examine two variables to address the hypothesis that students from families that value the environment rate more highly the quality of their education about environmental values.</p>
 <p>The data has two variables:</p>
 <ul>
@@ -416,8 +416,19 @@ ggplot(hydrop, aes(x = ?, y = ?)) + geom_point() +
 <pre class="r"><code>mic = read.table(&quot;data/MicrobesStoichiometry.txt&quot;, header = TRUE)</code></pre>
 <ol style="list-style-type: decimal">
 <li>The dataset is fairly large ;-), i.e. <em>exploration</em> could take you a while. Therefore start with filtering a subset of intermediate stoichiometry in the medium (either level 5 or 50).</li>
+</ol>
+<pre class="r"><code>mic$NP&lt;-factor(mic$NP)
+mic&lt;-subset(mic,subset=(NP==5 | NP==50) )
+mic&lt;-droplevels(mic)</code></pre>
+<ol start="2" style="list-style-type: decimal">
 <li>The dataset is multivariate, we are mainly interested in abundance of <em>nucleic acids</em>. Could all the nucleic acid Raman signatures be considered to inform about the same property <em>nucleic acid abundance</em>? If so, average the signatures to create a new <em>metavariable</em>. Consider using <code>scale</code> before averaging.</li>
 <li>Measurements of individual bacterial cells are replicates <strong>within</strong> each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 <em>average</em> bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average <em>location</em>. Not collapsing the dataset to bottle means would mean to use a <strong>pseudoreplicated</strong> dataset.</li>
+</ol>
+<pre class="r"><code>mic&lt;-mic[,-c(2)] # aggregation will make this factor meaningless
+mic2&lt;-aggregate(.~all.treat+species+growthphase+NP+bottle,data=mic,FUN=median)</code></pre>
+<pre><code>## Error in eval(predvars, data, env): object 'growthphase' not found</code></pre>
+<pre class="r"><code># compare shape and size of mic vs. mic2!</code></pre>
+<ol start="4" style="list-style-type: decimal">
 <li>The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more “growth machinery” = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.</li>
 <li>Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.</li>
 </ol>
