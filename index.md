@@ -28,13 +28,7 @@ Morning sessions will be from 9-12, afternoon from 13-16.
 | :--- |  :---|   :---    | :--- |
 |21.02 Monday|[Introduction to R](unit_1/1a_intro_r.html)<br/>[Populations, samples, descriptive statistics](unit_1/1b_population_samples.html)|[Univariate statistics](unit_1/1c_univariate.html)<br/><small>Confidence intervals<br/>Significance testings<br/>Type I and II errors</small>|[Exercise sheet 1](unit_1/worksheet_1.html)<br/><small>R Base Graphics<br/>Programming basics<br/>Sampling</small>|
 |22.02 Tuesday|[Lecture 2a](unit_2/2a_correlation_regression.html)<br/><small>Data structures<br/>Visualisation basics<br/>Correlation & Regression<br/>Association</small>|Catch up|[Exercise sheet 2](unit_2/worksheet_2.html)<br/><small>Correlation<br/>Linear models<br/>ANOVA</small>|
-|23.02 Wednesday|[1- and 2-way Analysis of variance](unit_2/2b_anova.html)|[Lecture 3a](unit_3/3a_mlr.html)<br/><small>Multiple regression<br/>ANCOVA<br/>Model selection</small>|ANOVA<br/>ANCOVA<br/>MLR|
-|24.02 Thursday|Non-normal statistics<br/><small>Models for counts, proportions<br/>Bootstrapping & randomisation<br/></small>Multivariate statistics I <br/><small>PCA, RDA</small>|Multivariate statistics II<br/><small>Distance-based methods</small>|Multivariate stats in R|
+|23.02 Wednesday|[1- and 2-way Analysis of variance](unit_2/2b_anova.html)|[Lecture 3a](unit_3/3a_mlr.html)<br/><small>Multiple regression<br/>ANCOVA<br/>Model selection</small>|[Exercise Sheet 3]()<br/><small>ANOVA<br/>ANCOVA<br/>MLR</small>|
+|24.02 Thursday|[Abnormal statistics](unit_4/4a_abnormal.html)<br/><small>Models for counts, proportions<br/>Bootstrapping & randomisation<br/></small><br/>Multivariate statistics I <br/><small>PCA, RDA</small>|Multivariate statistics II<br/><small>Distance-based methods</small>|Multivariate stats in R|
 |25.02 Friday|Multivariate statistics<br/><small>PCA, CCA, RDA, DCCA</small>||Multivariate stats in Canoco|
 
-
-
-
-### Resources
-
-Data files, example code, etc
