@@ -1,0 +1,483 @@
+---
+title: "Generalised Linear Models"
+author: "Matthew Talluto"
+date: "23.02.2022"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: ../assets/rmd_style.css
+  beamer_presentation: default
+---
+
+
+```{r setup, include=FALSE, results = "hide"}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=7, fig.height=7, collapse = TRUE, comment = "##", dev="png", error=TRUE)
+library(RColorBrewer)
+cols = brewer.pal(8, "Set1")
+
+```
+
+## Another thought experiment
+
+Birds of prey often pass by high-altitude areas in relatively large numbers during the fall migration season. You and 50 friends go to 50 different mountaintops in the alps and count passing raptors for one hour.
+
+Assuming an average rate of 2 raptors passing per hour, how many birds does each friend see? What distribution describes this?
+
+## Another thought experiment
+
+Birds of prey often pass by high-altitude areas in relatively large numbers during the fall migration season. You and 50 friends go to 50 different mountaintops in the alps and count passing raptors for one hour.
+
+Assuming an average rate of 2 raptors passing per hour, how many birds does each friend see? What distribution describes this?
+
+**Intuition**: there will be variability, some will see 0, most will see 2. Five is possible, ten is unlikely.
+
+## Another thought experiment
+
+Birds of prey often pass by high-altitude areas in relatively large numbers during the fall migration season. You and 50 friends go to 50 different mountaintops in the alps and count passing raptors for one hour.
+
+Assuming an average rate of 2 raptors passing per hour, how many birds does each friend see? What distribution describes this?
+
+**Intuition**: there will be variability, some will see 0, most will see 2. Five is possible, ten is unlikely.
+
+The probability $p_k$ of observing $k$ events with a constant rate *\lambda* is given by a simple equation:
+
+$$
+p_k = \frac{\lambda^k e^{-\lambda}}{k!}
+$$
+```{r}
+lambda = 2 # two raptors per hour, observed for one hour
+k = 0
+(lambda^k * exp(-lambda)/factorial(k))
+k = 1
+(lambda^k * exp(-lambda)/factorial(k))
+
+k = 0:10
+probs = (lambda^k * exp(-lambda)/factorial(k))
+ggplot(data.frame(k = factor(k), prob = probs), aes(x = k, y = probs)) + geom_col() + ylab("Probability")
+```
+
+## Poisson distributions
+
+A random process whereby uncommon (n < 20) events occur with a fixed probability is a Poisson process, and our observations or raptors will follow a Poisson distribution.
+
+```{r}
+# simulate the experiment
+rapts = rpois(50, 2)
+hist(rapts)
+```
+## General linear models
+
+> Matt, add that Epsilon is Y_hat? But I see that Y_hat may be a bit disturbing in the definition of theta later on. I was a bit notation-confused but also I haven´t actually listened to your LR-talk, where you also used epsilon alreaady...
+
+$$
+\mathbb{E}(y) = \mathbf{B}\mathbf{X}
+$$
+
+$n$ observations of $y$, $n$ observations of $k$ $x$-variables, $k$-length coefficient vector.
+
+$$
+\begin{bmatrix}
+\mathbb{E}(y_1) \\ \mathbb{E}(y_2) \\ \vdots \\ \mathbb{E}(y_n)
+\end{bmatrix}
+= 
+\begin{bmatrix}
+b_0 & b_1 & ~b_2 & \dots & b_k
+\end{bmatrix}
+\times
+\begin{bmatrix}
+1 & x_{1,1} & x_{2,1} & \dots & x_{k,1} \\
+1 & x_{1,2} & x_{2,2} & \dots & x_{k,2} \\
+\vdots & \vdots & \vdots & \dots & \vdots \\
+1 & x_{1,n} & x_{2,n} & \dots & x_{k,n} \\
+\end{bmatrix}
+$$
+
+
+## General linear models
+
+$$
+\mathbb{E}(\mathbf{Y}) = \mathbf{B}\mathbf{X}
+$$
+
+$n$ observations of $j$ $y-$variables, $n$ observations of $k$ $x$-variables, $k \times j$-length coefficient matrix.
+
+$$
+\begin{bmatrix}
+\mathbb{E}(y_{1,1}) & \mathbb{E}(y_{2,1}) & \dots & \mathbb{E}(y_{j,1}) \\
+\mathbb{E}(y_{1,2}) & \mathbb{E}(y_{2,2}) & \dots & \mathbb{E}(y_{j,2}) \\
+\vdots & \vdots & \vdots & \dots & \vdots \\
+\mathbb{E}(y_{1,n}) & \mathbb{E}(y_{2,n}) & \dots & \mathbb{E}(y_{j,n}) \\
+\end{bmatrix}
+= 
+\begin{bmatrix}
+b_{1,1} & b_{2,1} & \dots & b_{k,1} \\
+b_{1,2} & b_{2,2} & \dots & b_{k,2} \\
+\vdots & \vdots & \vdots & \dots & \vdots \\
+b_{1,j} & b_{2,j} & \dots & b_{k,j} \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+1 & x_{1,1} & x_{2,1} & \dots & x_{k,1} \\
+1 & x_{1,2} & x_{2,2} & \dots & x_{k,2} \\
+\vdots & \vdots & \vdots & \dots & \vdots \\
+1 & x_{1,n} & x_{2,n} & \dots & x_{k,n} \\
+\end{bmatrix}
+$$
+
+
+## Changing the conditional distribution of y
+
+* What if $y$ doesn't come from a normal distribution?
+* We can easily relax this assumption!
+
+$$
+\begin{aligned}
+\mathbb{E}(y) & = \mathbf{B}\mathbf{X} \\
+\theta & = \mathcal{f}\left [\mathbb{E}\left (y \right), \phi \right ] \\
+y & \sim \mathcal{D}(\theta)
+\end{aligned}
+$$
+
+* $\theta$ is a vector of **distribution parameters**, used to parameterize a generic distribution $\mathcal{D}$.
+* $\phi$ is a **dispersion** or **precision** parameter
+   - e.g., if $\mathcal{D}$ is a normal distribution, $\phi = s_\epsilon$
+
+
+
+
+## Link functions
+
+* This model assumes a linear relationship between $\mathbb{E}(y)$ and $\mathbf{B}\mathbf{X}$.
+$$
+\begin{aligned}
+\mathbb{E}(y) & = \mathbf{B}\mathbf{X} \\
+\theta & = \mathcal{f}\left [\mathbb{E}\left (y \right), \phi \right ] \\
+y & \sim \mathcal{D}(\theta)
+\end{aligned}
+$$
+
+
+* This can be a problem for some distributions
+* A straight line can predict impossible values for $\mathbb{E}(y)$!
+
+```{r echo = FALSE, fig.width=9, fig.height=8}
+xx1 = seq(0,1,length.out = 100)
+yy1 = dbeta(xx1, 1.7, 2.7)
+xx2 = seq(0, 20, length.out=100)
+yy2 = dexp(xx2)
+par(mfrow=c(2,2), pch=16, bty='n')
+plot(xx1, yy1, xlab = "E(y)", ylab = "probability density", type='l', main = "y ~ beta")
+plot(xx2, yy2, xlab = "E(y)", ylab = "probability density", type='l', main = "y ~ exponential")
+```
+
+## Linearity assumption revisited
+
+* This model assumes a linear relationship between $\mathbb{E}(y)$ and $\mathbf{B}\mathbf{X}$.
+
+* This can be a problem for some distributions
+* A straight line can predict impossible values for $\mathbb{E}(y)$!
+
+```{r echo = FALSE}
+set.seed(123)
+x1 = rnorm(100)
+pr = plogis(0.7 - 0.9 * x1)
+dat = data.frame(x = x1, y = rbeta(plogis(x1), 50*pr, 50*(1-pr)))
+plot(y~x, data=dat, xlab = "Standardized winter snow cover", 
+     ylab = "Proportion plant cover", pch=16, bty='n', xlim=c(-4, 4), ylim=c(-0.2, 1.4), yaxp=c(-0.2, 1.4, 8))
+mod = lm(y ~ x, data = dat)
+abline(mod)
+```
+
+
+
+## Linearity assumption revisited
+
+* This model assumes a linear relationship between $\mathbb{E}(y)$ and $\mathbf{B}\mathbf{X}$.
+
+* This can be a problem for some distributions
+* A straight line can predict impossible values for $\mathbb{E}(y)$!
+
+```{r echo = FALSE}
+plot(y~x, data=dat, xlab = "Standardized winter snow cover", 
+     ylab = "Proportion plant cover", pch=16, bty='n', xlim=c(-4, 4), ylim=c(-0.2, 1.4), yaxp=c(-0.2, 1.4, 8))
+abline(mod)
+xn = c(-3.5, 3.9)
+yn = predict(mod, newdata=data.frame(x=xn))
+points(xn, yn, pch=16, col=cols[1])
+abline(h = yn, lty=2)
+```
+
+
+## Transforming the expectation
+
+* This model assumes a linear relationship between $\mathbb{E}(y)$ and $\mathbf{B}\mathbf{X}$.
+
+* This can be a problem for some distributions
+* A straight line can predict impossible values for $\mathbb{E}(y)$!
+* To transform $y$, we need a way to **link** sensible values for $\mathbb{E}(y)$ to the linear term $\mathbf{BX}$
+
+```{r echo = FALSE}
+plot(y~x, data=dat, xlab = "Standardized winter snow cover", 
+     ylab = "Proportion plant cover", pch=16, bty='n', xlim=c(-4, 4), ylim=c(-0.2, 1.4), yaxp=c(-0.2, 1.4, 8))
+abline(mod)
+xn = c(-3.5, 3.9)
+yn = predict(mod, newdata=data.frame(x=xn))
+points(xn, yn, pch=16, col=cols[1])
+mod2 = lm(y ~ plogis(x), data = dat)
+xx = seq(-4, 4, length.out=100)
+yy = plogis(0.7 - 0.9*xx)
+lines(xx, yy, col=cols[1], lty=1, lwd=1.5)
+```
+
+## Why not lm?
+
+* This model assumes a linear relationship between $\mathbb{E}(y)$ and $\mathbf{B}\mathbf{X}$.
+
+* This can be a problem for some distributions
+* A straight line can predict impossible values for $\mathbb{E}(y)$!
+* To transform $y$, we need a way to **link** sensible values for $\mathbb{E}(y)$ to a linear equation $a + \mathbf{BX}$
+* `lm` with transformed y is biased!
+
+```{r echo = FALSE}
+plot(y~x, data=dat, xlab = "Standardized winter snow cover", 
+     ylab = "Proportion plant cover", pch=16, bty='n', xlim=c(-4, 4), ylim=c(-0.2, 1.4), yaxp=c(-0.2, 1.4, 8))
+abline(mod)
+xn = c(-3.5, 3.9)
+yn = predict(mod, newdata=data.frame(x=xn))
+points(xn, yn, pch=16, col=cols[1])
+mod2 = lm(y ~ plogis(x), data = dat)
+xx = seq(-4, 4, length.out=100)
+yy = plogis(0.7 - 0.9*xx)
+yy2 = plogis(coef(mod2)[1] + coef(mod2)[2]*xx)
+lines(xx, yy, col=cols[1], lty=1, lwd=1.5)
+lines(xx, yy2, col=cols[2], lty=1, lwd=2.5)
+
+lines(xx, yy2, col=cols[2], lty=1, lwd=2.5)
+```
+
+
+
+## Why not lm?
+* Recall the problem for many non-linear transformations:
+
+$$
+\mathcal{f} \left [\mathbb{E}\left (y \right ) \right] \ne \mathbb{E}\left (\mathcal{f} \left [y  \right] \right )
+$$
+
+> here we could link back to the Hydropsyche regression example if we do this one with lm() and nlm() and point out the differences there already. I think that´s equivalent to the problem of lm brought up here.
+
+## Link functions
+
+<div class="left lt">
+
+* To properly transform $y$, we need a way to **link** sensible values for $\mathbb{E}(y)$ to the linear term $\mathbf{BX}$
+* The linear term is defined for all real numbers: $(-\infty, \infty)$, while $\mathbb{E}(y)$ is in $[0,1]$
+* If $y$ is a proportion or probability, the **log-odds** (aka **logit**) function works well
+
+$$
+\begin{aligned}
+\log \frac{\mathbb{E}(y)}{1-\mathbb{E}(y)} & = \mathbf{BX} \\
+\mathrm{logit} \left[ \mathbb{E}\left (y \right ) \right] & = \mathbf{BX} \\
+\mathbb{E}(y) & = \mathrm{logit}^{-1} (\mathbf{BX}) \\
+\mathbb{E}(y) & = \frac{\mathrm{e}^{\mathbf{BX}}}{1 + \mathrm{e}^{\mathbf{BX}}}
+\end{aligned}
+$$
+* In R, $\mathrm{logit}(y)$ is `qlogis(y)` and $\mathrm{logit}^{-1}(x)$ is `plogis(x)`
+
+> understanding issue from Gabriel: We start here with f(y) which - just a few pages before - we argued not to do. Not sure if I get it.
+
+</div>
+
+<div class="right rt">
+```{r echo=FALSE}
+
+xx = seq(-7, 7, length.out=200)
+pp = plogis(xx)
+par(mar=c(4.5, 5, 0.5, 0.5))
+plot(xx, pp, xlab = "X", ylab = expression(logit^{-1}~X), type='l', bty='n')
+```
+</div>
+
+
+
+
+## The generalised linear model (glm)
+
+$$
+\begin{aligned}
+\mathrm{L} \left[ \mathbb{E}\left(y \right) \right] & = \mathbf{B}\mathbf{X} \\
+\mathbb{E}(y) & = \mathrm{L}^{-1}(\mathbf{B}\mathbf{X}) \\
+\theta & = \mathcal{f}\left [\mathbb{E}\left (y \right), \phi \right ] \\
+y & \sim \mathcal{D}(\theta)
+\end{aligned}
+$$
+
+* $\mathrm{L}$ is the **link function**
+* $\theta$ is a vector of **distribution parameters**, used to parameterize a generic distribution $\mathcal{D}$.
+* $\phi$ is a **dispersion** or **precision** parameter
+* Linear regression is a special case of the GLM, where
+   - $\mathrm{L}$ is the **identity function**: $\mathrm{L}(x) = x$
+   - $\mathcal{f}$ is also the **identity function**
+   - $\mathcal{D}$ is a normal distribution with mean $\mathbb{E}(y)$ and constant variance $\sigma = \phi$
+   
+
+
+
+## Discrete events - Binomial models
+
+* We observe an event happening $k$ times out of $n$ attempts/possibilities
+    - $k_1$ of $n_1$ people in the vaccine group got COVID, compared to $k_c$ of $n_c$ in the control
+    - we marked $n$ animals and recovered $k$ a week later
+    - $k$ of $n$ trees in forest monitoring plots were alive when the plots were surveyed
+* Also works for binary data (i.e., $n=1$)
+    - A species is present or absent in experimental units (species distribution modelling)
+
+
+We use a **binomial** distribution with a **logit** or **probit link**
+
+The expectation of y is the probability that an event occurs
+
+$$
+\begin{aligned}
+p & = \mathrm{logit}^{-1}(\mathbf{BX}) \\
+y & \sim \mathrm{Binomial}(p)
+\end{aligned}
+$$
+
+**Constraint:** $\sigma^2_{y|\mathbf{X},n} = np(1-p)$
+
+Binomial models are fairly robust to this assumption
+
+
+## True counts - Poisson models
+
+* Often, we have so-called true counts (trials/$n$ are unknown, infinite, nonsensical)
+* Can also be expressed as a *rate*
+   - number of species observed per unit area
+   - number of fish crossing a fish ladder per hour
+   - abundance per sampling effort
+   
+These data can be modelled with a **poisson** distribution, conventionally with a **log link**
+
+The expectation of y is the rate at which the counts accumulate (in units of counts per sampling unit)
+
+$$
+\begin{aligned}
+\lambda & = \exp(\mathbf{BX}) \\
+y & \sim \mathrm{Poisson}(\lambda)
+\end{aligned}
+$$
+
+**Constraint:** $\sigma^2_{y|\mathbf{X}} = \mathbb{E}(y|\mathbf{X}) = \lambda$
+
+check this with the **dispersion** parameter in the GLM output
+
+* Sometimes, *exposure* varies by observation.
+   - Different size plots
+   - Different observation times
+   - We can add this to the model on the log scale using the `offset` parameter
+   
+
+
+## Poisson example: technology on islands
+
+**Hypothesis**: The rate of technological development $\lambda_{\mathrm{tools}}$ among indigenous populations increases with log-population size. 
+
+> log-transform $x$ because at some point, the benefit of increasing population levels off
+
+```{r fig.width = 12, fig.height=5.5}
+tools = data.frame(
+  culture = c("Malekula", "Tikopia", "Santa Cruz", "Yap", "Lau Fiji", 
+              'Trobriand', 'Chuuk', 'Manus', 'Tonga', 'Hawaii'), 
+  tool_types = c(13,22,24,43,33,19,40,28,55,71),
+  population = c(1100, 1500, 3600, 4791, 7400, 8000, 9200, 13000, 17500, 275000),
+  contact = factor(c("lo", "lo", "lo", "hi", "hi", "hi", "hi", "lo", "hi", "lo")),
+  age_ky = c(0.5, 0.7, 3.3, 1, 3.5, 3.3, 2.2, 3, 2.9, 1.1)  ## wild guesses from instructor :-)
+)
+par(mfrow=c(1,3))
+plot(tool_types ~ population, pch=16, data=tools, ylab="Number of tool types", xlab="Population Size")
+plot(tool_types ~ log(population), pch=16, data=tools, ylab="Number of tool types", xlab="log(Population Size)")
+hist(tools$tool_types, main="Histogram of tool types", xlab="Number of tool types")
+
+```
+
+<p style="font-size: small;">
+(Kline Michelle A. and Boyd Robert 2010. Population size predicts technological complexity in Oceania. Proc. R. Soc. B.277: 2559–2564)
+</p>
+
+## Poisson example
+
+```{r fig.width = 13}
+mod1 = glm(tool_types ~ log(population), data = tools, family = poisson)
+mod2 = glm(tool_types ~ log(population)+contact, data = tools, family = poisson)
+mod3 = glm(tool_types ~ log(population)+contact, data = tools, family = poisson, offset = log(age_ky))
+
+summary(mod1)
+summary(mod2)
+summary(mod3)
+
+## Investigate for overdispersion
+## empirical dispersion parameter... expect it to be equal to one!
+mod1$deviance / mod1$df.residual
+mod2$deviance / mod2$df.residual
+mod3$deviance / mod3$df.residual
+
+## Look at AIC of the 3 models
+## Minimum is "best" model
+## Models < 2 delta are very similar to best
+## Models 2-10 delta have some support, but inferior
+## Models >10 have basically no support
+aictab = data.frame(model = c("pop only", "pop+contact", "pop+contact+offset"), 
+          aic = c(AIC(mod1), AIC(mod2), AIC(mod3)))
+aictab$delta = aictab$aic - min(aictab$aic)
+aictab
+```
+
+## Poisson example
+```{r fig.width = 13}
+
+par(mfrow=c(1,2))
+plot(tool_types ~ log(population), pch=16, col = tools$contact, 
+     data=tools, ylab="Number of tool types", xlab="log(Population Size)")
+new_hi = data.frame(population = seq(min(tools$population), max(tools$population), length.out = 500), 
+                    contact = "hi")
+pr_hi = predict(mod2, type='response', newdata = new_hi)
+new_lo = data.frame(population = seq(min(tools$population), max(tools$population), length.out = 500), 
+                    contact = "lo")
+pr_lo = predict(mod2, type='response', newdata = new_lo)
+lines(log(new_hi$population), pr_hi)
+lines(log(new_lo$population), pr_lo, col=2)
+legend("bottomright", legend=c("high contact", "low contact"), col=1:2, lwd=1, bty='n')
+
+plot(tool_types ~ population, pch=16, col = tools$contact, 
+     data=tools, ylab="Number of tool types", xlab="Population Size")
+lines(new_hi$population, pr_hi)
+lines(new_lo$population, pr_lo, col=2)
+legend("bottomright", legend=c("high contact", "low contact"), col=1:2, lwd=1, bty='n')
+
+
+```
+
+
+
+
+## What to do if overdispersed?
+1. Consider adding predictors if possible (and x-transformations)
+2. Consider if exposure is really constant (for Poisson)
+3. Fit models with more flexible variance (e.g., negative binomial instead of Poisson)
+4. Are there more zeros than expected? (finite mixture models)
+5. Consult a statistician
+
+
+
+## Continuous, strictly positive data
+
+* Often used for costs, waiting times
+   - ecosystem services modelling
+   - animal movement
+   - life expectancy
+* Generally assume the coefficient of variation is constant
+* Use a **gamma** likelihood and **inverse** or **log** link
+
