@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, error=TRUE)
 ```
 
+
 ## Hucho record captures in Austrian rivers
 
 Fishermen like to catch record-breaking large fish and if successful will do a bit of effort to document their historic achievement in the local pub ;-) This dataset contains sizes of such record catches of Hucho in various Austrian streams and rivers of various size, the data was collected from various sources including the eventual black-and-white photograph hanging in a pub.

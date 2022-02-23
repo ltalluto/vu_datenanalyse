@@ -106,7 +106,7 @@ for(in 1:nrow(lakes)) {
 predict(m1)
 
 
-## Mortality/Abundacne of sugar maple
+## Mortality/Abundance of sugar maple
 
 These data are from a study of the response of trees in North America to climate change (Talluto, et al. (2017) Extinction debt and colonization credit delay range shifts of eastern North American trees. Nat Ecol Evol 1, 0182 (2017). https://doi.org/10.1038/s41559-017-0182).
 
@@ -154,7 +154,7 @@ names(clim_wide)
 Multicollinearity is usually a problem with climate variables, because many variables measure very similar things. However, the data set is very large, and so variance inflation is somewhat less of a problem. You should still choose a smaller number of variables to test (max 4); justify this choice based on a hypothesis. You can use `cor(clim[, -c(1,2)])` to make a correlation matrix; if two variables have a correlation > 0.6, you should only use one of them. You may (optionally) also check VIFs, but you should do so after fitting the model.
 
 ```{r}
-pairs(clim_wide[,-c(1:2)]) # a lot of data points, be careful, can take very long
+#pairs(clim_wide[,-c(1:2)]) # a lot of data points, be careful, can take very long
 cor(clim_wide[,-c(1:2)])
 ```
 

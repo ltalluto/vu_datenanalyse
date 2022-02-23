@@ -164,7 +164,7 @@ lines(hydrop$width,yhat,col="red")
 
 ## Stoichiometry of microbes
 
-[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but level of replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermedite N:P levels 5 and 50. In addition, in each bottle 20 specimen were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_growth phase_medium_bottle** and codes for the independent replicates in the experimental design.
+[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but level of replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermedite N:P levels 5 and 50. In addition, in each bottle 20 specimen were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_phase_medium_bottle** and codes for the independent replicates in the experimental design.
 
 The response variables in this design are signatures extracted from Raman spectra collected from individual bacterial cells. These are proxies for specific macromolecules: 8 carbohydrates, 4 nucleic acids, 3 proteins (coded by `ca_` and `na_`, `pr_`.)
 
@@ -193,16 +193,16 @@ mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
 
 3. Measurements of individual bacterial cells are replicates **within** each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 *average* bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average *location*. Not collapsing the dataset to bottle means would mean to use a **pseudoreplicated** dataset.
 ```{r}
-mic$all.treat<-droplevels(mic$all.treat) # some non-used NP levels still in here
 # could check distribution within each
 i<-0
 i<-i+1
+levels(mic$bottle)
 hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]])
 # just rerun last two lines to get some histograms
-# could also just plot all 28
-layout(matrix(1:28,nrow=4,ncol=7))
+# could also just plot all 60 or maybe at least some of them
+layout(matrix(1:30,nrow=5,ncol=6))
 par(mar=c(0,0,0,0))
-for(i in 1:28) {
+for(i in 1:30) {
   hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]],xlab="",ylab="",main="",xaxt="n",yaxt="n",col="grey",freq=FALSE)
   lines(density(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]]))
 }
@@ -250,12 +250,12 @@ Conclude: ANOVA results show significant main effects and no interaction. The in
 mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
 str(mic)
 mic$NP<-factor(mic$NP)
-mic<-subset(mic,subset=((NP==5 | NP==50) & growthphase=="log"))
+mic<-subset(mic,subset=((NP==5 | NP==50) & phase=="log"))
 mic<-droplevels(mic)
 mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
 names(mic)
 mic<-mic[,-c(2)]
-mic_agg<-aggregate(.~all.treat+species+growthphase+NP+bottle,data=mic,FUN=median)
+mic_agg<-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
 mic_agg$combfac<-paste(substr(mic_agg$species,0,3),mic_agg$NP,sep="_")
 
 table(mic_agg$combfac)
