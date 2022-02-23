@@ -570,9 +570,11 @@ preds$lower = exp(preds$fit - preds$se.fit * 1.96)
 preds$upper = exp(preds$fit + preds$se.fit * 1.96)
 preds$expect = exp(preds$fit)
 cidat = cbind(cidat, preds)
+ymax = 75
+cidat = cidat[cidat$upper < ymax,]
 
 
-ggplot() +  ylim(c(10,75)) + 
+ggplot() +  ylim(c(10,ymax)) + 
 	geom_ribbon(data = cidat, aes(x = population, ymin = lower, 
 				ymax = upper, fill = contact), alpha = 0.3) + 
 	geom_line(data = cidat, aes(x = population, y = expect, color = contact)) + 
