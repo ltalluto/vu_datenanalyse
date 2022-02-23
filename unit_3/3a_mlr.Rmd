@@ -27,7 +27,7 @@ library(kableExtra)
 
 Multiple metric continuous independent predictors are used to predict *one* metric response variable.
 
-![](img/mlr.png)
+![](img/mlr.png){width=90%}
 
 Already met 2-way ANOVA and ANCOVA as models with >1 predictor.
 

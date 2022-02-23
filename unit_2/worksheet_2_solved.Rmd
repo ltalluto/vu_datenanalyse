@@ -170,7 +170,7 @@ The response variables in this design are signatures extracted from Raman spectr
 
 ```{r}
 mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
-
+levels(mic$species)<-c("Pec","Ver") # just to make shorter labels on axes
 names(mic)
 ```
 
@@ -178,7 +178,7 @@ names(mic)
 
 ```{r}
 mic$NP<-factor(mic$NP)
-mic<-subset(mic,subset=(NP==5 | NP==50) )
+mic<-subset(mic,subset=(NP==5) )
 mic<-droplevels(mic)
 ```
 
@@ -193,14 +193,15 @@ mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
 
 3. Measurements of individual bacterial cells are replicates **within** each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 *average* bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average *location*. Not collapsing the dataset to bottle means would mean to use a **pseudoreplicated** dataset.
 ```{r}
-# could check distribution within each
+# could check distribution within each bottle
 i<-0
 i<-i+1
 levels(mic$bottle)
 hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]])
 # just rerun last two lines to get some histograms
 # could also just plot all 60 or maybe at least some of them
-layout(matrix(1:30,nrow=5,ncol=6))
+layout(matrix(1:36,nrow=6,ncol=6))
+old.par<-par # to keep graphical pars
 par(mar=c(0,0,0,0))
 for(i in 1:30) {
   hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]],xlab="",ylab="",main="",xaxt="n",yaxt="n",col="grey",freq=FALSE)
@@ -225,11 +226,11 @@ mic2<-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
 combfac<-paste(mic2$species,mic2$phase,sep="_")
 bartlett.test(mic2$na_avg~combfac)
 boxplot(na_avg~species*phase,data=mic2)
-# variances are still assumed as homogeneous
+# --> variances assumed as homogeneous
 hist(unlist(tapply(mic2$na_avg,combfac,scale))) # quick and dirt check says ND may be given ;-)
 an<-aov(na_avg~species*phase,data=mic2)
 summary(an)
-# interaction borderline not significant, thus in principal no post-hoc tests
+# interaction not significant, thus in principal no post-hoc tests needed unless groupwise comparisons interesting
 TukeyHSD(an)
 
 # making an appropriate graph
@@ -239,7 +240,7 @@ sds<-tapply(mic2$na_avg,combfac,sd)
 plot(c(1:4),means,xlim=c(0.5,4.5),ylim=c(-1.5,1.5),ylab="avg nucleic acid signature", xlab="",xaxt="n",bty="l")
 arrows(x0=c(1:4),y0=means-sds,y1=means+sds,angle=90,code=3)
 axis(side=1,at=c(1:4),labels=names(means))
-text(c(1:4),means,labels=c("a","b","a","b"),pos=4)
+text(c(1:4),means,labels=c("a","b","b","b"),pos=4)
 # obvious some things could still be improved, like using different symbols and symbol colors for the treatments  
 ```
 
@@ -248,18 +249,16 @@ Conclude: ANOVA results show significant main effects and no interaction. The in
 5. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
 ```{r}
 mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
-str(mic)
+levels(mic$species)<-c("Pec","Ver") # just to make shorter labels on axes
 mic$NP<-factor(mic$NP)
 mic<-subset(mic,subset=((NP==5 | NP==50) & phase=="log"))
 mic<-droplevels(mic)
 mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
-names(mic)
 mic<-mic[,-c(2)]
 mic_agg<-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
 mic_agg$combfac<-paste(substr(mic_agg$species,0,3),mic_agg$NP,sep="_")
 
 table(mic_agg$combfac)
-
 bartlett.test(na_avg~combfac,data=mic_agg)
 boxplot(na_avg~species*NP,data=mic_agg)
 # variances seem homogeneous
@@ -267,7 +266,7 @@ hist(unlist(tapply(mic_agg$na_avg,mic_agg$combfac,scale))) # ok
 an<-aov(na_avg~species*NP,data=mic_agg)
 summary(an)
 # interaction significant
-# thus post-hoc tests
+# thus post-hoc tests more important
 TukeyHSD(an)
 
 # making an appropriate graph
@@ -277,7 +276,7 @@ sds<-tapply(mic_agg$na_avg,mic_agg$combfac,sd)
 plot(c(1:4),means,xlim=c(0.5,4.5),ylim=c(-1.5,1.5),ylab="avg nucleic acid signature",xlab="",xaxt="n",bty="l")
 arrows(x0=c(1:4),y0=means-sds,y1=means+sds,angle=90,code=3)
 axis(side=1,at=c(1:4),labels=names(means))
-text(c(1:4),means,labels=c("a","b","b","b"),pos=4)
+text(c(1:4),means,labels=c("a","b","b","a,b"),pos=4)
 # obvious some things could still be improved, like using different symbols and symbol colors for the treatments  
 ```
 

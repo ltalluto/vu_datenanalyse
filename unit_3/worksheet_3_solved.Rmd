@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 3"
 author: "Matthew Talluto & Gabriel Singer"
-date: "23.02.2021"
+date: "23.02.2022"
 output: html_document
 ---
 
@@ -22,7 +22,6 @@ The Danube salmon is an endangered species in now dwindling populations. It need
 
 ```{r}
 hucho = read.table("data/HuchoRatschan2012.txt", header = TRUE)
-getwd()
 ```
 
 1. Look for a reasonable relationship of a river size measure with a fish size measure. Deliver a model that could guide construction of fish passes. Consider transformations to linearize relationships.
@@ -75,13 +74,20 @@ humo4<-lm(mass~log(discharge)+population,data=hucho)
 anova(humo4)
 summary(humo4)
 
-plot(length~log(discharge),data=hucho)
-
+plot(mass~log(discharge),data=hucho,col=c("green","red","black"))
+abline(a=coef(humo4)[1],b=coef(humo4)[2],col="green")
+abline(a=coef(humo4)[1]+coef(humo4)[3],b=coef(humo4)[2],col="red")
+abline(a=coef(humo4)[1]+coef(humo4)[4],b=coef(humo4)[2],col="black")
 ```
+
 The best model to estimate fish ladder dimension comes from mass~log(Q) using only data from large populations:
+
 Hucho model4: Fish mass = 16.67 +2.36 log(Q)
+
 which has similar slope but higher intercept than the model that ignores population size:
+
 Hucho model1: Fish mass = 14.9+2.4 * log(Q)
+
 With model1 fish would be estimated too small, fish passes would not support the largest fish that we could hope for in eventually healthy populations.
 
 ## Solid particulate matter in lakes
@@ -92,7 +98,7 @@ Load the LakeSPM dataset (Lindström, M., Håkanson, L., Abrahamsson, O., Johans
 lakes <- read.table("data/LakeSPM.txt",header=TRUE)
 ```
 
-The study has a set of lakes with SPM=solid particulate matter as the main response of interest. High SPM is a water quality issue, it can be generated through excessive phytoplankton growth or resuspension of sediment in shallow lakes or terrigeneous input into smaller lakes. For water quality prediction a model to predict SPM from easily accessible lake data should be generated. The available predictors include
+The study has a set of lakes with SPM=solid particulate matter as the main response of interest. High SPM is a water quality issue, it can be generated through excessive phytoplankton growth or resuspension of sediment in shallow lakes or terrigeneous input into smaller lakes. For water quality prediction a model to predict SPM from easily accessible lake data should be generated. The available predictors (check Excel sheet in data folder for exact meaning of abbreviations) include
 
 * Measures of lake size and morphology that could influence sensitivity to terrestrial loading and resuspension of lake sediment.
 * Measures of water renewal.
@@ -132,6 +138,7 @@ vif(mlr.full)
 mlr.full<-lm(spm~.-area-Dm-Dmax,data=lakes)
 vif(mlr.full)
 # -> now all predictors have VIF<10 and make sense as input for MLR
+# note that DR and Vd (which remain included) are lake morphometric measures computed from area, Dm and Dmax!
 
 # delete the unnecessary predictors from the dataframe
 which(names(lakes) %in% c("area","Dm","Dmax"))
@@ -231,7 +238,7 @@ cor.test(lakes$spm,ypred_cv)
 
 > conclude: mlr2 is able to make reasonably good predictons even for left-out cases
 
-## Mortality/Abundacne of sugar maple
+## Mortality/Abundance of sugar maple
 
 These data are from a study of the response of trees in North America to climate change (Talluto, et al. (2017) Extinction debt and colonization credit delay range shifts of eastern North American trees. Nat Ecol Evol 1, 0182 (2017). https://doi.org/10.1038/s41559-017-0182).
 
