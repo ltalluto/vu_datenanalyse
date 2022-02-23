@@ -86,7 +86,7 @@ mic<-droplevels(mic)
 
 ```{r}
 mic<-mic[,-c(2)] # aggregation will make this factor meaningless
-mic2<-aggregate(.~all.treat+species+growthphase+NP+bottle,data=mic,FUN=median)
+mic2<-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
 # compare shape and size of mic vs. mic2!
 ```
 

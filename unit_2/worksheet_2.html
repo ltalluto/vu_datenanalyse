@@ -425,9 +425,8 @@ mic&lt;-droplevels(mic)</code></pre>
 <li>Measurements of individual bacterial cells are replicates <strong>within</strong> each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 <em>average</em> bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average <em>location</em>. Not collapsing the dataset to bottle means would mean to use a <strong>pseudoreplicated</strong> dataset.</li>
 </ol>
 <pre class="r"><code>mic&lt;-mic[,-c(2)] # aggregation will make this factor meaningless
-mic2&lt;-aggregate(.~all.treat+species+growthphase+NP+bottle,data=mic,FUN=median)</code></pre>
-<pre><code>## Error in eval(predvars, data, env): object 'growthphase' not found</code></pre>
-<pre class="r"><code># compare shape and size of mic vs. mic2!</code></pre>
+mic2&lt;-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
+# compare shape and size of mic vs. mic2!</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more “growth machinery” = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.</li>
 <li>Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.</li>
