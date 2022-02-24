@@ -43,8 +43,9 @@ The study has a set of lakes with SPM=solid particulate matter as the main respo
 * Measures of water renewal.
 * Proxies for productivity.
 
-1. Explore the data for potential relationships with the response SPM. Assess distributions and chance for collinearity by graphical means (e.g. using `pairs` or `plot(data)`). Consider appropriate transformation to improve linearity of relationships.
-2. With `vif` from the `car`-package you can assess collinearity. Identify redundant variables using VIF and drop them from the dataset.
+1. Formulate a set of hypotheses testing effects of productivity and lake size on spm. Choose variables wisely, then run a formal hypothesis test using MLR.
+2. These hypotheses are lame ;-) We know that nutrients influence productivity since decades. For water quality forecasting a model to predict spm is needed. Start an explorative approach with the aim to design a *good* model for spm. Explore the data for potential relationships with the response SPM. Assess distributions and chance for collinearity by graphical means (e.g. using `pairs` or `plot(data)`). Consider appropriate transformation to improve linearity of relationships.
+3. With `vif` from the `car`-package you can assess collinearity. Identify redundant variables using VIF and drop them from the dataset.
 ```{r eval=FALSE}
 plot(lakes)
 lakes<-lakes[,-c(1:2)]
@@ -69,7 +70,7 @@ names(lakes)
 lakes<-lakes[,-c(2:4)]
 
 ```
-3. Identify the best **simple** linear regression model and a **full** model with only one predictor or all non-redundant ones to start a forward and a backward model building process.
+4. Identify the best **simple** linear regression model and a **full** model with only one predictor or all non-redundant ones to start a forward and a backward model building process.
 ```{r}
 plot(lakes)
 summary(m1<-lm(spm~TP,data=lakes))
@@ -80,7 +81,7 @@ summary(mf<-lm(spm~.,data=lakes))
 ```
 
 
-4. Using the functions `add1`and `drop1` terms can be added to or removed from models. Follow a forward and a backward model building process until a final result and compare the two final models.
+5. Using the functions `add1`and `drop1` terms can be added to or removed from models. Follow a forward and a backward model building process until a final result and compare the two final models.
 ```{r eval=FALSE}
 
 add1(m1,scope=~pH+TP+T+Q+DR+Vd,test="F")
@@ -90,7 +91,7 @@ add1(m2,scope=~pH+TP+T+Q+DR+Vd,test="F")
 drop1(mlr.full,test="F")
 
 ```
-5. Use `step` to identify a *good* model based on the AIC. How does this compare to the models created above? Check model assumptions and decide for a final model.
+6. Use `step` to identify a *good* model based on the AIC. How does this compare to the models created above? Check model assumptions and decide for a final model.
 
 ```{r}
 step(mf,direction="both")
@@ -98,7 +99,7 @@ step(mf,direction="both")
 summary(m3<-lm(spm~pH + TP + DR + Vd,data=lakes))
 ```
 
-6. The model is intended to be used for prediction. Test its prediction capacity using a leave-1-out approach. Leave-1-out means to predict the response for each observation with a model built without this observation. For this, pick your most favourite model built above. Use a loop to leave out 1 case at a time, then predict for the left-out case. Finally compare observed vs. (unbiased) predictions and plot on a 1:1 graph.
+7. The model is intended to be used for prediction. Test its prediction capacity using a leave-1-out approach. Leave-1-out means to predict the response for each observation with a model built without this observation. For this, pick your most favourite model built above. Use a loop to leave out 1 case at a time, then predict for the left-out case. Finally compare observed vs. (unbiased) predictions and plot on a 1:1 graph.
 
 for(in 1:nrow(lakes)) {
 

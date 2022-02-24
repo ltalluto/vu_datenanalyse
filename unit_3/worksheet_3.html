@@ -392,7 +392,8 @@ summary {
 <li>Proxies for productivity.</li>
 </ul>
 <ol style="list-style-type: decimal">
-<li>Explore the data for potential relationships with the response SPM. Assess distributions and chance for collinearity by graphical means (e.g. using <code>pairs</code> or <code>plot(data)</code>). Consider appropriate transformation to improve linearity of relationships.</li>
+<li>Formulate a set of hypotheses testing effects of productivity and lake size on spm. Choose variables wisely, then run a formal hypothesis test using MLR.</li>
+<li>These hypotheses are lame ;-) We know that nutrients influence productivity since decades. For water quality forecasting a model to predict spm is needed. Start an explorative approach with the aim to design a <em>good</em> model for spm. Explore the data for potential relationships with the response SPM. Assess distributions and chance for collinearity by graphical means (e.g. using <code>pairs</code> or <code>plot(data)</code>). Consider appropriate transformation to improve linearity of relationships.</li>
 <li>With <code>vif</code> from the <code>car</code>-package you can assess collinearity. Identify redundant variables using VIF and drop them from the dataset.</li>
 </ol>
 <pre class="r"><code>plot(lakes)
@@ -416,7 +417,7 @@ vif(lm(spm~.-area-Dm-Dmax,data=lakes))
 
 names(lakes)
 lakes&lt;-lakes[,-c(2:4)]</code></pre>
-<ol start="3" style="list-style-type: decimal">
+<ol start="4" style="list-style-type: decimal">
 <li>Identify the best <strong>simple</strong> linear regression model and a <strong>full</strong> model with only one predictor or all non-redundant ones to start a forward and a backward model building process.</li>
 </ol>
 <pre class="r"><code>plot(lakes)</code></pre>
@@ -492,7 +493,7 @@ lakes&lt;-lakes[,-c(2:4)]</code></pre>
 ## Residual standard error: NaN on 0 degrees of freedom
 ## Multiple R-squared:      1,  Adjusted R-squared:    NaN 
 ## F-statistic:   NaN on 25 and 0 DF,  p-value: NA</code></pre>
-<ol start="4" style="list-style-type: decimal">
+<ol start="5" style="list-style-type: decimal">
 <li>Using the functions <code>add1</code>and <code>drop1</code> terms can be added to or removed from models. Follow a forward and a backward model building process until a final result and compare the two final models.</li>
 </ol>
 <pre class="r"><code>add1(m1,scope=~pH+TP+T+Q+DR+Vd,test=&quot;F&quot;)
@@ -500,7 +501,7 @@ m2&lt;-lm(spm~TP+pH,data=lakes)
 add1(m2,scope=~pH+TP+T+Q+DR+Vd,test=&quot;F&quot;)
 
 drop1(mlr.full,test=&quot;F&quot;)</code></pre>
-<ol start="5" style="list-style-type: decimal">
+<ol start="6" style="list-style-type: decimal">
 <li>Use <code>step</code> to identify a <em>good</em> model based on the AIC. How does this compare to the models created above? Check model assumptions and decide for a final model.</li>
 </ol>
 <pre class="r"><code>step(mf,direction=&quot;both&quot;)</code></pre>
@@ -527,7 +528,7 @@ drop1(mlr.full,test=&quot;F&quot;)</code></pre>
 ## Residual standard error: 1.454 on 21 degrees of freedom
 ## Multiple R-squared:  0.9684, Adjusted R-squared:  0.9624 
 ## F-statistic: 160.9 on 4 and 21 DF,  p-value: 1.965e-15</code></pre>
-<ol start="6" style="list-style-type: decimal">
+<ol start="7" style="list-style-type: decimal">
 <li>The model is intended to be used for prediction. Test its prediction capacity using a leave-1-out approach. Leave-1-out means to predict the response for each observation with a model built without this observation. For this, pick your most favourite model built above. Use a loop to leave out 1 case at a time, then predict for the left-out case. Finally compare observed vs. (unbiased) predictions and plot on a 1:1 graph.</li>
 </ol>
 <p>for(in 1:nrow(lakes)) {</p>
