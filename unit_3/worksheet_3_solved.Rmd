@@ -100,13 +100,19 @@ lakes <- read.table("data/LakeSPM.txt",header=TRUE)
 
 The study has a set of lakes with SPM=solid particulate matter as the main response of interest. High SPM is a water quality issue, it can be generated through excessive phytoplankton growth or resuspension of sediment in shallow lakes or terrigeneous input into smaller lakes. For water quality prediction a model to predict SPM from easily accessible lake data should be generated. The available predictors (check Excel sheet in data folder for exact meaning of abbreviations) include
 
-* Measures of lake size and morphology that could influence sensitivity to terrestrial loading and resuspension of lake sediment.
-* Measures of water renewal.
-* Proxies for productivity.
+* Measures of lake size and morphology that could influence sensitivity to terrestrial loading and resuspension of lake sediment: area, mean depth Dm, maximum depth Dmax, dynamic ratio DR (=sqrt(area)/Dm), volume development form factor Vd (3*Dm/Dmax)
+* Measures of water renewal: discharge into lake Q, turnover time T in years
+* Proxies for productivity: pH (buffering capacity), total phosphorous TP
 
-1. Formulate a set of hypotheses testing effects of productivity and lake size on spm. Choose variables wisely, then run a formal hypothesis test using MLR.
+1. Formulate a set of hypotheses testing effects of productivity and lake depth on spm. Choose variables wisely, then run a formal hypothesis test using MLR.
+A suggestion is:
+H1: Productive lakes support phytoplankton growth, thus higher spm.
+H2: Shallow lakes allow resuspension, thus higher spm.
+Use variables TP and Dm, consider log-transformation (also of spm) to improve linearity.
 ```{r}
 # choose variables and run MLR
+plot(lakes[,c('spm','TP','Dm')])
+plot(log(lakes[,c('spm','TP','Dm')]))
 ```
 
 2. These hypotheses are lame ;-) We know that nutrients influence productivity since decades. For water quality forecasting a model to predict spm is needed. Start an explorative approach with the aim to design a *good* model for spm.  Explore the data for potential relationships with the response SPM. Assess distributions and chance for collinearity by graphical means (e.g. using `pairs` or `plot(data)`). Consider appropriate transformation to improve linearity of relationships.
