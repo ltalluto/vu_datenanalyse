@@ -1,0 +1,56 @@
+---
+title: "Dataset: North American Trees"
+author: "Matt Talluto"
+date: "26.02.2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE)
+```
+
+You have here a large dataset of tree abundance from forestry plots in North America. The data is in RDS format (which stands for "R Data Serial"). RDS is a compact way to save R objects with all of their formatting intact. You can save them using `saveRDS(object_name, file_name)`. You can load the data using:
+
+```{r}
+trees = readRDS("na_tree.rds")
+head(trees[, 1:20])
+```
+
+Here we see just the first few rows and columns, but the dataset is quite large!
+
+```{r}
+dim(trees)
+
+# count the number of column names starting with 'sp', indicating species
+sum(grepl("^sp", colnames(trees))) 
+```
+
+
+### Variables
+
+* **year**: The measurement year, a factor, either 1978 or 2005
+* **annual_mean_temp**: Mean annual temperature within a plot
+* **temp_seasonality**: Temperature seasonality, a measure of intra-annual variation in temperature. Can be an indicator of climatic harshness.
+* **gdd**: Growing degree days, a measure of how long the growing season is.
+* **pp_seasonality**: Precipitation seasonality.
+* **tot_annual_pp**: Total annual precipitation.
+* **forest_type**: Factor, either boreal, mixed, or temperate.
+* **total_biomass**: An index of the total tree biomass in a plot.
+* **lat**: The latitude of the plot.
+* **sp####**: Species abundances; each column is a separate species, values are the proportion of biomass in the plot.
+
+### Task
+
+Your job is to develop and test hypotheses regarding biodiversity in this dataset. How you define diversity is up to you, but you will likely either consider an aggregate measure of local (alpha) diversity, or consider multivariate diversity using a distance-based ordination method. Note that the dataset covers a wide geographic range, and many species are not able to occur everywhere. This might influence your choice of analysis. Also note that the factor levels are not evenly spread out. For example: `forest_type` obviously varies with temperature and latitude, and the geographic range that was studied is not the same at the two time points.
+
+Alpha diversity you will need to compute. I suggest the Shannon Index for proportional data:
+
+$$
+	D_i = -\sum_{j=1}^{n} p_{ij} \log p_{ij}
+$$
+
+Where $p_{ij}$ is the proportional abundance of species $j$ at site $i$. Note that you should skip any species where the abundance is zero for this.
+
+After you have decided on a diversity metric, choose some appropriate hypotheses about how diversity relates to the other available variables. Be sure to explore the data and evaluate the assumptions of your analysis.
+
+There are many options, so you will need to choose an approach that makes sense out of the large amount of data. Present your results in a 15-20 minute presentation where you include the analysis approach you selected, the statistical results, and some well-designed figures showing the most appropriate relationships.

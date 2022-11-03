@@ -48,3 +48,6 @@ Gemfile*
 _site/*
 
 # Rmarkdown cache
+
+## RDS files
+*.rds
