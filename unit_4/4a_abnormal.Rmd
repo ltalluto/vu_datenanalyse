@@ -38,7 +38,7 @@ Our tests so far have been (mostly) **parametric**. There is a known theoretical
 our test statistic follows.
 
 * The **t-statistic** describes how large a difference between two means is, and follows a t-distribution.
-* The **F-statistic** describes a ratio of varainces, and follows an F-distribution.
+* The **F-statistic** describes a ratio of variances, and follows an F-distribution.
 
 
 
