@@ -1,7 +1,7 @@
 ---
 title: "Correlation and Regression"
 author: "Matthew Talluto"
-date: "22.02.2022"
+date: "14.02.2023"
 output:
   slidy_presentation:
     theme: cerulean
@@ -16,7 +16,7 @@ output:
 ## This setup chunk should be used for defining the document defaults
 ## here, we set the default figure size, the comment character, and the type
 ## of graphics to use
-knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png", error=TRUE)
 
 ## this chunk us also a cood place to load any librarys you want
 ## and to store constants in the R environment
@@ -118,6 +118,7 @@ grid.arrange(p1, p2, p3, ncol=1)
 
 * Like with the mean and standard deviation, we can **rescale** the covariance to make it easier to compare different datasets.
 * Scale-independent covariance is called **correlation**; for many datasets we use the **Pearson correlation coefficient** $\rho_{xy}$.
+* Ranges from $-1$ to $1$. Zero means zero covariance. $-1$ and $1$ indicates that $x$ and $y$ predict each other perfectly!
 
 $$
 \begin{aligned}
@@ -180,16 +181,17 @@ t &= \frac{r}{s}
 $$
 
 ```{r fig.show='hide'}
-data(iris)
-iris_set = subset(iris, Species == "setosa")
-n = nrow(iris_set)
-r = cor(iris_set$Sepal.Length, iris_set$Petal.Length)
-r
-s_r = sqrt((1-r^2)/(n-2))
-s_r
-t_val = r/s_r
-t_val
-2 * pt(t_val, n-2, lower.tail = FALSE) ## two-sided test
+data(penguins, package = "palmerpenguins")
+penguins = as.data.frame(penguins)
+penguins = penguins[complete.cases(penguins),] # remove NAs
+
+penguins_ade = subset(penguins, species == "Adelie")
+n = nrow(penguins_ade)
+(r = cor(penguins_ade$body_mass_g, penguins_ade$flipper_length_mm))
+(s_r = sqrt((1-r^2)/(n-2)))
+(t_val = r/s_r)
+(2 * pt(t_val, n-2, lower.tail = FALSE)) ## two-sided test
+
 ```
 
 </div>
@@ -199,12 +201,8 @@ t_val
 The classic way to visualise is a **scatterplot**
 
 ```{r fig.height=4, fig.width=4}
-setosa_plot = ggplot(iris_set, aes(x = Sepal.Length, y = Petal.Length)) + 
-	geom_point() + xlab("Setosa Sepal Length") + ylab("Setosa Petal Length")
-setosa_plot
-# equivalent in base graphics
-# plot(Petal.Length ~ Sepal.Length, data = iris_set, pch=16, 
-#     xlab = "Setosa Sepal Length", ylab = "Setosa Petal Length", bty='n')
+plot(flipper_length_mm ~ body_mass_g, data = penguins_ade, pch=16, 
+     xlab = "Adelie Penguin Body Mass (g)", ylab = "Flipper Length (mm)", bty='n')
 ```
 
 </div>
@@ -222,16 +220,12 @@ t &= \frac{r}{s}
 $$
 
 ```{r fig.show='hide'}
-data(iris)
-iris_set = subset(iris, Species == "setosa")
-n = nrow(iris_set)
-r = cor(iris_set$Sepal.Length, iris_set$Petal.Length)
-r
-s_r = sqrt((1-r^2)/(n-2))
-s_r
-t_val = r/s_r
-t_val
-2 * pt(t_val, n-2, lower.tail = FALSE) ## two-sided test
+penguins_ade = subset(penguins, species == "Adelie")
+n = nrow(penguins_ade)
+(r = cor(penguins_ade$body_mass_g, penguins_ade$flipper_length_mm))
+(s_r = sqrt((1-r^2)/(n-2)))
+(t_val = r/s_r)
+(2 * pt(t_val, n-2, lower.tail = FALSE)) ## two-sided test
 ```
 
 </div>
@@ -239,10 +233,7 @@ t_val
 <div class="right rt">
 ```{r}
 # Equivalent built-in test
-# same test, with a formula instead
-# cor.test(~ Sepal.Length + Petal.Length, data = iris_set, alternative = "two.sided"))
-with(iris_set, 
-	 cor.test(Sepal.Length, Petal.Length, alternative = "two.sided"))
+with(penguins_ade, cor.test(body_mass_g, flipper_length_mm, alternative = "two.sided"))
 ```
 
 </div>
@@ -426,9 +417,10 @@ We want to test for an *association* between the two variables (forest type and 
 
 <div class="right rt">
 
-![](img/woodpecker.jpg)
+![](img/woodpecker.jpg){width=75px}
 
 $H_0$: Nesting tree is not associated with forest type
+
 $H_A$: Nest tree is associated with forest type
 
 </div>
@@ -455,6 +447,29 @@ $H_A$: Nest tree is associated with forest type
 
 </div>
 
+
+## Chi-squared test
+
+<div class="left lt">
+
+### Nesting holes of black-backed woodpeckers.
+
+```{r}
+table(woodpecker)
+
+table(woodpecker)/rowSums(table(woodpecker))
+
+```
+
+We want to test for an *association* between the two variables (forest type and nest tree)
+
+$H_0$: Nesting tree is not associated with forest type
+$H_A$: Nest tree is associated with forest type
+
+
+</div>
+
+
 <div class="right rt">
 
 ```{r}
@@ -466,90 +481,6 @@ with(woodpecker, chisq.test(forest_type, nest_tree))
 
 </div>
 
-
-## Visualisation
-
-<div class="left lt">
-
-Plots in ggplot have 3 required components.
-
-* **data**: A data frame containing all the variables you want to work with
-
-```{r, results = 'hide'}
-data(iris)
-head(iris)
-```
-</div>
-
-<div class="right rt">
-```{r, echo = FALSE}
-head(iris)
-```
-
-</div>
-
-
-## Visualisation
-<div class="left lt">
-
-Plots in ggplot have 3 required components.
-
-* **data**: A data frame containing all the variables you want to work with
-* One or more **aesthetic mappings**
-	- defined using `aes` function
-	- How to *map* data to visual information
-	- what is x, what is y
-	- how to use colour, size or shape of symbols, etc
-
-
-
-```{r, fig.show='hide'}
-library(ggplot2)
-ggplot(iris, aes(x = Petal.Width, y = Petal.Length))
-```
-
-</div>
-
-<div class="right rt">
-
-```{r, echo = FALSE}
-ggplot(iris, aes(x = Petal.Width, y = Petal.Length))
-```
-
-</div>
-
-
-
-
-## Visualisation
-<div class="left lt">
-
-Plots in ggplot have 3 required components.
-
-* **data**: A data frame containing all the variables you want to work with
-* One or more **aesthetic mappings**
-	- defined using `aes` function
-	- How to *map* data to visual information
-	- what is x, what is y
-	- how to use colour, size or shape of symbols, etc
-* A **geometry** describing what geometric objects to use in the plot
-	- points, lines, histograms, bars, boxplots, etc.
-
-
-```{r, fig.show='hide'}
-iris_plot = ggplot(iris, aes(x = Petal.Width, 
-				y = Petal.Length)) + geom_point()
-iris_plot
-```
-
-</div>
-
-
-<div class="right rt">
-```{r, echo = FALSE}
-iris_plot
-```
-</div>
 
 
 
@@ -563,7 +494,7 @@ Scatterplots become less useful.
 birddiv = read.csv("data/birddiv.csv")
 bird_plot = ggplot(birddiv, aes(x=forest_frag, 
 				y = richness, colour = bird_type)) + 
-				geom_point()
+				geom_point() + theme_minimal()
 head(birddiv)
 ```
 
@@ -586,7 +517,7 @@ Adding jitter can sometimes improve things
 ```{r, fig.show='hide'}
 bird_plot = ggplot(birddiv, aes(x=forest_frag, 
 				y = richness, colour = bird_type)) + 
-				geom_jitter()
+				geom_jitter() + theme_minimal()
 ```
 
 </div>
@@ -610,7 +541,7 @@ Better solution: boxplots
 ```{r, fig.show='hide'}
 bird_plot = ggplot(birddiv, aes(x=as.factor(forest_frag), 
 				y = richness, fill = bird_type)) + 
-				geom_boxplot()
+				geom_boxplot() + theme_minimal()
 bird_plot = bird_plot + xlab("Forest Fragmentation")
 ```
 
@@ -690,10 +621,12 @@ Barplots, or proportional bars for counts within categories
 table(woodpecker)
 
 woodp_plot = ggplot(woodpecker, aes(x = nest_tree,
-				fill = forest_type))
+				fill = forest_type)) + theme_minimal()
 woodp_plot = woodp_plot + geom_bar(width = 0.5)
 woodp_plot
 ```
+
+Stacked bars are "unfair" — easiest to compare the "rooted" class (unburned).
 
 </div>
 
@@ -774,25 +707,25 @@ We want to solve these equations for $a$ and $b$
 The "best" $a$ and $b$ are the ones that draw a line that is closest to the most points (i.e., that minimizes $s_{\epsilon}$)
 
 ```{r echo = FALSE, fig.width=12}
-pars = coef(lm(Petal.Length ~ Sepal.Length, data = iris_set))
+pars = coef(lm(flipper_length_mm ~ body_mass_g, data = penguins_ade))
 
 par(mfrow = c(1, 3))
-plot(iris_set$Sepal.Length, iris_set$Petal.Length, pch=16, 
-     xlab = "Setosa Sepal Length", 
-     ylab = "Setosa Petal Length", bty='n', main = expression(best~line))
+plot(penguins_ade$body_mass_g, penguins_ade$flipper_length_mm, pch=16, 
+     xlab = "Adelie body mass (g)", 
+     ylab = "Adelie flipper length (mm)", bty='n', main = expression(best~line))
 abline(a = pars[1], b = pars[2], col='blue', lwd=2)
 
-plot(iris_set$Sepal.Length, iris_set$Petal.Length, pch=16, 
-     xlab = "Setosa Sepal Length", 
-     ylab = "Setosa Petal Length", bty='n', 
+plot(penguins_ade$body_mass_g, penguins_ade$flipper_length_mm, pch=16, 
+     xlab = "Adelie body mass (g)", 
+     ylab = "Adelie flipper length (mm)", bty='n', 
      main = expression(bias:~bar(epsilon) != 0))
-abline(a = pars[1] + 0.2, b = pars[2], col='blue', lwd=2)
+abline(a = pars[1] + 15, b = pars[2], col='blue', lwd=2)
 
-plot(iris_set$Sepal.Length, iris_set$Petal.Length, pch=16, 
-     xlab = "Setosa Sepal Length", 
-     ylab = "Setosa Petal Length", bty='n', 
+plot(penguins_ade$body_mass_g, penguins_ade$flipper_length_mm, pch=16, 
+     xlab = "Adelie body mass (g)", 
+     ylab = "Adelie flipper length (mm)", bty='n', 
      main = expression(precision:~s[epsilon]~too~large))
-abline(a =mean(iris_set$Petal.Length), b = 0, col='blue', lwd=2)
+abline(a =mean(penguins_ade$flipper_length_mm), b = 0, col='blue', lwd=2)
 
 ```
 
@@ -869,33 +802,29 @@ $$
    - valid if $y$ is linear w.r.t some transformation: $\hat{y} = a + b\mathcal{f}(x)$
    - more complicated in the reverse case: $\mathcal{f}(\hat{y}) = a + bx$
 
-<div class="left lt">
 
-```{r}
-set.seed(123)
-y = rpois(200, 7.5)
-c(
-  mean(log(y)),
-  log(mean(y)))
-y = c(y, 0)
-c(
-  mean(log(y)),
-  log(mean(y)))
 
-```
-</div>
-<div class="right rt">
-```{r echo = FALSE}
-hist(y, xlab="count", main="", breaks=0:max(y))
-```
-
-</div>
 
 ## Transformations
 
+<div class="left lt">
 * Transformation can be used to linearize non-linear relationships
 * It can also improve the quality of the variance of the residuals
 * Use caution! The hypothesized relationship will change!
+
+</div>
+<div class="right rt">
+```{r, echo = FALSE, fig.height = 8}
+# Exponential relationship between x and y
+set.seed(10)
+x = rnorm(400, 10, 1)
+y = exp(0.1 + 0.5 * x + rnorm(400, 0, 0.5))
+par(mfrow = c(2, 1))
+plot(x,y, pch = 16, cex = 0.6)
+plot(log(x), log(y), pch = 16, cex = 0.6)
+
+```
+</div>
 
 ## Regression in R
 
@@ -904,7 +833,8 @@ hist(y, xlab="count", main="", breaks=0:max(y))
 ```{r}
 ## Data on sparrow wing lengths from Zar (1984)
 dat = data.frame(age = c(3:6, 8:12, 14:17), 
-        wing_length = c(1.4, 1.5, 2.2, 2.4, 3.1, 3.2, 3.2, 3.9, 4.1, 4.7, 4.5, 5.2, 5.0))
+        wing_length = c(1.4, 1.5, 2.2, 2.4, 3.1, 3.2, 3.2, 
+        				3.9, 4.1, 4.7, 4.5, 5.2, 5.0))
 mod = lm(wing_length ~ age, data = dat)
 summary(mod)
 confint(mod)
@@ -915,7 +845,7 @@ confint(mod)
 <div class="left lt">
 ```{r echo = FALSE}
 plot(wing_length ~ age, data = dat, pch=16, col="blue", bty='n',
-     xlab= "Sparrow wing length (cm)", ylab = "Age (days)")
+     ylab= "Sparrow wing length (cm)", xlab = "Age (days)")
 abline(mod)
 ```
 </div>
@@ -936,6 +866,13 @@ abline(h = 0, lty=2)
 ```
 
 
+## Regression in R: diagnostics
+
+```{r fig.width = 7}
+## also try
+par(mfrow = c(2,2), bty='n', mar = c(3, 3, 2,0), mgp = c(2, 0.5, 0))
+plot(mod)
+```
 
 ## Presenting regression output
 
@@ -954,14 +891,18 @@ abline(h = 0, lty=2)
 </div>
 
 <div class="right rt">
-We found a significant positive relationship between wing length and age ($F_{1,11} = 400$, $p < 0.001$, $R^2 = 0.97$; Table 1) <br/>
+We found a significant positive relationship between wing length and age ($F_{1,11} = 400$, $p < 0.001$, $R^2 = 0.97$; Table 1). <br/>
 
 ```{r echo = FALSE, results = 'asis'}
-tab = data.frame(" " = c("intercept", "age"), estimate = c(0.71, 0.27), 
-                 s = c(0.15, 0.013), "95\\% CI" = c("0.39, 1.03", "0.24, 0.30"))
-kable(tab, col.names = c("", "estimate", "st. error", "95% CI"),
+tab = data.frame(" " = c("", "Intercept      ", "Age"), 
+				 estimate = c("Estimate      ", "0.71", "0.27"), 
+                 s = c("St. error      ", "0.15", "0.013"), 
+				 "95\\% CI" = c("95% CI", "[0.39, 1.03]", "[0.24, 0.30]"))
+kt = kable(tab, col.names = c("", "", "", ""),
       caption = "Table 1. Parameter estimates for regression of wing length on age")
-
+kt = row_spec(kt, 1, extra_css = "border-top: solid 2px; border-bottom: solid 1px")
+kt = row_spec(kt, 2, extra_css = "padding 20px")
+kt
 ```
 
 </div>
