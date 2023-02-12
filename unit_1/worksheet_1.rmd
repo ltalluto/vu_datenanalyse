@@ -73,12 +73,17 @@ my_sample = sample(t1_population$x, n)
 samp_sd = sd(my_sample)
 st_err = samp_sd/sqrt(n)
 
+# compute quantiles from the t-distribution
+# because this is a sample!
+# why 0.975?? (hint: this is a 2-sided confidence interval)
+(quant = qt(0.975, df = n - 1))
+
 # compute mean and confidence limits, save in a data.frame
 # change "yourname" to be your actual name
 samp_mean = mean(my_sample)
 my_stats = data.frame(name = "yourname", mean = samp_mean, sd = samp_sd,
-					  lower = samp_mean - 1.96*st_err, 
-					  upper = samp_mean + 1.96*st_err)
+					  lower = samp_mean - quant * st_err, 
+					  upper = samp_mean + quant * st_err)
 # save the file to your computer, in the unit_1 folder, so we can share them
 # replace "yourname" with your name
 # write.csv(my_stats, "yourname_t1c.csv")
@@ -178,12 +183,8 @@ with(fish, tapply(richness, type, conf_interval, alpha = 0.01))
 ```
 
 
-2d. Use the `var` function to compute the variance of each group. Are the variances similar?
+2d. Perform a t-test of the hypothesis you wrote in question 1. Use the R function `t.test`, and be sure to check the help with `?t.test` before you start. 
 
-A rule of thumb: you may use equal variance tests if the larger variance is less than roughly 4x the smaller.
-
-2e. Perform a t-test of the hypothesis you wrote in question 1. Use the R function `t.test`, and be sure to check the help with `?t.test` before you start. 
-
-Pay attention to the options `alternative`, `paired`, and `var.equal`. How should you set them for this particular problem?
+Pay attention to the options `alternative` and `paired`. How should you set them for this particular problem?
 
 Report the results of the test: t-statistic, p-value, and conclusions.

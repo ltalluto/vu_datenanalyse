@@ -1,7 +1,7 @@
 ---
 title: "Populations & Samples"
 author: "Matthew Talluto"
-date: "21.02.2022"
+date: "13.02.2022"
 output:
   slidy_presentation:
     theme: cerulean
@@ -22,6 +22,10 @@ library(knitr)
 library(kableExtra)
 options(digits = 3)
 set.seed(12345)
+data(penguins, package = "palmerpenguins")
+penguins = as.data.frame(penguins)
+penguins = penguins[complete.cases(penguins), ]
+
 ```
 
 ## Populations & Samples
@@ -84,18 +88,23 @@ p1
 
 ## Aside: graphics in R
 
-We will use the two dominant graphics packages during this course.
+R currently has two dominant graphical engines
 
-* **base graphics** is built in to R.
-	- Simple to use
-	- Relatively easy syntax
-	- Plots usually need a lot of customization before they are finished
-* **ggplot2** is a library you must install.
-	- More complex syntax
-	- Produces publication-quality graphics with less customization needed.
-	- Plots can be saved in a variable, with customization added as needed.
+### Base graphics
+* Built in to R.
+* Simple to use
+* Relatively easy syntax
+* Plots usually need a lot of customization before they are finished
 
-Here we will work through both, using the histogram as a motivating example.
+### ggplot2
+* A package you must install.
+* More complex syntax
+* Produces publication-quality graphics with less customization needed.
+* Plots can be saved in a variable, with customization added as needed.
+
+We will mostly use base graphics in the course
+
+If you want to learn ggplot, ask Matt
 
 ## Histograms: Base graphics
 <div class="left lt">
@@ -147,16 +156,20 @@ hist(my_var, main = "", xlab="Variable of interest", ylab = "Frequency",
 
 ## Colors
 
+<div class="left lt">
 * R supports colors using the common HTML color coding: `#RRGGBB`
 	- RR, GG, BB are the amounts of red, green, and blue
 	- each ranges from `00` (none) to `FF` (most)
-	- Color pickers online help you translate a color in real life to a coded color
+	- [Color pickers](https://www.w3schools.com/colors/colors_picker.asp) online help you translate a color in real life to a coded color
 * R also has 657 named colors: `col = rosybrown`
 * see the `colors()` function for the names
 
 ```{r}
 head(colors())
 ```
+</div>
+
+<div class="right rt">
 
 ```{r echo = FALSE, fig.width=35, fig.height=18}
 library(ggdark)
@@ -170,57 +183,6 @@ with(d, rect(xl, yb, 1+xl, 1+yb, col = colors, border = NA))
 with(d, text(xl, yb + 0.5, colors, col = invert_color(colors), cex = 1, adj = 0))
 ```
 
-
-
-
-## Histograms: ggplot2
-
-<div class="left lt">
-* `ggplot2` is a **package**: packages extend the base functionality of R
-* You can install packages with `install.packages()` (just once)
-* You load packages with `library` (once per session)
-
-### Using ggplot
-* `ggplot` always works on data.frames, so make sure your data is in one
-* Each plot defines **aesthetics** using `aes`
-	- What to plot
-	- In what position (x-axis, y-axis, etc)
-	- How to visualise structure in data (e.g., color by categories or variables)
-* You then add **geometries** to tell ggplot how to plot the data
-* Here we create a plot, define a single variable plotted in the `x` position, and set a histogram geometry
-* We can easily add other customisations (e.g., axis labels)
-
-</div>
-
-<div class="right rt">
-```{r eval = FALSE}
-# only do this once, if you do not have the package already installed
-# install.packages("gglot2")
-
-# load the package
-library("ggplot2")
-
-# make a data frame with a single variable named my_var
-my_df = data.frame(my_var)
-
-# create a plot and save it in a variable
-x_histogram = ggplot(my_df, aes(x = my_var)) + geom_histogram()
-
-# add some more features
-x_histogram = x_histogram + ylab("Frequency") + xlab("Variable of Interest")
-
-# display the plot
-print(x_histogram)
-```
-
-
-```{r echo = FALSE, message = FALSE}
-my_df = data.frame(my_var)
-x_histogram = ggplot(my_df, aes(x = my_var)) + geom_histogram()
-x_histogram = x_histogram + ylab("Frequency") + xlab("Variable of Interest")
-print(x_histogram)
-```
-
 </div>
 
 
@@ -229,7 +191,7 @@ print(x_histogram)
 
 ## Describing populations and samples
 <div class="left lt">
-* We can visualise the distribution of values within a population using a **histogram**
+* We can visualise the distribution of values within a population or sample using a **histogram**
 
 > - We use **summary statistics** to describe the values numerically.
 > - In practise, we must estimate population statistics via sample statistics.
@@ -462,7 +424,6 @@ $$
 \frac{s}{|\bar{x}|}
 $$
 
-* A **boxplot** is a nice way to summarize location and dispersion in a dataset
 
 </div>
 <div class="right rt">
@@ -480,15 +441,22 @@ quantile(my_var, 0.75) - quantile(my_var, 0.25)
 
 # coefficient of variation can be done manually
 sd(my_var)/mean(my_var)
-
-ggplot(my_df, aes(y = my_var)) + geom_boxplot() + 
-	theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
-
 ```
 </div>
 
 
+## Summary statistics: dispersion (or scale)
+<div class="left lt">
 
+* A **boxplot** is a nice way to summarize location and dispersion in a dataset
+
+</div>
+<div class="right rt">
+
+```{r}
+boxplot(my_var)
+```
+</div>
 
 
 ## Summary statistics: higher moments
@@ -580,13 +548,10 @@ legend("topright", legend = c("mesokurtic (normal distribution)",
 
 <div class="right rt">
 
-```{r, eval = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris, notch = TRUE)
+```{r}
+boxplot(body_mass_g ~ species, data = penguins, boxwex=0.4, notch = TRUE)
 ```
 
-```{r, echo = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4, notch = TRUE)
-```
 
 </div>
 
@@ -609,27 +574,28 @@ boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4, notch = TRUE)
 <div class="right rt">
 
 ```{r, eval = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris, notch = TRUE)
+boxplot(body_mass_g ~ species, data = penguins, boxwex=0.4, notch = TRUE)
 ```
 
 ```{r, echo = FALSE}
-boxplot(Sepal.Length ~ Species, data = iris, boxwex=0.4, notch = TRUE)
-rng = range(iris$Sepal.Length[iris$Species == "setosa"])
+boxplot(body_mass_g ~ species, data = penguins, boxwex=0.4, notch = TRUE)
+rng = range(penguins$body_mass_g[penguins$species == "Adelie"])
 lines(c(0.75, 0.75), rng, col=cols[1])
 text(0.75, rng[2], "range", col=cols[1], pos=2)
 
-iqr = quantile(iris$Sepal.Length[iris$Species == "versicolor"], c(0.25, 0.75))
+iqr = quantile(penguins$body_mass_g[penguins$species == "Chinstrap"], c(0.25, 0.75))
 lines(c(1.75, 1.75), iqr, col=cols[2])
-text(1.75, rng[2], "IQR", col=cols[2], pos=2)
-med = median(iris$Sepal.Length[iris$Species == "versicolor"])
+text(1.75, iqr[2], "IQR", col=cols[2], pos=2)
+med = median(penguins$body_mass_g[penguins$species == "Chinstrap"])
 text(2.15, med, "median", col=cols[3], pos=4)
 
-lines(c(2.75, 2.75), c(6.35, 6.65), col=cols[4])
-text(2.75, 6.5, "~95 % CI", col = cols[4], pos = 2)
+lines(c(2.75, 2.75), c(4950, 5150), col=cols[4])
+text(2.75, 4950, "~95 % CI", col = cols[4], pos = 2)
 
-text(3, 0.985*min(iris$Sepal.Length[iris$Species == "virginica"]), 
+text(1.7,5700, 
      "outliers\n x < quartile(x, 0.25) - 1.5*IQR(x)\n x > quartile(x, 0.75) + 1.5*IQR(x)", 
      pos=1, col=cols[5], cex=0.7)
+lines(c(1.8, 2), c(5300, 4850), col = cols[5])
 ```
 
 </div>
@@ -637,15 +603,14 @@ text(3, 0.985*min(iris$Sepal.Length[iris$Species == "virginica"]),
 
 
 
-## Programming in R: Repeating yourself
+## Repeating yourself
 
 <div class="left lt">
 * An important programming concept is **DRY**: Don't Repeat Yourself!
    - Don't copy and paste code if you can instead instruct the computer to repeat things for you.
 * There are many ways to execute the same code repeatedly; we will cover these in detail as they are needed.
 * A motivating example:
-    - Compute the mean of every variable in the `iris` dataset
-    - Note that the last variable, `species`, is nominal and thus the mean is not defined
+    - Compute the mean of every numeric variable in the `penguins` dataset
 
 </div>
 
@@ -654,46 +619,49 @@ text(3, 0.985*min(iris$Sepal.Length[iris$Species == "virginica"]),
 ```{r}
 # bad!
 (col_means = c(
-  mean(iris[,1]),
-  mean(iris[,2]),
-  mean(iris[,3]),
-  mean(iris[,1]),  # it's easy to introduce mistakes this way!
-  mean(iris[,5])))
+  mean(penguins[,3]),
+  mean(penguins[,4]),
+  mean(penguins[,5]),
+  mean(penguins[,3])  # it's easy to introduce mistakes this way!
+))
 ```
 
 </div>
 
 
 
-## Programming in R: applying functions
+## Applying functions
 
-* We want to **apply** the function named `mean` separately to every variable in `iris` 
+* We want to **apply** the function named `mean` separately to every variable in `penguins` 
 * R has many different ways to apply functions, in this case we use `s`imple `apply` (`sapply`)
 
 ```{r}
 # bad!
 (col_means = c(
-  mean(iris[,1]),
-  mean(iris[,2]),
-  mean(iris[,3]),
-  mean(iris[,1]),  # it's easy to introduce mistakes this way!
-  mean(iris[,5])))
+  mean(penguins[,3]),
+  mean(penguins[,4]),
+  mean(penguins[,5]),
+  mean(penguins[,3])  # it's easy to introduce mistakes this way!
+))
 
 # better
-(col_means = sapply(iris, mean)) # apply the function mean to each variable in iris
+# use columns 3:6 because these are the numeric columns
+# doesn't make sense to take the mean of penguins$species
+(col_means = sapply(penguins[,3:6], mean)) # apply the function mean to each variable
 ```
 
 
 
-## Programming in R: applying functions
+## Applying functions
 
-* We want to **apply** the function named `mean` separately to every variable in `iris` 
+* We want to **apply** the function named `mean` separately to every variable in `penguins` 
 * R has many different ways to apply functions, in this case we use `s`imple `apply` (`sapply`)
 * this works with any function that accepts a vector, even when they return more than a single value
 ```{r}
-# we use only the first four columns, because these functions throw an error with non-numeric data
-sapply(iris[,1:4], range)
-sapply(iris[,1:4], quantile, c(0.25, 0.5, 0.75))
+sapply(penguins[,3:6], range)
+# here, we pass an additional argument named probs to quantile
+# see ?quantile for what this does
+sapply(penguins[,3:6], quantile, probs = c(0.25, 0.5, 0.75))
 ```
 
 
@@ -702,20 +670,23 @@ sapply(iris[,1:4], quantile, c(0.25, 0.5, 0.75))
 
 
 
-## Programming in R: tabular applies
+## Tabular applies
 
 <div class="left lt">
-* There are three species of iris; it makes more sense to have summary statistics for each one
+* There are three species of penguin; it makes more sense to have summary statistics for each one
 * `tapply`: `t`abular `apply`
-  - produces a summary table for a single variable (e.g., `Sepal.Length`) based on categories in another variable (e.g., `Species`)
+  - produces a summary table for a single variable (e.g., `bill_length_mm`) based on categories in another variable (e.g., `species`)
 
 </div>
 
 <div class="right rt">
 
 ```{r}
-with(iris, 
-	 tapply(Sepal.Length, Species, mean)
+# with: use the variables found in the data.frame penguins
+# allows us to not write penguins$species to access the variable species
+with(penguins, 
+	 # compute the mean of bill_length_mm for each of the three species
+	 tapply(bill_length_mm, species, mean)
 )
 ```
 
@@ -943,7 +914,6 @@ position
 
 ## Probability distributions
 <div class="left lt">
-We can simulate this experiment in R.
 
 And for a larger sample (2500) friends, doing more coin flips (500 each), with more concise code.
 
@@ -959,7 +929,8 @@ positions = rep(0, n_friends)
 # repeat the experiment 500 times
 time_steps = 1:500
 for(i in time_steps) {
-	# flip a coin for each friend; this returns one heads or tails for each n_friends
+	# flip a coin for each friend
+	# returns one heads or tails for each n_friends
 	coin_flips = sample(c("heads", "tails"), size = n_friends, replace = TRUE)
 	# compute the steps: +0.5 if the flip is heads, -0.5 if tails
 	moves = ifelse(coin_flips == "heads", 0.5, -0.5)

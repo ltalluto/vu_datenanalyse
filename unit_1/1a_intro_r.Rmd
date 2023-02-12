@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R"
 author: "Matthew Talluto"
-date: "21.02.2022"
+date: "13.02.2022"
 output:
   slidy_presentation:
     theme: cerulean
@@ -16,6 +16,8 @@ output:
 knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
 library(knitr)
 library(kableExtra)
+data(penguins, package = "palmerpenguins")
+penguins = as.data.frame(penguins)
 ```
 
 
@@ -51,7 +53,7 @@ All course materials are available on the
    - An R console and interpreter
 
 
-### Helpful vocabulary
+## Helpful vocabulary
 
 * **console**: A window where you can type commands and view (text) results and output
 * **interpreter**: Software that translates R commands into instructions for your computer in real time
@@ -75,7 +77,7 @@ The code in the course files assumes your working directory is set to the *unit*
    
    
 
-## Programming in R: Variables
+## Variables
 
 <div class="left lt">
 * A **variable** is a name that points to some data. 
@@ -93,8 +95,10 @@ The code in the course files assumes your working directory is set to the *unit*
 <div class="right rt">
 
 ```{r error=TRUE}
-# Comments in R start with the # symbol; anything after # will not be executed
-# Comments are a useful way to annotate your code so you know what is happening
+# Comments in R start with the # symbol
+# anything after # will not be executed
+# Comments are a useful way to annotate your code so you know what is 
+# happening
 
 # Legal variable names
 x = 1
@@ -118,9 +122,8 @@ my name = "Matt"
 </div>
 
 
-## Programming in R: Data types
+## Data types
 
-* All variables have a type
 * `numeric`: integers and floating-point (decimal) numbers
 * `logical`: yes/no, true/false data; in R represented by the special values `TRUE` and `FALSE`
 	- `T` and `F` (no quotes) can be used as shortcuts for `TRUE`/`FALSE`, but you should avoid this!
@@ -129,7 +132,7 @@ my name = "Matt"
 
 
 
-## Programming in R: Operators
+## Operators
 
 <div class="left lt">
 We use **operators** to perform computations on variables and constants
@@ -159,11 +162,10 @@ x == 5.1
 
 </div>
 
-## Programming in R: Logic
+## Logic
 
 <div class="left lt">
 * Logical comparisons can be made with and (`&`), or (`|`), and not (`!`).
-* You can use logic to help your script make decision based on the outcome of a computation
 
 </div>
 
@@ -181,7 +183,24 @@ FALSE | FALSE
 
 # not: returns the opposite
 !FALSE
+```
 
+</div>
+
+
+
+
+## Logic
+
+<div class="left lt">
+* Logical comparisons can be made with and (`&`), or (`|`), and not (`!`).
+* You can use logic to help your script make decision based on the outcome of a computation
+
+</div>
+
+<div class="right rt">
+
+```{r}
 # making decisions
 x = 2^15 + 1
 if(x > 100) {
@@ -200,7 +219,7 @@ if(x > 100 & x %% 2 == 0) {
 </div>
 
 
-## Programming in R: Functions
+## Functions
 
 <div class="left lt">
 * **Functions** take a series of **arguments** (which can be variables or constants).
@@ -223,17 +242,18 @@ If you don´t know a function´s name, you can search for a (likely/suspected) s
 ```{r}
 x = 5
 
-# The print() function takes one or more arguments, in this case the variable x
-# It returns no value, but has the side effect of printing the value of x to the
-# screen
+# The print() function takes one or more arguments
+#.      in this case the variable x
+# It returns no value, but has the side effect of printing the 
+# value of x to the screen
 print(x)
 
 # compute the natural logarithm of x, store it in y, then print the result
 y = log(x)
 print(y)
 
-# functions can take multiple arguments, and arguments can be named; in this case,
-# we change the base of the logarithm
+# functions can take multiple arguments, and arguments can be named
+# here we change the base of the logarithm
 log(x, base = 10)
 ```
 
@@ -243,7 +263,7 @@ log(x, base = 10)
 
 
 
-## Programming in R: Basic data structures
+## Basic data structures
 
 <div class="left lt">
 * A **data structure** is a way of organizing multiple pieces of data into a single variable
@@ -289,7 +309,7 @@ as.integer(x)
 </div>
 
 
-## Programming in R: Working with data frames
+## Working with data frames
 
 <div class="left lt">
 * A `data.frame` holds tabular data
@@ -302,13 +322,15 @@ as.integer(x)
 <div class="right rt">
    
 ```{r, results = "hide"}
-## Load a built-in data frame named 'iris'
-data(iris)
-head(iris)
+## Load a dataset named 'penguins' and convert it to a data frame
+## this dataset comes from a package, "palmerpenguins"
+data(penguins, package = "palmerpenguins")
+penguins = as.data.frame(penguins)
+head(penguins)
 ```
 
 ```{r echo = FALSE, results = 'asis'}
-kable_styling(kable(head(iris)), font_size = 12)
+kable_styling(kable(head(penguins)), font_size = 12)
 ```
 
 
@@ -316,51 +338,54 @@ kable_styling(kable(head(iris)), font_size = 12)
 </div>
 
 
-## Programming in R: Working with data frames
+## Working with data frames
 
 * `View` shows the data frame in a graphical window
 * `str` gives you a summary of the **str**ucture of the data
 
 ```{r}
-str(iris)
+str(penguins)
 ```
 
 * `nrow`, `ncol`, `dim` give you dimensions of the data frame
 
 ```{r}
 ## data frame dimensions
-nrow(iris)
-ncol(iris)
-dim(iris)
+nrow(penguins)
+ncol(penguins)
+dim(penguins)
 ```
+
+
+## Working with data frames
 
 * Access an individual variable using `$` or `[]`
 ```{r, results = "hide"}
 # accessing variables
 ## all of these are identical
-iris$Sepal.Length
-iris[,1] ## [,1] get every row in the first column
+penguins$bill_length_mm
+penguins[,1] ## [,1] get every row in the first column
 ```
 
 ```{r}
-iris[1:10,"Sepal.Length"] ## another way to access by name, gets the first 10 entries
+penguins[1:10,"bill_length_mm"] ## another way to access by name, gets the first 10 entries
 ```
 
 
 
-## Programming in R: Working with data frames
+## Working with data frames
 
-The variable `Species` is a factor.
+The variable `species` is a factor.
 
 ```{r}
-str(iris)
+str(penguins)
 ```
 
 Useful functions for factors include `levels` and `table`.
 
 ```{r}
-levels(iris$Species)
-table(iris$Species)
+levels(penguins$species)
+table(penguins$species)
 ```
 
 
