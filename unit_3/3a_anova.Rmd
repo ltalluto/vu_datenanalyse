@@ -594,7 +594,7 @@ In the rats x food illustration case we only have 2 factor levels for each facto
 
 A significant interaction effect is often the more interesting effect ;-).
 
-A significant interaction effect also means main effects need to be carefully evaluated :-(. Main effectss may be made worthless by a strong interaction.
+A significant interaction effect also means main effects need to be carefully evaluated :-(. Main effects may be made worthless by a strong interaction.
 
 ![](img/interaction.png)
 

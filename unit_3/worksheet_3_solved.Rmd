@@ -1,13 +1,134 @@
 ---
 title: "Worksheet 3"
-author: "Matthew Talluto & Gabriel Singer"
-date: "23.02.2022"
+author: "Gabriel Singer"
+date: "15.02.2023"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, error=TRUE)
 ```
+
+
+## Stoichiometry of microbes
+
+[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but level of replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermedite N:P levels 5 and 50. In addition, in each bottle 20 specimen were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_phase_medium_bottle** and codes for the independent replicates in the experimental design.
+
+The response variables in this design are signatures extracted from Raman spectra collected from individual bacterial cells. These are proxies for specific macromolecules: 8 carbohydrates, 4 nucleic acids, 3 proteins (coded by `ca_` and `na_`, `pr_`.)
+
+```{r}
+mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
+levels(mic$species)<-c("Pec","Ver") # just to make shorter labels on axes
+names(mic)
+```
+
+1. The dataset is fairly large ;-), i.e. *exploration* could take you a while. Therefore start with filtering a subset of intermediate stoichiometry in the medium (either level 5 or 50).
+
+```{r}
+mic$NP<-factor(mic$NP)
+mic<-subset(mic,subset=(NP==5) )
+mic<-droplevels(mic)
+```
+
+2. The dataset is multivariate, we are mainly interested in aabundance of *nucleic acids*. Could all the nucleic acid Raman signatures be considered to inform about the same property *nucleic acid abundance*? If so, average the signatures to create a new *metavariable*. Consider using `scale` before averaging. 
+
+```{r}
+plot(mic[,grep("na",names(mic))])
+# strong correlations suggest redundant information in those na-signatures
+mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
+# this is a good average na-signature, due to scaling all 4 have same weight
+```
+
+3. Measurements of individual bacterial cells are replicates **within** each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 *average* bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average *location*. Not collapsing the dataset to bottle means would mean to use a **pseudoreplicated** dataset.
+```{r}
+# could check distribution within each bottle
+i<-0
+i<-i+1
+levels(mic$bottle)
+hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]])
+# just rerun last two lines to get some histograms
+# could also just plot all 60 or maybe at least some of them
+layout(matrix(1:36,nrow=6,ncol=6))
+old.par<-par # to keep graphical pars
+par(mar=c(0,0,0,0))
+for(i in 1:30) {
+  hist(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]],xlab="",ylab="",main="",xaxt="n",yaxt="n",col="grey",freq=FALSE)
+  lines(density(mic$na_avg[mic$all.treat==levels(mic$all.treat)[i]]))
+}
+# not all bottles generate ND data, maybe median is better measure for location within each bottle than mean
+# now averaging data within each bottle
+na_bt_med<-tapply(mic$na_avg,INDEX=mic$all.treat,median)
+species<-factor(substr(names(na_bt_med),start=0,stop=3))
+phase<-factor(substr(names(na_bt_med),start=5,stop=7))
+mic1<-data.frame(species,phase,na_bt_med) # not used any further here
+
+# same operation smarter with aggregate() instead
+mic<-mic[,-c(2)] # aggregation will make this factor meaningless
+mic2<-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
+# compare shape and size of mic vs. mic2!
+```
+
+4. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
+```{r}
+# could do separate tests for each species, but two-way ANOVA is more efficient and could help to find an interesting interaction effect
+combfac<-paste(mic2$species,mic2$phase,sep="_")
+bartlett.test(mic2$na_avg~combfac)
+boxplot(na_avg~species*phase,data=mic2)
+# --> variances assumed as homogeneous
+hist(unlist(tapply(mic2$na_avg,combfac,scale))) # quick and dirt check says ND may be given ;-)
+an<-aov(na_avg~species*phase,data=mic2)
+summary(an)
+# interaction not significant, thus in principal no post-hoc tests needed unless groupwise comparisons interesting
+TukeyHSD(an)
+
+# making an appropriate graph
+# Anova tests differences in locations=means, thus boxplots are not really appropriate
+means<-tapply(mic2$na_avg,combfac,mean)
+sds<-tapply(mic2$na_avg,combfac,sd)
+plot(c(1:4),means,xlim=c(0.5,4.5),ylim=c(-1.5,1.5),ylab="avg nucleic acid signature", xlab="",xaxt="n",bty="l")
+arrows(x0=c(1:4),y0=means-sds,y1=means+sds,angle=90,code=3)
+axis(side=1,at=c(1:4),labels=names(means))
+text(c(1:4),means,labels=c("a","b","b","b"),pos=4)
+# obvious some things could still be improved, like using different symbols and symbol colors for the treatments  
+```
+
+Conclude: ANOVA results show significant main effects and no interaction. The interaction term is just not significant, so we should better be careful with interpreting the main effects. Also, the plot suggests quite different patterns and prompts us to rely on pairwise tests rather than the anova results. The opportunistic species has clearly higher nucleic acid content when in growth phase.
+
+5. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+```{r}
+mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
+levels(mic$species)<-c("Pec","Ver") # just to make shorter labels on axes
+mic$NP<-factor(mic$NP)
+mic<-subset(mic,subset=((NP==5 | NP==50) & phase=="log"))
+mic<-droplevels(mic)
+mic$na_avg<-apply(scale(mic[,grep("na",names(mic))]),1,mean)
+mic<-mic[,-c(2)]
+mic_agg<-aggregate(.~all.treat+species+phase+NP+bottle,data=mic,FUN=median)
+mic_agg$combfac<-paste(substr(mic_agg$species,0,3),mic_agg$NP,sep="_")
+
+table(mic_agg$combfac)
+bartlett.test(na_avg~combfac,data=mic_agg)
+boxplot(na_avg~species*NP,data=mic_agg)
+# variances seem homogeneous
+hist(unlist(tapply(mic_agg$na_avg,mic_agg$combfac,scale))) # ok
+an<-aov(na_avg~species*NP,data=mic_agg)
+summary(an)
+# interaction significant
+# thus post-hoc tests more important
+TukeyHSD(an)
+
+# making an appropriate graph
+# Anova tests differences in locations=means, thus boxplots are not really appropriate
+means<-tapply(mic_agg$na_avg,mic_agg$combfac,mean)
+sds<-tapply(mic_agg$na_avg,mic_agg$combfac,sd)
+plot(c(1:4),means,xlim=c(0.5,4.5),ylim=c(-1.5,1.5),ylab="avg nucleic acid signature",xlab="",xaxt="n",bty="l")
+arrows(x0=c(1:4),y0=means-sds,y1=means+sds,angle=90,code=3)
+axis(side=1,at=c(1:4),labels=names(means))
+text(c(1:4),means,labels=c("a","b","b","a,b"),pos=4)
+# obvious some things could still be improved, like using different symbols and symbol colors for the treatments  
+```
+
+Conclude that the opportunistic species can make better use of high-P medium.
 
 
 ## Hucho record captures in Austrian rivers
@@ -89,363 +210,4 @@ which has similar slope but higher intercept than the model that ignores populat
 Hucho model1: Fish mass = 14.9+2.4 * log(Q)
 
 With model1 fish would be estimated too small, fish passes would not support the largest fish that we could hope for in eventually healthy populations.
-
-## Solid particulate matter in lakes
-
-Load the LakeSPM dataset (Lindström, M., Håkanson, L., Abrahamsson, O., Johansson, H. (1999) An empirical model for prediction of lake water suspended particulate matter. Ecological Modelling 121, 185–198).
-
-```{r}
-lakes <- read.table("data/LakeSPM.txt",header=TRUE)
-```
-
-The study has a set of lakes with SPM=solid particulate matter as the main response of interest. High SPM is a water quality issue, it can be generated through excessive phytoplankton growth or resuspension of sediment in shallow lakes or terrigeneous input into smaller lakes. For water quality prediction a model to predict SPM from easily accessible lake data should be generated. The available predictors (check Excel sheet in data folder for exact meaning of abbreviations) include
-
-* Measures of lake size and morphology that could influence sensitivity to terrestrial loading and resuspension of lake sediment: area, mean depth Dm, maximum depth Dmax, dynamic ratio DR (=sqrt(area)/Dm), volume development form factor Vd (3*Dm/Dmax)
-* Measures of water renewal: discharge into lake Q, turnover time T in years
-* Proxies for productivity: pH (buffering capacity), total phosphorous TP
-
-1. Formulate a set of hypotheses testing effects of productivity and lake depth on spm. Choose variables wisely, then run a formal hypothesis test using MLR.
-A suggestion is:
-H1: Productive lakes support phytoplankton growth, thus higher spm.
-H2: Shallow lakes allow resuspension, thus higher spm.
-Use variables TP and Dm, consider log-transformation (also of spm) to improve linearity.
-```{r}
-# choose variables and run MLR
-plot(lakes[,c('spm','TP','Dm')])
-plot(log(lakes[,c('spm','TP','Dm')]))
-```
-
-2. These hypotheses are lame ;-) We know that nutrients influence productivity since decades. For water quality forecasting a model to predict spm is needed. Start an explorative approach with the aim to design a *good* model for spm.  Explore the data for potential relationships with the response SPM. Assess distributions and chance for collinearity by graphical means (e.g. using `pairs` or `plot(data)`). Consider appropriate transformation to improve linearity of relationships.
-```{r}
-plot(lakes[,-c(1:2)])
-boxplot(scale(lakes[,-c(1:2)]))
-#pH is already a log-transform, Vd seems symmetrically distributed, all others are skewed and are log-transformed
-names(lakes)
-lakes[,-c(1,2,7,12)]<-log(lakes[,-c(1,2,7,12)])
-plot(lakes[,-c(1:2)])
-boxplot(scale(lakes[,-c(1:2)]))
-# distributions have improved, some linear relationships obvious - with response as well as among predictors (collinearity)
-```
-
-3. With `vif` from the `car`-package you can assess collinearity. Identify redundant variables using VIF and drop them from the dataset.
-```{r}
-lakes<-lakes[,-c(1:2)]
-mlr.full<-lm(spm~.,data=lakes) # makes a model with all predictors available
-library(car)
-vif(mlr.full) #computes VIF
-# check what VIF means:
-summary(lm(area~.-spm,data=lakes)) # regressing area on all other predictors gives an R2 of (almost) 1!
-# some really high VIF point to collinearity, start removing predictors and repeat procedure.
-
-# full model without area
-mlr.full<-lm(spm~.-area,data=lakes)
-vif(mlr.full)
-# full model without area and Dm
-mlr.full<-lm(spm~.-area-Dm,data=lakes)
-vif(mlr.full)
-# -> still high VIFs for some predictors, drop Dmax
-
-# full model without Dm and area and Dmax
-mlr.full<-lm(spm~.-area-Dm-Dmax,data=lakes)
-vif(mlr.full)
-# -> now all predictors have VIF<10 and make sense as input for MLR
-# note that DR and Vd (which remain included) are lake morphometric measures computed from area, Dm and Dmax!
-
-# delete the unnecessary predictors from the dataframe
-which(names(lakes) %in% c("area","Dm","Dmax"))
-lakes<-lakes[,-c(2,3,4)]
-```
-4. Identify the best **simple** linear regression model and a **full** model with only one predictor or all non-redundant ones to start a forward and a backward model building process.
-```{r}
-mlr.full<-lm(spm~.,data=lakes) # makes a model with all predictors available
-summary(mlr.full)
-# -> this is "maximum" model with lots of probably unimportant predictors, maximum "achievable" r2 is now 0.88
-
-plot(lakes)
-
-simple.mod1<-lm(spm~TP,data=lakes)
-summary(simple.mod1)
-plot(spm~TP,data=lakes)
-abline(simple.mod1,col="red")
-# -> very good relationship, high r2
-```
-
-5. Using the functions `add1`and `drop1` terms can be added to or removed from models. Follow a forward and a backward model building process until a final result and compare the two final models.
-```{r}
-add1(simple.mod1,scope=~pH+TP+T+Q+DR+Vd,test="F")
-# -> pH and DR seem to be good candidates for adding to the model
-# -> add pH (its inclusion alongside TP causes strongest change in model according to F-value and produces lowest AIC)
-mlr1<-lm(spm~TP+pH,data=lakes)
-summary(mlr1)
-# -> good model, try adding more terms
-add1(mlr1,scope~pH+TP+T+Q+DR+Vd,test="F")
-# -> add DR
-mlr2<-lm(spm~TP+pH+DR,data=lakes)
-summary(mlr2)
-# -> good model, all terms significant try adding more terms
-add1(mlr2,scope~pH+TP+T+Q+DR+Vd,test="F")
-# -> no  more terms to add according to F -> mlr2 is the final model (as in the original publication)
-# -> not that according to AIC we could add Vd and keep building more complicated model
-
-# alternatively with dropping terms from the full model
-summary(mlr.full)
-# -> unreasonable model with many insignificant terms
-drop1(mlr.full,test="F")
-# -> drop Q (lowest F, highest P, also makes lowest AIC)
-mlr3<-lm(spm~pH+TP+T+DR+Vd,data=lakes)
-summary(mlr3)
-drop1(mlr3,test="F")
-# -> drop T
-mlr4<-lm(spm~pH+TP+DR+Vd,data=lakes)
-summary(mlr4)
-drop1(mlr4,test="F")
-# according to F we should drop pH, according to AIC this is already the best model
-# rule of thumb: AIC differences <2 are not reliable, thus drop pH
-mlr5<-lm(spm~TP+DR+Vd,data=lakes)
-summary(mlr5)
-drop1(mlr5,test="F")
-# -> no more terms to drop
-# -> final model is different between forward and backward variable selection, even though 2 of 3 predictors are identical!
-
-```
-6. Use `step` to identify a *good* model based on the AIC. How does this compare to the models created above? Check model assumptions and decide for a final model.
-```{r}
-step(mlr.full,direction="backward")
-step(simple.mod1,scope=~pH+TP+T+Q+DR+Vd,direction="forward")
-# same solutions! compare with selection by F!
-
-# combined forward and backward selection based on AIC
-step(mlr.full,direction="both")
-mlr8<-lm(spm~pH+TP+DR+Vd,data=lakes)
-
-# assess the final model candidates: mlr2, mlr5 and mlr8
-summary(mlr2)
-summary(mlr5)
-summary(mlr8)
-extractAIC(mlr2)
-extractAIC(mlr5)
-extractAIC(mlr8)
-# -> r2 and AIC are not very different, not enough reason to use more complex model (4 vs. 3 variables!)
-# AIC differences between models <2 indicate "equivalent" models
-# -> choose mlr2 or mlr5
-
-```
-
-7. The model is intended to be used for prediction. Test its prediction capacity using a leave-1-out approach. Leave-1-out means to predict the response for each observation with a model built without this observation. For this, pick your most favourite model built above. Use a loop to leave out 1 case at a time, then predict for the left-out case. Finally compare observed vs. (unbiased) predictions and plot on a 1:1 graph.
-
-
-```{r}
-# will use mlr2
-i = 1
-ypred_cv<-rep(NA,nrow(lakes))
-for(i in 1:nrow(lakes)) {
-  mod <- lm(spm ~ TP + pH + DR, data = lakes[-i, ])
-  ypred_cv[i]<-predict(mod, newdata = lakes[i,])
-}
-plot(lakes$spm,ypred_cv)
-abline(a=0,b=1,col="red")
-cor.test(lakes$spm,ypred_cv)
-```
-
-> conclude: mlr2 is able to make reasonably good predictons even for left-out cases
-
-## Mortality/Abundance of sugar maple
-
-These data are from a study of the response of trees in North America to climate change (Talluto, et al. (2017) Extinction debt and colonization credit delay range shifts of eastern North American trees. Nat Ecol Evol 1, 0182 (2017). https://doi.org/10.1038/s41559-017-0182).
-
-Load the somewhat deconstructed dataset, containing climate data, data on tree abundance and mortality, and a species table:
-
-```{r}
-clim = read.csv("data/tree_clim.csv")
-trees = read.csv("data/trees.csv")
-species = read.csv("data/tree_species.csv")
-```
-
-We have two potential hypotheses to explore:
-
-**1**: Mortality of sugar maple (*Acer saccharum*) is negatively related to temperature and/or climatic variability.
-
-**2**: Abundance of sugar maple has a hump-shaped (quadratic) relationship to climate (i.e., there is a climatic optimum)
-
-Choose one of the two to work on. 1 implies a binomial process (k trees died out of n trees present), and will have `cbind(died, n)` as the response variable. 2 implies a poisson process and will have `n` as the response. Formulate a more specific alternative hypothesis.
-
-### Reshaping
-
-The data will need to be reshaped a bit before use.
-
-1. Explore the climate data. Use `reshape2::dcast` to produce a "wide" format dataset. You have 6 variables, measured in plots across multiple years. 
-
-**Measures of climate location**
-
-* annual_mean_temp
-* mean_temp_wettest_quarter
-* tot_annual_pp (precipitation)
-* pp_warmest_quarter
-
-**Measures of climate variability**
-
-* mean_diurnal_range
-* pp_seasonality
-
-Multicollinearity is usually a problem with climate variables, because many variables measure very similar things. However, the data set is very large, and so variance inflation is somewhat less of a problem. You should still choose a smaller number of variables to test (max 4); justify this choice based on a hypothesis. You can use `cor(clim[, -c(1,2)])` to make a correlation matrix; if two variables have a correlation > 0.6, you should only use one of them. You may (optionally) also check VIFs, but you should do so after fitting the model.
-
-```{r}
-library(reshape2)
-clim_wide = dcast(clim, plot_id+year_measured ~ variable)
-cor(clim_wide[,-(1:2)])
-
-```
-
-> I will select 4 variables, 1 each of temperature and precipitation, location and variability. I start with the variability, since there are only 2 variables I select them both (mean_diurnal_range and pp_seasonality). For temperature location, mean_temp_wettest_quarter is strongly correlated with pp_seasonaility, so I go with annual_mean_temp. For precipitation, pp_warmest_quarter is the most unique variable remaining, and has the added benefit of having a nice interpretation with regard to drought stress (low pp_warmest_quarter = high drought stress).
-
-```{r}
-## note that it is less error-prone if you refer to variables by name.
-vars = c("plot_id", "year_measured", "annual_mean_temp", "mean_diurnal_range", "pp_seasonality", "pp_warmest_quarter")
-my_clim_vars = clim_wide[, vars]
-```
-
-
-
-2. Merge the climate data with the tree data (as shown in the lecture), and filter the data to only include *Acer saccharum*
-
-```{r}
-trees = merge(trees, my_clim_vars, by.x = c("plot", "year"), 
-              by.y= c("plot_id", "year_measured"))
-trees = subset(trees, species_code == "28731-ACE-SAC") ## this is the species code for sugar maple
-```
-
-
-3. Fit GLMs (using the `glm` function with the `family = poisson` or `family = 'binomial'` option, depending on your response). Use `AIC(mod)` to compare different hypotheses about which variables to include. Choose a final 'best' model, and report the results using appropriate tables, figures, etc. If you use a poisson model, be sure to check for overdispersion in each of your models (it is not necessary to correct if it is too high in your final model, but do report it).
-
-
-### Hypothesis 1
-
-> Binomial models need to know what the count of events is (here, deaths, because we are modelling mortality), but they also need to know the number of "trials;" in this case, we can't observe more deaths than there were actual trees, so the variable is n. We use this to make a combined response variable: cbind(died, n)
-
-
-```{r}
-## biggest model, including all variables
-mod_h1_1 = glm(cbind(died, n) ~ annual_mean_temp + mean_diurnal_range + pp_seasonality + pp_warmest_quarter, data = trees, family=binomial)
-## only location, no variability
-mod_h1_2 = glm(cbind(died, n) ~ annual_mean_temp + pp_warmest_quarter, data = trees, family=binomial)
-## variability only
-mod_h1_3 = glm(cbind(died, n) ~ mean_diurnal_range + pp_seasonality, data = trees, family=binomial)
-## temperature only
-mod_h1_4 = glm(cbind(died, n) ~ annual_mean_temp + mean_diurnal_range, data = trees, family=binomial)
-## With all 2-way interactions
-mod_h1_int = glm(cbind(died, n) ~ (annual_mean_temp + mean_diurnal_range + pp_seasonality + pp_warmest_quarter)^2, data = trees, family=binomial)
-
-
-mods_h1 = data.frame(model = c("mod_h1_1", "mod_h1_2", "mod_h1_3", "mod_h1_4", "mod_h1_int"), 
-					 aic = c(AIC(mod_h1_1), AIC(mod_h1_2), AIC(mod_h1_3), 
-					 		AIC(mod_h1_4), AIC(mod_h1_int)))
-mods_h1$dAIC = mods_h1$aic - min(mods_h1$aic)
-mods_h1
-
-coef(mod_h1_1)
-
-
-new_trees = trees
-new_trees[, c("annual_mean_temp", "mean_diurnal_range", "pp_seasonality", "pp_warmest_quarter")] = 
-	scale(new_trees[, c("annual_mean_temp", "mean_diurnal_range", "pp_seasonality", "pp_warmest_quarter")])
-mod_h1_1_sc = glm(cbind(died, n) ~ annual_mean_temp + mean_diurnal_range + pp_seasonality + pp_warmest_quarter, data = new_trees, family=binomial)
-```
-
-> The first model, with all 4 variables, is best. looking at the coefficients, we find that more variability in climate results in increased mortality. We can make response curves by generating some fake data. We set other variables to their mean when computing the predictions.
-
-```{r}
-x_plot = data.frame(annual_mean_temp = seq(min(trees$annual_mean_temp), max(trees$annual_mean_temp), length.out = 500), 
-					mean_diurnal_range = mean(trees$mean_diurnal_range), pp_seasonality = mean(trees$pp_seasonality), 
-					pp_warmest_quarter = mean(trees$pp_warmest_quarter))
-# use the predict function to find out what we expect for mortality if x takes hypothetical values
-# type = 'response' takes care of transforming away the link function, otherwise we would get predictions on the logit scale
-y_plot = predict(mod_h1_1, type='response', newdata = x_plot)
-
-par(mfrow = c(2,2), bty='n')
-plot(x_plot$annual_mean_temp, y_plot, type='l', xlab='Annual Mean Temperature', ylab = "Mortality Probability", ylim=c(0,1), col='blue', lwd=2)
-points(trees$annual_mean_temp, trees$died/trees$n, pch=16, cex=0.4)
-
-## now just edit the appropriate columns to make the rest of the plots
-for(i in 2:4) {
-	nm = colnames(x_plot)[i]
-	nm_pr = colnames(x_plot)[i-1]
-	x_plot[,nm_pr] = mean(trees[,nm_pr]) # set the previous column to the mean
-	# set the next to a sequence
-	x_plot[, nm] = seq(min(trees[,nm]), max(trees[,nm]), length.out = 500)
-	y_plot = predict(mod_h1_1, type='response', newdata = x_plot)
-	plot(x_plot[,nm], y_plot, type='l', xlab=nm, ylab = "Mortality Probability", ylim=c(0,1), col='blue', lwd=2)
-	points(trees[,nm], trees$died/trees$n, pch=16, cex=0.4)
-
-}
-
-
-```
-
-
-
-### Hypothesis 2
-
-> Here we check for hump-shaped relationships between the number of trees and climate. The number of trees is a count, so we use a Poisson model. I choose only to include quadratic terms for climate location; it makes sense that variability is either good or bad, not necessarily that there is an interpediate optimum.
-
-```{r}
-## biggest model, including all variables and a squared term for location
-mod_h2_1 = glm(n  ~ annual_mean_temp + mean_diurnal_range + pp_seasonality + pp_warmest_quarter + I(annual_mean_temp^2) + I(pp_warmest_quarter^2), data = trees, family=poisson)
-## only location, no variability
-mod_h2_2 = glm(n ~ annual_mean_temp + pp_warmest_quarter + I(annual_mean_temp^2) + I(pp_warmest_quarter^2), data = trees, family=poisson)
-## location, linear only
-mod_h2_3 = glm(n ~ annual_mean_temp + pp_warmest_quarter, data = trees, family=poisson)
-## temperature only
-mod_h2_4 = glm(n  ~ annual_mean_temp + mean_diurnal_range + I(annual_mean_temp^2), data = trees, family=poisson)
-
-mods_h2 = data.frame(model = c("mod_h2_1", "mod_h2_2", "mod_h2_3", "mod_h2_4"), 
-					 aic = c(AIC(mod_h2_1), AIC(mod_h2_2), AIC(mod_h2_3), AIC(mod_h2_4)))
-mods_h2$dAIC = mods_h2$aic - min(mods_h2$aic)
-mods_h2
-
-coef(mod_h2_1)
-```
-
-> The first model, with all 4 variables, is by far the best. looking at the coefficients, we find that more variability in climate results in increased mortality. Interpreting the coefficients directly with such a model is difficult, we will need to check the response curves.
-
-```{r}
-x_plot = data.frame(annual_mean_temp = seq(min(trees$annual_mean_temp), max(trees$annual_mean_temp), length.out = 500), 
-					mean_diurnal_range = mean(trees$mean_diurnal_range), pp_seasonality = mean(trees$pp_seasonality), 
-					pp_warmest_quarter = mean(trees$pp_warmest_quarter))
-# use the predict function to find out what we expect for mortality if x takes hypothetical values
-# type = 'response' takes care of transforming away the link function, otherwise we would get predictions on the logit scale
-y_plot = predict(mod_h2_1, type='response', newdata = x_plot)
-
-par(mfrow = c(2,2), bty='n')
-plot(x_plot$annual_mean_temp, y_plot, type='l', xlab='Annual Mean Temperature', ylab = "Expected Number of Trees")
-
-## now just edit the appropriate columns to make the rest of the plots
-for(i in 2:4) {
-	nm = colnames(x_plot)[i]
-	nm_pr = colnames(x_plot)[i-1]
-	x_plot[,nm_pr] = mean(trees[,nm_pr]) # set the previous column to the mean
-	# set the next to a sequence
-	x_plot[, nm] = seq(min(trees[,nm]), max(trees[,nm]), length.out = 500)
-	y_plot = predict(mod_h2_1, type='response', newdata = x_plot)
-	plot(x_plot[,nm], y_plot, type='l', xlab=nm, ylab = "Expected Number of Trees")
-}
-
-```
-
-> The quadratic terms produce some rather unexpected predictions. In particular, not only do we find no evidence of an optimum, but there is an anti-optimum with regards to precipitation! The model predicts the least number of trees at intermediate precipitations. Likely we have not done an adequate job building this model, and so we will need to explore further hypotheses...
-
-> But for the moment, we have another problem. Poisson models assume the variance is equal to the mean. We can check this with the "dispersion parameter," which should be equal to one. Compute it as the ratio of residual deviance to the degrees of freedom. For comparison, we can do this for all models.
-
-```{r}
-mod_h2_1$deviance / mod_h2_1$df.residual
-mod_h2_2$deviance / mod_h2_2$df.residual
-mod_h2_3$deviance / mod_h2_3$df.residual
-mod_h2_4$deviance / mod_h2_4$df.residual
-
-```
-
-> As the models get simpler, the dispersion parameter gets worse (simpler models describe less deviance). In all cases, the dispersion parameters are quite a bit greater than one, so (in a complete analysis), we would need to consider more variables, or consider another model structure. Unfortunately, the counts are much too close to zero to use a normal approximation.
-
-```{r}
-hist(trees$n)
-```
 
