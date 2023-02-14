@@ -108,7 +108,7 @@ $$
 ## Multiple linear regression: Goodness of fit
 
 * Explained variance: **multiple $R^2$**
-* Similar interpretatin as with simple LR: the percentage of variation of Y explained by *all* X variables.
+* Similar interpretation as with simple LR: the percentage of variation of Y explained by *all* X variables.
 
 ## Multiple linear regression: Goodness of fit
 
@@ -179,7 +179,7 @@ $$
 	\mathbb{E}(\epsilon_*) = | \hat{y}_* - \mathbf{BX}^* |
 $$
 
-We usually do not measure it, rather we apprimate it with Akaike's Information Criterion (AIC)
+We usually do not measure it, rather we approximate it with Akaike's Information Criterion (AIC)
 
 $$
 \mathrm{AIC} = n \ln \left( \frac{SS_{err}}{n} + \right ) + 2k
@@ -259,7 +259,7 @@ AIC(full_mod) - AIC(simple_mod)
 * We should view such models as hypotheses to be explored with further data collection
 * Unwise to speak of significance
 
-Such models are prone to **Overfitting**:" irrelevant predictors that correlate with the outcomes by chance result in a model that its the dataset well, but performs poorly when challenged with new data (low **transferability**)
+Such models are prone to **Overfitting**:" irrelevant predictors that correlate with the outcomes by chance result in a model that fits the dataset well, but performs poorly when challenged with new data (low **transferability**)
 
 
 ## Pitfalls: Model flexibility
