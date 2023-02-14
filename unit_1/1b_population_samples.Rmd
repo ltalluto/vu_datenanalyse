@@ -1037,7 +1037,7 @@ $$
 * If $\mu = 0$ and $\sigma = 1$, the distribution is called the **standard normal**.
 * Transforming a variable so that $\mu = 0$ and $\sigma = 1$ is called **standardization**.
 $$
-x_{std} = \frac{(x - \bar{x})}{\sigma}
+x_{std} = \frac{(x - \bar{x})}{s}\approx\frac{(x - \mu)}{\sigma}
 $$
 * In R, we can use the `scale` function.
 
