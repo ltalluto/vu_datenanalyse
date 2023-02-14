@@ -1,7 +1,7 @@
 ---
 title: "Anova and Ancova"
 author: "Gabriel Singer"
-date: "22.02.2022"
+date: "15.02.2023"
 output:
   slidy_presentation:
     theme: cerulean
@@ -183,12 +183,13 @@ bartlett.test(TDN~landuse,data=data)
 # -> variances differ significantly among landuses !
 
 # Get out of here ASAP ;-)
-oneway.test(log(TDN)~landuse,data=data,var.equal=TRUE)
+oneway.test(TDN~landuse,data=data,var.equal=FALSE)
 
 # ... or try again with log-transformed TDN!
 boxplot(log(TDN)~landuse,data=data)
 bartlett.test(log(TDN)~landuse,data=data)
 #-> variances now homogeneous (i.e. "not found heterogeneous")
+# ready for ANOVA
 ```
 
 </div>
@@ -198,7 +199,7 @@ bartlett.test(log(TDN)~landuse,data=data)
 
 <div class="left lt">
 
-(Illustration assumes 3 groups and equal group sizes (n).)
+(Illustration assumes 3 groups and equal group sizes n.)
 
 <br/>
 
@@ -258,32 +259,31 @@ Task: Estimate variance from the **ONE** underlying population!
 
 <br/>
 
-Step 1: Calculation of sums of squares **between** the groups, i.e. the sum of the squared differences between the **group means** and the **grand mean**.
+For step 2: Calculation of sum of squares **within** the groups, i.e. the sum of the squared differences between each data point and the respective group mean.
 
 <br/>
 
 ![](img/anova2.png)
-
 <br/>
 
-<br/>
-
-Step 2: Calculation of sum of squares **within** the groups, i.e. the sum of the squared differences between each data point and the respective group mean.
+For step 3: Calculation of sums of squares **between** the groups, i.e. the sum of the squared differences between the **group means** and the **grand mean**.
 
 <br/>
 
 ![](img/anova3.png)
+
+<br/>
 
 
 ## ANalysis Of VAriance: Partitioning sums of squares
 
 <div class="left lt">
 
-Partitioning the total sum of squares (SS) (“Splitting of variance”):
+For each strategy to estimate variance an expression for sums of squares is needed:
 
 <br/>
 
-$SS_t$ is always an expression for total variation.
+1. $SS_t$ is always an expression for total variation.
 
 $$
 SS_{t(total)}=\sum_{z=1}^Z\sum_{i=1}^n(x_{iz}-\bar{x})^2
@@ -291,18 +291,18 @@ $$
 
 <br/>
 
-$SS_b$ is an expression for group-to-group variation, also called the *explained* SS (*due to treatment*).
+2. $SS_w$ is an expression for within-group variation, also called *not explained* SS (*due to random error*).
 
 $$
-SS_{b(between)}=n\cdot\sum_{z=1}^Z(\bar{x}_z-\bar{x})^2
+SS_{w(within)}=\sum_{z=1}^Z\sum_{i=1}^n(x_{iz}-\bar{x}_z)^2
 $$
 
 <br/>
 
-$SS_w$ is an expression for within-group variation, also called *not explained* SS (*due to random error*).
+3. $SS_b$ is an expression for group-to-group variation, also called the *explained* SS (*due to treatment*).
 
 $$
-SS_{w(within)}=\sum_{z=1}^Z\sum_{i=1}^n(x_{iz}-\bar{x}_z)^2
+SS_{b(between)}=n\cdot\sum_{z=1}^Z(\bar{x}_z-\bar{x})^2
 $$
 
 </div>
@@ -318,6 +318,10 @@ $$
 <br/>
 
 This can be translated into percentages of variation due to treatment and due to random error!
+
+<br/>
+
+The process is also called **Partitioning the total sum of squares (SS) (“Splitting of variance”)**
 
 </div>
 
