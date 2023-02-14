@@ -392,6 +392,7 @@ anova(fit2)
 # -> yes, there is a significant landuse effect on log(TDN)
 
 TukeyHSD(fit) # post hoc tests, needs usage of aov() above
+# check last column for adjusted p-values
 pairwise.t.test(log(data$TDN),data$landuse,p.adj="bonferroni",pool.sd=TRUE)
 # -> F differs from M and A, F has lowest TDN (i.e. "some" agriculture already increases TDN)
 
@@ -483,6 +484,7 @@ $H_0$: no interaction
 ## Two-way ANOVA: Partitioning sums of squares
 
 <div class="left lt">
+$SS_t$ is again the expression for total variation.
 $$
 SS_{t}=\sum_{s=1}^S\sum_{f=1}^F\sum_{i=1}^n(x_{isf}-\bar{\bar{x}})^2
 $$
@@ -494,7 +496,7 @@ $$
 
 $SS_{food}$ is computed from means of food types (sexes pooled).
 $$
-SS_{(food)}=S\cdot{n}\cdot\sum_{f=1}^F(\bar{x}_{f}-\bar{\bar{x}})^2
+SS_{food}=S\cdot{n}\cdot\sum_{f=1}^F(\bar{x}_{f}-\bar{\bar{x}})^2
 $$
 
 $SS_w$ is *still* an expression for within-group variation, also called *not explained* SS (*due to random error*).
