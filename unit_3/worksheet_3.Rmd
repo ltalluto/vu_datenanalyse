@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 3"
-author: "Matthew Talluto & Gabriel Singer"
-date: "23.02.2022"
+author: "Gabriel Singer"
+date: "15.02.2023"
 output: html_document
 ---
 
