@@ -757,7 +757,7 @@ bartlett.test(m1$res~data$landuse)
 layout(matrix(1:4,2,2))
 hist(m1$res)
 qqnorm(m1$res); qqline(m1$res)
-plot(m1$res,m1$fitted) # unexplained relationship/pattern left?
+plot(m1$res~m1$fitted) # unexplained relationship/pattern left?
 plot(m1$res^2~m1$fitted) # variances homogeneous? should not show any trend
 layout(matrix(1:4,2,2))
 plot(m1)
