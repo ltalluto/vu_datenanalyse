@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 4"
 author: "Gabriel Singer"
-date: "24.02.2022"
+date: "16.02.2023"
 output: html_document
 ---
 
@@ -9,10 +9,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, error=TRUE)
 ```
 
-## Membrane composition of bacteria
+## DOM from Berlin´s surface waters
 
-Data source: Hall, Singer, Kainz & Lennon 2010. Functional Ecology 24: 898-908
-Two bacterial isolates (a warm water and a cold water isolate) were exposed to two different cultivation temperatures (6 and 28 °C). We measured fatty acid composition of their membranes to investigate which fatty acids can be interpreted as adaptation (across isolates but same temperature) and which ones as acclimation (within an isolate but across temperatures). The 17 fatty acids are proportional data ("relative abundances of various FAs).
+Data source: Romero Gonzalez-Quijano 2022. Biogeosciences 19: 2841-2853, https://doi.org/10.5194/bg-19-2841-2022
+A range of urban water bodies in Berlin´s extensive 'aquascape' were investigated for properties of dissolved organic matter (DOM). There were 4 seasonal campaigns, water bodies were classified into 2 lotic (rivers and streams) and 2 lentic (lakes and ponds) types. DOM can be considered to drive and indicate various ecosystem functions like respiration, primary production. It may also indicate pollution and react to linkage to the terrestrial surrounding. 
 
 We will need the 'vegan' package (a lot of ordinations coded by ecologists for ecologists). Some more classical ordinations like PCA are available in the package 'MASS'.
 
@@ -20,14 +20,13 @@ We will need the 'vegan' package (a lot of ordinations coded by ecologists for e
 library(vegan)
 library(MASS)
 
-lipids<-read.table(file="data/BacterialMembrane.txt",header=TRUE)
-names(lipids)
+DOM<-read.table(file="data/DOM_Berlin_Romero.txt",header=TRUE)
+names(DOM)
 ```
 
-The names of these fatty acids point to (un)saturation and branched molecule structure with the
-abbreviations: MU = mono-unsaturated, SA = saturated, nb = non-branched, b = branched. The variable SA_branprop is the proportion of branched and saturated FAs. More double bonds and branched molecules require more space and increase membrane fluidity at cold temperature.
+The dataset includes DOC indicating pure quantity and several descriptors of DOM quality measured by optical instruments (SR:fresh,C1:C6), chromatography (HMWS.C:humic.N) and mass spectrometry (avgmolmass:O_C) (see the Excel sheet or the original paper for detailed variable description). Mass-spectrometric information only exist for three seasons. The dataset also includes variables that should be considered as drivers of DOM composition: nutrient concentrations, Chlorophyll-a, landuse percentages (NH4:URG).
 
-1. To warm up test for location differences in the variables SA_branprop and FA1_SAnb for warm isolates only, i.e. search for a possible acclimation reaction between incubation temperatures.
+1. DOM consists of thousands of chemical structures. We try to understand its 'composition' by throwing analytics on it to produce many at least partially collinear descriptors. Reduce the dimensionality of the DOM dataset to a meaningful number of dimensions by PCA. Leave away incomplete mass-spectrometric information. How much variance do individual PC-axes explain? How many axes do you need to properly represent the dataset? Note that the latter question may be answered based on PCA-results or based on theoretical considerations considering the study design of 4 water body types sampled across 4 seasons.
 
 ```{r}
 lipids$temperature = factor(lipids$temperature)
@@ -35,15 +34,7 @@ subset()
 t.test()
 ```
 
-
-2. Assume you have forgotten how P-values for a two-sample location test are computed. Instead of relying on a fancy test statistic and a parameterized distribution giving you P-values for it, you can also test a null hypothesis by permutation of the data at hand. The assumption is simple: If the null hypothesis of identical means is correct, then assignment of the data to the samples is exchangeable. Any random assignment to the two groups is as good as the one observed. The question is how "extreme" is the one observed? You can assess this probability (alpha!) by designing an appropriate test statistic that somehow expresses the difference between the two groups (the *effect size* in fact).
-
-Make your own permutation test by:
-
-* Designing a test statistic and computing it for the observed allocation of cases to the two groups.
-* Randomly permuting the group vector many times and computing a large population of permuted test statistics.
-* Assessing how extreme your observed outcome is relative to the permutation results.
-
+2. Create a biplot for PC1 and PC2 with the most important variables defining these two axes. Plot the various water bodies and code symbol shape and symbol color to represent the study design targetting 4 water body types and 4 seasons. Note that sites and variables (or subsets thereof) do not have to be plotted onto a single biplot.
 
 ```{r}
 lipids_warm = lipids[lipids$isolate == 'warm',]
@@ -79,9 +70,7 @@ sum(TS_p <= TS_emp) / 1000 # change >/< depending on hypothesis
 
 ```
 
-Such permutation-based significance tests are a standard strategy in multivariate tests. Permutation is not always as simple as here (*complete*) and can be restrained to adequately test more complex designs with multiple factors and dependencies (random factors).
-
-3. Compute dissimilarities with regard to fatty acid composition between isolates and temperature treatments using an adequate dissimilarity/distance measure. Explore dissimilarity among isolates and temperature treatments using a dendrogram. You will not only have to make a choice about transformation and the dissimilarity metric, but also decide about which linkage algorithm to use.
+3. Assess differences between water body types with respect to average composition of DOM and with respect to sesonal turnover of DOM composition. This question translates to an assessment of location and of seasonal variation along PC1 and PC2. You may add univariate formal hypothesis tests using the PCs as response metavariables. Use various graphical means for plotting of the sites to illustrate.
 
 ```{r}
 library(vegan)
@@ -98,9 +87,9 @@ plot(dmat, cophenetic(clu_1))
 
 ```
 
-Choose a final dendrogram. Which problems have you encountered?
+Which water bodies differ markedly among each other in DOM? Which water bodies show more seasonal DOM turnover?
 
-4. The subjectivity of clustering can be overcome by simply asking for the "best" reproduction of given dissimilarities in a low (usually 2) dimensional space. Metric scaling (aka PCoA) tries to reproduce the actual dissimilarities as distances. Use it on an (inadequate) Euclidean distance matrix. How many axes do you expect in order to properly show treatment-induced variation? How many do you finally need acccording to your analysis? And which fatty acids *define* these axes?
+4. Adding incomplete descriptors
 
 ```{r}
 pcoa = cmdscale(dmat, k = 2, eig=TRUE) # always computes all axes, but will only report scores of k=2
@@ -127,7 +116,7 @@ ordisurf() # as contourplot
 
 **Bonus**: Compare PCoA results with results of a PCA on the raw data.
 
-5. For non-metric dissimilarities an often more appropriate ordination is created by searching for a low-dimensional configuration whose distances reproduce the rank order of observed dissimilarities. Use such a non-metric multidimensional scaling on a more appropriate Bray-Curtis dissimilarity matrix. How many dimensions do you need for an adequate representation of the data? Produce a nice graph demonstrating differences between isolates and temperatures. Which fatty acids drive the differences (or: are typical for specific treatments)?
+5. Assess potential drivers
 
 ```{r}
 mds_lipids = metaMDS(comm = , distance = "bray", k = 2, trymax = 100) # to run a NMDS, $points to get scores, $stress to get information about fit
