@@ -89,27 +89,31 @@ Use variables TP and Dm, consider log-transformation (also of spm) to improve li
 3. With `vif` from the `car`-package you can assess collinearity. Identify redundant variables using VIF and drop them from the dataset.
 
 ```{r eval=FALSE}
-lakes = lakes[,-c(1:2)]
+# drop the first two columns, non-numeric
+lakes = lakes[, -c(1, 2)]
 plot(lakes) # skewness issues!
-boxplot(lakes)
-boxplot(scale(lakes))
+
+# log transform everything except pH and Vd
 lakes[, -c(5,10)] = log(lakes[, -c(5,10)])
 plot(lakes)
 
-# . makes a model with all predictors available
+# suggestion: make some histograms!
+
+# dot (.) makes a model with all predictors 
 mlr.full = lm(spm ~ ., data = lakes) 
 summary(mlr.full)
 library(car)
 vif(mlr.full) #computes VIF
-summary(lm(area ~ . - spm, data = lakes)) #r2=1!!
+
+# look at how area is predicted by the X matrix
+# R^2 is one!
+summary(lm(area ~ . - spm, data = lakes))
 
 # try a few reductions
-# the .- syntax fits all variables *except* the ones with a -
+# minus removes a predictor from the model
 vif(lm(spm ~ . - area, data = lakes))
 vif(lm(spm ~ . - area - Dm, data = lakes))
 vif(lm(spm ~ . - area - Dm - Dmax, data = lakes))
-
-names(lakes)
 
 ```
 
@@ -124,9 +128,7 @@ summary(mf)
 5. Use `step` to identify a *good* model based on the AIC. Be sure to check diagnostics of the final model you get. Can you make conclusions about significance?
 
 ```{r eval=FALSE}
-step(mf, direction="both")
-
-summary(m3<-lm(spm~pH + TP + DR + Vd,data=lakes))
+mod = step(mf, direction="both")
 ```
 
 
