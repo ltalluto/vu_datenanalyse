@@ -21,6 +21,7 @@ cols = brewer.pal(8, "Set1")
 ## to use tables
 library(knitr)
 library(kableExtra)
+library(vegan)
 ```
 
 ## Methods based on distance/dissimilarity/similarity
