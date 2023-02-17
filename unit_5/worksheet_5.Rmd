@@ -36,7 +36,7 @@ t.test()
 ```
 
 
-2. Assume you have forgotten how P-values for a two-sample location test are computed. Instead of relying on a fancy test statistic and a parameterized distribution giving you P-values for it, you can also test a null hypothesis by permutation of the data at hand. The assumption is simple: If the null hypothesis of identical means is correct, then assignment of the data to the samples is exchangeable. Any random assignment to the two groups is as good as the one observed. The question is how "extreme" is the one observed? You can assess this probability (alpha!) by designing an appropriate test statistic that somehow expresses the difference between the two groups (the *effect size* in fact).
+2. Assume you have forgotten how P-values for a two-sample location test are computed. Instead of relying on a fancy test statistic and a parameterized distribution giving you P-values for it, you can also test a null hypothesis by permutation of the data at hand. The assumption is simple: If the null hypothesis of identical means is correct, then assignment of the data to the samples is exchangeable. Any random assignment to the two groups is as good as the one observed. The question is how "extreme" is the one observed? You can assess this probability (i.e. compare it to alpha!) by designing an appropriate test statistic that somehow expresses the difference between the two groups (the *effect size* in fact).
 
 Make your own permutation test by:
 
@@ -65,18 +65,6 @@ hist(TS_p)
 # assess how likely your "empirical" TS is given this null distribution
 # the "empirical" one is the TS computed for the unpermuted data!
 abline(v = TS_emp, col='red', lwd=2)
-
-##  how likely is a value as or more extreme than the observed if the null is true
-## absolute values make this a two-sided test
-hist(abs(TS_p))
-abline(v = abs(TS_emp), col='red', lwd=2)
-
-## compute a p-value
-sum(abs(TS_p) >= abs(TS_emp)) / 1000
-
-## if we want to do a one-sided test
-sum(TS_p <= TS_emp) / 1000 # change >/< depending on hypothesis
-
 ```
 
 Such permutation-based significance tests are a standard strategy in multivariate tests. Permutation is not always as simple as here (*complete*) and can be restrained to adequately test more complex designs with multiple factors and dependencies (random factors).
@@ -92,8 +80,8 @@ clu_1<-hclust(dmat, method = "single") # one of many possible solutions, play wi
 
 plot(clu_1)
 
+cophenetic(clu_2) # linkage distances in dendrogram
 cor(dmat, cophenetic(clu_1), method = "spearman")
-
 plot(dmat, cophenetic(clu_1))
 
 ```

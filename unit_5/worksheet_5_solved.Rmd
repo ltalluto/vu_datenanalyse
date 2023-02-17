@@ -76,9 +76,15 @@ hist(TS_p)
 abline(v = TS_emp, col='red', lwd=2)
 
 ##  how likely is a value as or more extreme than the observed if the null is true
+## absolute values make this a two-sided test
+hist(abs(TS_p))
+abline(v = abs(TS_emp), col='red', lwd=2)
+
+## compute a p-value
+sum(abs(TS_p) >= abs(TS_emp)) / 1000
+
 ## if we want to do a one-sided test
 sum(TS_p <= TS_emp) / 1000 # change >/< depending on hypothesis
-# double to get P for two-sided test
 ```
 
 Such permutation-based significance tests are a standard strategy in multivariate tests. Permutation is not always as simple as here (*complete*) and can be restrained to adequately test more complex designs with multiple factors and dependencies (random factors).
@@ -156,7 +162,7 @@ ordisurf(x=pcoa,y=lipids2$FA1_SAnb,add=TRUE) # as contourplot
 
 **Bonus**: Compare PCoA results with results of a PCA on the raw data.
 
-5. For non-metric dissimilarities an often more appropriate ordination is created by searching for a low-dimensional configuration whose distances reproduce the rank order of observed dissimilarities. Use such a non-metric multidimensional scaling on a more appropriate Bray-Curtis dissimilarity matrix. How many dimensions do you need for an adequate representation of the data? Produce a nice graph demonstrating differences between isolates and temperatures. Which fatty acids drive the differences (or: are typical for specific treatments)?
+5. For non-metric dissimilarities an often more appropriate ordination is created by searching for a low-dimensional configuration whose distances reproduce the **rank order** of observed dissimilarities. Use such a non-metric multidimensional scaling on a more appropriate Bray-Curtis dissimilarity matrix. How many dimensions do you need for an adequate representation of the data? Produce a nice graph demonstrating differences between isolates and temperatures. Which fatty acids drive the differences (or: are typical for specific treatments)?
 
 ```{r}
 mds_lipids = metaMDS(comm = lipids2, distance = "bray", k = 2, trymax = 100) # to run a NMDS, $points to get scores, $stress to get information about fit
