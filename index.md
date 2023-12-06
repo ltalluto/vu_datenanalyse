@@ -1,6 +1,19 @@
-**Instructors** Gabriel Singer, Matthew Talluto
+<style>
+	td p {margin: 0px;}
+	.sm {margin: 0px 5px; font-size: x-small}
+	.nmhead {margin: 0px; font-weight: bold}
+	.prb {color: #beaed4; margin: 0px}
+	.pr5 {color: #fdc086; margin: 0px}
+	table {font-size: small;}
+</style>
 
-**Meeting location** Praktikumsraum Biologie, 5th floor, Technikerstr. 25
+<p class="nmhead">Instructors</p>
+Gabriel Singer, Matthew Talluto, Thomas Fuß <br/>
+Tutor: Lukas Thuile-Bistarelli
+
+<p class="nmhead">Meeting locations</p>
+<p class="prb">Praktikumsraum Biologie, 1st floor, Technikerstr. 25 (PRB)</p>
+<p class="pr5">Praktikumsraum Biologie, 5th floor, Technikerstr. 25 (PR5)</p><br/>
 
 ### Course description
 
@@ -22,13 +35,139 @@ Students will be graded based on their participation during the exercise session
 
 ### Schedule
 
-Morning sessions will be from 9-12, afternoon from 13-16.
+<table>
+	<tr>
+		<th> Date & Location </th> <th> Morning Topics </th> <th> Afternoon Topics </th> <th> Exercises </th>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>Group 0</strong></p>
+			<p class="sm prb">Wed. 13.12, 9:00-16:00, PRB</p>
+			<p><strong>Group 1</strong></p>
+			<p class="sm pr5">Mon. 18.12, 9:00-16:00, PR5</p>
+		</td>
+		<td>
+			<p><a href="">The Basics</a></p>
+			<p class="sm">Introduction to R</p>
+			<p class="sm">Populations, samples</p>
+			<p calss="sm">Descriptive statistics</p>
+		</td>
+		<td>
+			<p><a href="unit_1/1c_univariate.html">Univariate statistics</a></p>
+			<p class="sm">Confidence intervals</p>
+			<p class="sm">Significance tests</p>
+			<p class="sm">Type I and II errors</p>
+		</td>
+		<td>
+			<p><a href="unit_1/worksheet_1.html">Exercise sheet 1</a></p>
+			<p class="sm">R Base Graphics</p>
+			<p class="sm">Programming basics</p>
+			<p class="sm">Sampling</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>Group 0</strong></p>
+			<p class="sm prb">Thurs. 14.12, 9:00-16:00, PRB</p>
+			<p><strong>Group 1</strong></p>
+			<p class="sm pr5">Tues. 19.12, 9:00-16:00, PR5</p>
+		</td>
+		<td>
+			<p><a href="">Basics, Part II</a></p>
+			<p class="sm">Data structures</p>
+			<p class="sm">Visualisation</p>
+			<p class="sm">Association</p>
+		</td>
+		<td>
+			<p><a href="">Linear Models I</a></p>
+			<p class="sm">Correlation and Regression</p>
+		</td>
+		<td>
+			<p><a href="">Exercise sheet 2</a></p>
+			<p class="sm">Correlation and Regression</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>Group 0</strong></p>
+			<p class="sm prb">Fri. 15.12, 9:00-13:00, PRB</p>
+			<p><strong>Group 1</strong></p>
+			<p class="sm pr5">Wed. 20.12, 9:00-13:00, PR5</p>
+		</td>
+		<td>
+			<p><a href="">Linear Models II</a></p>
+			<p class="sm">Multiple regression</p>
+			<p class="sm">Model selection</p>
+		</td>
+		<td></td>
+		<td>
+			<p><a href="">Exercise sheet 3</a></p>
+			<p class="sm">Multiple regression</p>
+			<p class="sm">Model selection</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>Group 0</strong></p>
+			<p class="sm prb">Mon. 18.12, 9:00-16:00, PRB</p>
+			<p><strong>Group 1</strong></p>
+			<p class="sm prb">Mon. 29.01, 9:00-16:00, PRB</p>
+		</td>
+		<td>
+			<p><a href="">Analysis of Variance</a></p>
+			<p class="sm">1-way ANOVA</p>
+			<p class="sm">2-way ANOVA</p>
+		</td>
+		<td>
+			<p>ANOVA Continued</p>
+			<p class="sm">ANCOVA</p>
+			<p class="sm">Nonparametric location tests</p>
+		</td>
+		<td>
+			<p><a href="">Exercise sheet 4</a></p>
+			<p class="sm">ANOVA &amp; ANCOVA</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>Group 0</strong></p>
+			<p class="sm prb">Tues. 19.12, 9:00-16:00, PRB</p>
+			<p><strong>Group 1</strong></p>
+			<p class="sm prb">Tues. 30.01, 9:00-16:00, PRB</p>
+		</td>
+		<td>
+			<p><a href="">Multivariate Statistics I</a></p>
+			<p class="sm">Principle components analysis (PCA)</p>
+			<p class="sm">Redundancy analysis (RDA)</p>
+		</td>
+		<td>
+			<p><a href="">Multivariate Statistics II</a></p>
+			<p class="sm">Permutation tests</p>
+			<p class="sm">Non-metric multidimensional scaling (NMDS)</p>
+		</td>
+		<td>
+			<p><a href="">Exercise sheet 5</a></p>
+			<p class="sm">PCA &amp; RDA</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<p><strong>Group 0</strong></p>
+			<p class="sm prb">Wed. 20.12, 9:00-13:00, PRB</p>
+			<p><strong>Group 1</strong></p>
+			<p class="sm prb">Wed. 31.01, 9:00-13:00, PRB</p>
+		</td>
+		<td>
+			<p>Multivariate Statistics Contd.</p>
+		</td>
+		<td></td>
+		<td>
+			<p><a href="">Exercise sheet 6</a></p>
+			<p class="sm">NMDS</p>
+		</td>
+	</tr>
+</table>
 
-|Date  |Morning Lecture|Afternoon Lecture|Exercises |
-| :--- |  :---|   :---    | :--- |
-|13.02 Monday|[Introduction to R](unit_1/1a_intro_r.html)<br/>[Populations, samples, descriptive statistics](unit_1/1b_population_samples.html)|[Univariate statistics](unit_1/1c_univariate.html)<br/><small>Confidence intervals<br/>Significance testings<br/>Type I and II errors</small>|[Exercise sheet 1](unit_1/worksheet_1.html)<br/><small>R Base Graphics<br/>Programming basics<br/>Sampling</small>|
-|14.02 Tuesday|[Lecture 2a](unit_2/2a_correlation_regression.html)<br/><small>Data structures<br/>Visualisation basics<br/>Correlation & Regression<br/>Association</small>|[Lecture 2b](unit_2/2b_mlr.html)<br/><small>Multiple regression<br/>Model selection</small>|[Exercise sheet 2](unit_2/worksheet_2.html)<br/><small>Linear models<br/>Model selection</small>|
-|15.02 Wednesday|[Analysis of variance](unit_3/3a_anova.html)<br/><small>1-way ANOVA<br/>2-way ANOVA</small>|ANOVA Continued<br/><small>ANCOVA<br/>Nonparametric tests</small>|[Exercise Sheet 3](unit_3/worksheet_3.html)<br/><small>ANOVA<br/>ANCOVA</small>|
-|16.02 Thursday|[Abnormal statistics](unit_4/4a_abnormal.html)<br/><small>Models for counts, proportions<br/>Bootstrapping & randomisation</small>|[Multivariate statistics I](unit_4/4a_multivariate.html)<br/><small>PCA, RDA</small>|[Exercise Sheet 4](unit_4/worksheet_4.html)<br/><small>Multivariate stats in R</small>|
-|17.02 Friday|[Multivariate statistics II](unit_5/5_distance.html)<br/><small>Distance-based methods</small>||[Exercise Sheet 5](unit_5/worksheet_5.html)<br/><small>Distance-based methods</small>|
+
+
 
