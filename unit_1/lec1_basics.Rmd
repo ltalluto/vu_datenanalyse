@@ -1,13 +1,14 @@
 ---
-title: "Introduction to R"
-author: "Matthew Talluto"
-date: "13.02.2023"
+title: "The Basics"
+author: "M. Talluto"
+date: "13.12.2023"
 output:
   slidy_presentation:
     theme: cerulean
     toc_depth: 2
     css: ../assets/rmd_style.css
-  beamer_presentation: default
+    self_contained: false
+    lib_dir: lib
 ---
 
 
@@ -37,9 +38,8 @@ penguins = as.data.frame(penguins)
 
 ### Website and course materials
 
-All course materials are available on the 
-[website](https://flee-group.github.io/vu_datenanalyse) and via 
-[GitHub](https://github.com/flee-groupvu_datenanalyse) (demo incoming).
+* The [course website](https://flee-group.github.io/vu_datenanalyse) has the course schedule and other information.
+* The [students' Github repository](https://github.com/flee-group/vu_datenanalyse_students) includes data and scripts for all of the exercises
 
 
 ## Introduction to R
@@ -62,7 +62,7 @@ All course materials are available on the
    - or in **batch mode** (all commands run, one after the other)
 * **working directory**: location on your computer where R will search for files, data, etc.
 
-The code in the course files assumes your working directory is set to the *unit* you are working on. So, for today's exercises, you should run the following in the console: `setwd("unit_1")`.
+Any code that is given to you will assume your working directory is set to the **unit** you are working on. So, for today's exercises, you should run the following in the console: `setwd("unit_1")`.
 
 
 ## Recommendations
@@ -71,7 +71,6 @@ The code in the course files assumes your working directory is set to the *unit*
 * Save related commands together in a script.
 * Annotate your code with comments. Write more comments than you need.
    - In R, anything after the `#` character is a comment and will be ignored by the interpreter.
-* (For the adventurous) Write your protocols using **Rmarkdown** (combines text, code, output, and graphics).
 
    
    
@@ -249,6 +248,7 @@ x = 5
 print(x)
 
 # compute the natural logarithm of x, store it in y, then print the result
+# How do I know it is the natural log?
 y = log(x)
 print(y)
 
@@ -278,7 +278,7 @@ log(x, base = 10)
 <div class="right rt">
 
 ```{r}
-## Creating vectors
+# Creating vectors
 (one_to_ten = 1:10)
 
 # The c() function stands for concatenate
@@ -290,14 +290,14 @@ five_numbers[3]
 five_numbers[3:5]
 five_numbers[c(1,4)]
 
-## get vector length
+# get vector length
 length(five_numbers)
 
-## sequences and repeats
+# sequences and repeats
 seq(1, 5, 0.4)
 rep(0, 3)
 
-## testing and coersion
+# testing and coersion
 x = 5.5
 is.vector(x) ## even a single value is a vector in R
 is.integer(x)
@@ -322,8 +322,8 @@ as.integer(x)
 <div class="right rt">
    
 ```{r, results = "hide"}
-## Load a dataset named 'penguins' and convert it to a data frame
-## this dataset comes from a package, "palmerpenguins"
+# Load a dataset named 'penguins' and convert it to a data frame
+# this dataset comes from a package, "palmerpenguins"
 data(penguins, package = "palmerpenguins")
 penguins = as.data.frame(penguins)
 head(penguins)
@@ -350,7 +350,7 @@ str(penguins)
 * `nrow`, `ncol`, `dim` give you dimensions of the data frame
 
 ```{r}
-## data frame dimensions
+# data frame dimensions
 nrow(penguins)
 ncol(penguins)
 dim(penguins)
@@ -361,14 +361,16 @@ dim(penguins)
 
 * Access an individual variable using `$` or `[]`
 ```{r, results = "hide"}
-# accessing variables
-## all of these are identical
+# accessing a variable by name
 penguins$bill_length_mm
-penguins[,1] ## [,1] get every row in the first column
+
+# accessing a variable by position
+penguins[,1] # [,1] get every row in the first column
 ```
 
 ```{r}
-penguins[1:10,"bill_length_mm"] ## another way to access by name, gets the first 10 entries
+# accessing a variable by name, and subsetting rows
+penguins[1:10,"bill_length_mm"] # another way to access by name, gets the first 10 entries
 ```
 
 

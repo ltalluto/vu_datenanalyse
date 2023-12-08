@@ -9,7 +9,7 @@
 
 <p class="nmhead">Instructors</p>
 Gabriel Singer, Matthew Talluto, Thomas Fuß <br/>
-Tutor: Lukas Thuile-Bistarelli
+Tutors: Lukas Thuile-Bistarelli, Thea Schwingshackl
 
 <p class="nmhead">Meeting locations</p>
 <p class="prb">Praktikumsraum Biologie, 1st floor, Technikerstr. 25 (PRB)</p>
@@ -47,10 +47,10 @@ Students will be graded based on their participation during the exercise session
 			<p class="sm pr5">Mon. 18.12, 9:00-16:00, PR5</p>
 		</td>
 		<td>
-			<p><a href="">The Basics</a></p>
+			<p><a href="unit_1/lec1_basics.html">The Basics</a></p>
 			<p class="sm">Introduction to R</p>
 			<p class="sm">Populations, samples</p>
-			<p calss="sm">Descriptive statistics</p>
+			<p class="sm">Descriptive statistics</p>
 		</td>
 		<td>
 			<p><a href="unit_1/1c_univariate.html">Univariate statistics</a></p>
