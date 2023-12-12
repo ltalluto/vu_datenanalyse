@@ -19,6 +19,7 @@ library(knitr)
 library(kableExtra)
 data(penguins, package = "palmerpenguins")
 penguins = as.data.frame(penguins)
+penguins = penguins[complete.cases(penguins),]
 
 library(RColorBrewer)
 cols = brewer.pal(8, "Set1")
@@ -375,6 +376,9 @@ penguins[,1] # [,1] get every row in the first column
 ```{r}
 # accessing a variable by name, and subsetting rows
 penguins[1:10,"bill_length_mm"] # another way to access by name, gets the first 10 entries
+
+# getting rid of NA values
+penguins = penguins[complete.cases(penguins),]
 ```
 
 
@@ -1076,3 +1080,102 @@ with(penguins,
 ```
 
 </div>
+
+
+
+
+## Probability distributions
+
+<div class="left lt">
+
+**Thought experiment**
+
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4, message = FALSE, warning = FALSE}
+source("../vu_datenanalyse_students/unit_1/r/football.r")
+players = rep(0, 100)
+draw_pitch(players)
+ggplot(data.frame(players = players), aes(x=players)) + geom_histogram(bins=40) + xlab("Player positions") + xlim(-50, 50)
+
+```
+
+</div>
+
+
+
+## Probability distributions
+<div class="left lt">
+
+**Thought experiment**
+
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
+
+Each person flips a coin. If the coin is heads, they take a step east (add 0.5 m to their location), if its tails, they take a step west (subtract 0.5 m from their location). 
+
+**Question**: What is the long-run distribution of positions on the field?
+
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4, warning = FALSE}
+players = players + sample(c(-0.5, 0.5), length(players), replace = TRUE)
+draw_pitch(players)
+ggplot(data.frame(players = players), aes(x=players)) + geom_histogram(bins=200) + xlab("Player positions") + xlim(-50, 50)
+
+```
+
+</div>
+
+
+
+## Probability distributions
+<div class="left lt">
+
+**Thought experiment**
+
+You and 99 of your closest friends gather on the centre line of a 100-m football pitch. We define the centre line as 0m, the western boundary -50 m, and the eastern boundary as +50 m.
+
+Each person flips a coin. If the coin is heads, they take a step east (add 0.5 m to their location), if its tails, they take a step west (subtract 0.5 m from their location). 
+
+**Question**: What is the long-run distribution of positions on the field?
+
+**Exercise**: Try to simulate this process in R. What does the distribution of locations look like after 10 steps? After 100?
+
+
+</div>
+
+<div class="right rt">
+
+```{r eval = FALSE}
+# if you want to draw the soccer pitch, you can read the function for it
+source("r/football.r")
+
+# 100 players, all on the centre line (value = 0)
+nplayers = 100
+players = rep(0, nplayers)
+
+# define the size of the steps for each coin flip
+heads = 0.5
+tails = -0.5
+
+# simulate one step for each player
+steps = sample(c(heads, tails), nplayers, replace = TRUE)
+
+# update player locations
+players = players + steps
+
+# visualise, if desired
+draw_pitch(players)
+hist(players)
+```
+
+</div>
+
+

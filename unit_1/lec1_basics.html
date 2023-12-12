@@ -777,20 +777,23 @@ dimensions of the data frame</li>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>penguins[,<span class="dv">1</span>] <span class="co"># [,1] get every row in the first column</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># accessing a variable by name, and subsetting rows</span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>penguins[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">&quot;bill_length_mm&quot;</span>] <span class="co"># another way to access by name, gets the first 10 entries</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="do">##  [1] 39.1 39.5 40.3   NA 36.7 39.3 38.9 39.2 34.1 42.0</span></span></code></pre></div>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="do">##  [1] 39.1 39.5 40.3   NA 36.7 39.3 38.9 39.2 34.1 42.0</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># getting rid of NA values</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>penguins <span class="ot">=</span> penguins[<span class="fu">complete.cases</span>(penguins),]</span></code></pre></div>
 </div>
 <div id="working-with-data-frames-3" class="slide section level2">
 <h1>Working with data frames</h1>
 <p>The variable <code>species</code> is a factor.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">str</span>(penguins)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="do">## &#39;data.frame&#39;:    344 obs. of  8 variables:</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="do">## &#39;data.frame&#39;:    333 obs. of  8 variables:</span></span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="do">##  $ species          : Factor w/ 3 levels &quot;Adelie&quot;,&quot;Chinstrap&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="do">##  $ island           : Factor w/ 3 levels &quot;Biscoe&quot;,&quot;Dream&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="do">##  $ bill_length_mm   : num  39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="do">##  $ bill_depth_mm    : num  18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="do">##  $ flipper_length_mm: int  181 186 195 NA 193 190 181 195 193 190 ...</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="do">##  $ body_mass_g      : int  3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...</span></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="do">##  $ sex              : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 1 1 NA 1 2 1 2 NA NA ...</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="do">##  $ bill_length_mm   : num  39.1 39.5 40.3 36.7 39.3 38.9 39.2 41.1 38.6 34.6 ...</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="do">##  $ bill_depth_mm    : num  18.7 17.4 18 19.3 20.6 17.8 19.6 17.6 21.2 21.1 ...</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="do">##  $ flipper_length_mm: int  181 186 195 193 190 181 195 182 191 198 ...</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="do">##  $ body_mass_g      : int  3750 3800 3250 3450 3650 3625 4675 3200 3800 4400 ...</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="do">##  $ sex              : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 1 1 1 2 1 2 1 2 2 ...</span></span>
 <span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="do">##  $ year             : int  2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span></span></code></pre></div>
 <p>Useful functions for factors include <code>levels</code> and
 <code>table</code>.</p>
@@ -799,7 +802,7 @@ dimensions of the data frame</li>
 <span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">table</span>(penguins<span class="sc">$</span>species)</span>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="do">##    Adelie Chinstrap    Gentoo </span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="do">##       152        68       124</span></span></code></pre></div>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="do">##       146        68       119</span></span></code></pre></div>
 </div>
 <div id="graphics-in-r" class="slide section level2">
 <h1>Graphics in R</h1>
@@ -980,7 +983,7 @@ approximated with the <strong>sample mean</strong>:</p>
 <div class="right rt">
 <p><img src="lec1_basics_files/figure-slidy/unnamed-chunk-22-1.png" width="528" /></p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">mean</span>(my_var)</span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="do">## [1] 11.49896</span></span></code></pre></div>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="do">## [1] 11.20885</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-location-1" class="slide section level2">
@@ -999,7 +1002,7 @@ median, half below)</li>
 <div class="right rt">
 <p><img src="lec1_basics_files/figure-slidy/unnamed-chunk-24-1.png" width="528" /></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">median</span>(my_var)</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="do">## [1] 10.03721</span></span></code></pre></div>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="do">## [1] 10.02227</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-location-2" class="slide section level2">
@@ -1049,19 +1052,19 @@ median, half below)</li>
 <span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co"># cbind shows them together in columns</span></span>
 <span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(my_hist<span class="sc">$</span>mids, my_hist<span class="sc">$</span>counts))</span>
 <span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="do">##      [,1] [,2]</span></span>
-<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="do">## [1,]    1    1</span></span>
-<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="do">## [2,]    3   37</span></span>
-<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="do">## [3,]    5  111</span></span>
-<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="do">## [4,]    7  170</span></span>
-<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="do">## [5,]    9  175</span></span>
-<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="do">## [6,]   11  148</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="do">## [1,]  2.5    2</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="do">## [2,]  3.5   24</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="do">## [3,]  4.5   44</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="do">## [4,]  5.5   76</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="do">## [5,]  6.5   91</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="do">## [6,]  7.5   93</span></span>
 <span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a></span>
 <span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co"># use this to get the mode</span></span>
 <span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co"># first find out which one is the tallest with which.max</span></span>
 <span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a>(<span class="at">mode_position =</span> <span class="fu">which.max</span>(my_hist<span class="sc">$</span>counts))</span>
-<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="do">## [1] 5</span></span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="do">## [1] 7</span></span>
 <span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a>my_hist<span class="sc">$</span>mids[mode_position]</span>
-<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="do">## [1] 9</span></span></code></pre></div>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="do">## [1] 8.5</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-location-4" class="slide section level2">
@@ -1086,19 +1089,19 @@ mean)</p>
 </div>
 <div class="right rt">
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">min</span>(my_var), <span class="fu">max</span>(my_var))</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="do">## [1]  1.866582 66.530976</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="do">## [1]  2.638936 42.827233</span></span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">range</span>(my_var)</span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="do">## [1]  1.866582 66.530976</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="do">## [1]  2.638936 42.827233</span></span>
 <span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a></span>
 <span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="fu">quantile</span>(my_var, <span class="fl">0.4</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="do">##     40% </span></span>
-<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="do">## 8.86406</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="do">##      40% </span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="do">## 8.686673</span></span>
 <span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a></span>
 <span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co"># Centre the variable</span></span>
 <span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co"># note! arithmetic operators like `-` are vectorized!</span></span>
 <span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>my_var_ctr <span class="ot">=</span> my_var <span class="sc">-</span> <span class="fu">mean</span>(my_var)</span>
 <span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="fu">mean</span>(my_var_ctr)</span>
-<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="do">## [1] 5.67546e-16</span></span></code></pre></div>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="do">## [1] 1.949552e-16</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-dispersion-or-scale"
@@ -1129,13 +1132,13 @@ sample) <strong>standard deviation</strong>:</p>
 <p><img src="lec1_basics_files/figure-slidy/unnamed-chunk-29-1.png" width="528" /></p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># Population variance -- biased if x is a sample!</span></span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">sum</span>((my_var <span class="sc">-</span> <span class="fu">mean</span>(my_var))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(my_var)</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="do">## [1] 40.22413</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="do">## [1] 32.31627</span></span>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a></span>
 <span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co"># These R functions always produce the sample variance and sd</span></span>
 <span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="fu">var</span>(my_var)</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="do">## [1] 40.2644</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="do">## [1] 32.34862</span></span>
 <span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="fu">sd</span>(my_var)</span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="do">## [1] 6.345423</span></span></code></pre></div>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="do">## [1] 5.687585</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-dispersion-or-scale-1"
@@ -1156,19 +1159,19 @@ first quartiles</li>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># the range function gives you the min and max</span></span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co"># Take the difference to get the statistical range</span></span>
 <span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">diff</span>(<span class="fu">range</span>(my_var))</span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="do">## [1] 64.66439</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="do">## [1] 40.1883</span></span>
 <span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="fu">max</span>(my_var) <span class="sc">-</span> <span class="fu">min</span>(my_var)</span>
-<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="do">## [1] 64.66439</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="do">## [1] 40.1883</span></span>
 <span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a></span>
 <span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="fu">IQR</span>(my_var)</span>
-<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="do">## [1] 6.920517</span></span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="do">## [1] 6.724498</span></span>
 <span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="fu">quantile</span>(my_var, <span class="fl">0.75</span>) <span class="sc">-</span> <span class="fu">quantile</span>(my_var, <span class="fl">0.25</span>)</span>
 <span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="do">##      75% </span></span>
-<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="do">## 6.920517</span></span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="do">## 6.724498</span></span>
 <span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a></span>
 <span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="co"># coefficient of variation can be done manually</span></span>
 <span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="fu">sd</span>(my_var)<span class="sc">/</span><span class="fu">mean</span>(my_var)</span>
-<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="do">## [1] 0.5518257</span></span></code></pre></div>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="do">## [1] 0.5074191</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-dispersion-or-scale-2"
@@ -1250,6 +1253,178 @@ class="slide section level2">
 <div class="right rt">
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">boxplot</span>(body_mass_g <span class="sc">~</span> species, <span class="at">data =</span> penguins, <span class="at">boxwex=</span><span class="fl">0.4</span>, <span class="at">notch =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="lec1_basics_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
+</div>
+</div>
+<div id="programming-mini-lesson-repeating-yourself"
+class="slide section level2">
+<h1>Programming mini-lesson: repeating yourself</h1>
+<div class="left lt">
+<ul>
+<li>An important programming concept is <strong>DRY</strong>: Don’t
+Repeat Yourself!
+<ul>
+<li>Don’t copy and paste code if you can instead instruct the computer
+to repeat things for you.</li>
+</ul></li>
+<li>There are many ways to execute the same code repeatedly; we will
+cover these in detail as they are needed.</li>
+<li>A motivating example:
+<ul>
+<li>Compute the mean of every numeric variable in the
+<code>penguins</code> dataset</li>
+</ul></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># bad!</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>(<span class="at">col_means =</span> <span class="fu">c</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>]),</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">4</span>]),</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">5</span>]),</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>])  <span class="co"># it&#39;s easy to introduce mistakes this way!</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>))</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="do">## [1]  43.99279  17.16486 200.96697  43.99279</span></span></code></pre></div>
+</div>
+</div>
+<div id="applying-functions" class="slide section level2">
+<h1>Applying functions</h1>
+<ul>
+<li>We want to <strong>apply</strong> the function named
+<code>mean</code> separately to every variable in
+<code>penguins</code></li>
+<li>R has many different ways to apply functions, in this case we use
+<code>s</code>imple <code>apply</code> (<code>sapply</code>)</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># bad!</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>(<span class="at">col_means =</span> <span class="fu">c</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>]),</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">4</span>]),</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">5</span>]),</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>])  <span class="co"># it&#39;s easy to introduce mistakes this way!</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>))</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="do">## [1]  43.99279  17.16486 200.96697  43.99279</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a><span class="co"># better</span></span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a><span class="co"># use columns 3:6 because these are the numeric columns</span></span>
+<span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a><span class="co"># doesn&#39;t make sense to take the mean of penguins$species</span></span>
+<span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a>(<span class="at">col_means =</span> <span class="fu">sapply</span>(penguins[,<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], mean)) <span class="co"># apply the function mean to each variable</span></span>
+<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a><span class="do">##    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g </span></span>
+<span id="cb27-15"><a href="#cb27-15" tabindex="-1"></a><span class="do">##          43.99279          17.16486         200.96697        4207.05706</span></span></code></pre></div>
+</div>
+<div id="applying-functions-1" class="slide section level2">
+<h1>Applying functions</h1>
+<ul>
+<li>We want to <strong>apply</strong> the function named
+<code>mean</code> separately to every variable in
+<code>penguins</code></li>
+<li>R has many different ways to apply functions, in this case we use
+<code>s</code>imple <code>apply</code> (<code>sapply</code>)</li>
+<li>this works with any function that accepts a vector, even when they
+return more than a single value</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">sapply</span>(penguins[,<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], range)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="do">##      bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="do">## [1,]           32.1          13.1               172        2700</span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="do">## [2,]           59.6          21.5               231        6300</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co"># here, we pass an additional argument named probs to quantile</span></span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="co"># see ?quantile for what this does</span></span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a><span class="fu">sapply</span>(penguins[,<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>))</span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a><span class="do">##     bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span></span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a><span class="do">## 25%           39.5          15.6               190        3550</span></span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a><span class="do">## 50%           44.5          17.3               197        4050</span></span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a><span class="do">## 75%           48.6          18.7               213        4775</span></span></code></pre></div>
+</div>
+<div id="tabular-applies" class="slide section level2">
+<h1>Tabular applies</h1>
+<div class="left lt">
+<ul>
+<li>There are three species of penguin; it makes more sense to have
+summary statistics for each one</li>
+<li><code>tapply</code>: <code>t</code>abular <code>apply</code>
+<ul>
+<li>produces a summary table for a single variable (e.g.,
+<code>bill_length_mm</code>) based on categories in another variable
+(e.g., <code>species</code>)</li>
+</ul></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># with: use the variables found in the data.frame penguins</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="co"># allows us to not write penguins$species to access the variable species</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">with</span>(penguins, </span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>     <span class="co"># compute the mean of bill_length_mm for each of the three species</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>     <span class="fu">tapply</span>(bill_length_mm, species, mean)</span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>)</span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a><span class="do">##    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a><span class="do">##  38.82397  48.83382  47.56807</span></span></code></pre></div>
+</div>
+</div>
+<div id="probability-distributions" class="slide section level2">
+<h1>Probability distributions</h1>
+<div class="left lt">
+<p><strong>Thought experiment</strong></p>
+<p>You and 99 of your closest friends gather on the centre line of a
+100-m football pitch. We define the centre line as 0m, the western
+boundary -50 m, and the eastern boundary as +50 m.</p>
+</div>
+<div class="right rt">
+<p><img src="lec1_basics_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /><img src="lec1_basics_files/figure-slidy/unnamed-chunk-42-2.png" width="528" /></p>
+</div>
+</div>
+<div id="probability-distributions-1" class="slide section level2">
+<h1>Probability distributions</h1>
+<div class="left lt">
+<p><strong>Thought experiment</strong></p>
+<p>You and 99 of your closest friends gather on the centre line of a
+100-m football pitch. We define the centre line as 0m, the western
+boundary -50 m, and the eastern boundary as +50 m.</p>
+<p>Each person flips a coin. If the coin is heads, they take a step east
+(add 0.5 m to their location), if its tails, they take a step west
+(subtract 0.5 m from their location).</p>
+<p><strong>Question</strong>: What is the long-run distribution of
+positions on the field?</p>
+</div>
+<div class="right rt">
+<p><img src="lec1_basics_files/figure-slidy/unnamed-chunk-43-1.png" width="528" /><img src="lec1_basics_files/figure-slidy/unnamed-chunk-43-2.png" width="528" /></p>
+</div>
+</div>
+<div id="probability-distributions-2" class="slide section level2">
+<h1>Probability distributions</h1>
+<div class="left lt">
+<p><strong>Thought experiment</strong></p>
+<p>You and 99 of your closest friends gather on the centre line of a
+100-m football pitch. We define the centre line as 0m, the western
+boundary -50 m, and the eastern boundary as +50 m.</p>
+<p>Each person flips a coin. If the coin is heads, they take a step east
+(add 0.5 m to their location), if its tails, they take a step west
+(subtract 0.5 m from their location).</p>
+<p><strong>Question</strong>: What is the long-run distribution of
+positions on the field?</p>
+<p><strong>Exercise</strong>: Try to simulate this process in R. What
+does the distribution of locations look like after 10 steps? After
+100?</p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># if you want to draw the soccer pitch, you can read the function for it</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;r/football.r&quot;</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co"># 100 players, all on the centre line (value = 0)</span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>nplayers <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>players <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nplayers)</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="co"># define the size of the steps for each coin flip</span></span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>heads <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a>tails <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.5</span></span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a><span class="co"># simulate one step for each player</span></span>
+<span id="cb30-13"><a href="#cb30-13" tabindex="-1"></a>steps <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">c</span>(heads, tails), nplayers, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-14"><a href="#cb30-14" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" tabindex="-1"></a><span class="co"># update player locations</span></span>
+<span id="cb30-16"><a href="#cb30-16" tabindex="-1"></a>players <span class="ot">=</span> players <span class="sc">+</span> steps</span>
+<span id="cb30-17"><a href="#cb30-17" tabindex="-1"></a></span>
+<span id="cb30-18"><a href="#cb30-18" tabindex="-1"></a><span class="co"># visualise, if desired</span></span>
+<span id="cb30-19"><a href="#cb30-19" tabindex="-1"></a><span class="fu">draw_pitch</span>(players)</span>
+<span id="cb30-20"><a href="#cb30-20" tabindex="-1"></a><span class="fu">hist</span>(players)</span></code></pre></div>
 </div>
 </div>
 
