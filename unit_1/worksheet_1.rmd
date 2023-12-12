@@ -11,13 +11,30 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Task 1: Central Limit Theorem
 
-For this task, we will use a simulated population of measurements. Read them into R with the following code, then plot them with the histogram function. Observe that the values are strongly non-normal.
+The state of Tirol was divided into a 5-km grid, and the area of forest in each grid cell was computed using remote sensing.
 
-```{r}
+```{r echo = FALSE, message = FALSE, warning = FALSE, results = 'hide'}
+library(sf)
+library(ggplot2)
+tirol = st_read("../vu_datenanalyse_students/unit_1/data/tirol_forest_cover.gpkg")
+tirol_forest = read.csv("../vu_datenanalyse_students/unit_1/data/tirol_forest_cover.csv")
+fish = read.csv("../vu_datenanalyse_students/unit_1/data/coral_fish.csv")
+ggplot(tirol) + geom_sf(aes(fill=for_cover_km2)) + 
+	scale_fill_distiller(expression(Forest~Cover~(km^2)), palette = "Greens", direction = 1)
+						
+```
+
+We can observe that the distribution of forest cover is strongly non-normal!
+
+
+```{r eval = FALSE}
 # remember to set your working directory if needed!
 # setwd("unit_1")
-t1_population = read.csv("data/w1t1.csv")
-hist(t1_population$x, breaks=50, col="gray")
+tirol_forest = read.csv("data/w1t1.csv")
+```
+
+```{r}
+hist(tirol_forest$for_cover_km2, breaks=50, col="gray", xlab = expression(Forest~Cover~(km^2)), main = "")
 ```
 
 ### 1a. Population statistics
@@ -31,15 +48,21 @@ $$
 $$
 In code:
 
-```{r}
-n = nrow(t1_population)
-(mu = mean(t1_population$x))
-sq_diff = (t1_population$x - mu)^2 # squared deviations from the mean
-numerator = sum(sq_diff)
-(sigma = sqrt(numerator/n))
+```{r eval = FALSE}
+# population size
+pop_n = nrow(tirol_forest)
 
-# or all on one line:
-sqrt(sum((t1_population$x - mean(t1_population$x))^2) / nrow(t1_population))
+# compute population mean
+mu = mean(tirol_forest$for_cover_km2)
+
+# squared deviations from mean, (x - mu)^2
+sq_diff = (tirol_forest$for_cover_km2 - mu)^2
+
+# the numerator above, the sum of squared deviations
+numerator = sum(sq_diff)
+
+# population standard deviation
+sigma = sqrt(numerator/pop_n)
 ```
 
 What is the theoretical standard error of the mean, assuming a sample size of 25? Use the $\sigma$ you computed above.
@@ -48,27 +71,25 @@ What is the theoretical standard error of the mean, assuming a sample size of 25
 
 The following code collects a sample of size n, from our population, then computes the sample mean and standard deviation.
 
-```{r}
+```{r eval = FALSE}
 n = 25
-samp = sample(t1_population$x, n)
+samp = sample(tirol_forest$for_cover_km2, n)
 mean(samp)
 sd(samp)
 ```
 
-Run this code in your console a few (~5) times. 
-
-* What range of values do you get for the sample mean and sd? 
-* How do they compare to the population means and sds?
+Run this code in your console. How do the mean and standard deviation you get compare to the known *population* mean and sd?
 
 ### 1c. Performing an 'experiment'
 
-Now we will get everyone together to perform a simple experiment to estimate the mean of the *population* from a series of samples. Every student will take a sample (as in 1b), and compute the sample mean, and 95% confidence interval. We will share these, so that we have 25 sample means plus confidence limits in the end. This allows us to simulate what it's like to repeat an experiment many times on one population.
+Now we will get everyone together to perform a simple experiment to estimate the mean of the *population* from a series of samples. 
 
-```{r}
-n = 25
-# take a sample
-my_sample = sample(t1_population$x, n)
+* Every student will take five samples (as in 1b). For each sample:
+   - Compute the sample mean $\bar{x}$ and standard deviation $s$
+   - Use those values to compute a 95% confidence interval for each sample. 
+   - Enter these in a google doc that we all share.
 
+```{r eval = FALSE}
 # get the standard error
 samp_sd = sd(my_sample)
 st_err = samp_sd/sqrt(n)
@@ -76,26 +97,19 @@ st_err = samp_sd/sqrt(n)
 # compute quantiles from the t-distribution
 # because this is a sample!
 # why 0.975?? (hint: this is a 2-sided confidence interval)
-(quant = qt(0.975, df = n - 1))
+quant = qt(0.975, df = n - 1)
 
-# compute mean and confidence limits, save in a data.frame
-# change "yourname" to be your actual name
-samp_mean = mean(my_sample)
-my_stats = data.frame(name = "yourname", mean = samp_mean, sd = samp_sd,
-					  lower = samp_mean - quant * st_err, 
-					  upper = samp_mean + quant * st_err)
-# save the file to your computer, in the unit_1 folder, so we can share them
-# replace "yourname" with your name
-# write.csv(my_stats, "yourname_t1c.csv")
+# compute confidence limits
+lower = samp_mean - quant * st_err 
+upper = samp_mean + quant * st_err
 ```
 
 
 Next, load the shared data set from the whole course, and answer the following:
 
-1. Compute the mean of the sample means and the sample sds. How do they compare to the population mean and sd from **1a**?
-2. Compute the standard deviation of the sample means (using the `sd` function). How does that compare to the theoretical standard error from **1a**?
-3. Create histograms using the `hist` function for both the sample means and the sample sds.
-	* Do the histograms look normally distributed?
+1. Make a histogram of the sample means. How does the shape of this histogram compare to the histogram of the raw data? What about a histogram of sample standard deviations?
+2. What is the **mean of sample means**? How does it compare to the population mean? What about the **mean of sample sds** and its comparison to the population sd?
+3. Compute the standard deviation of the sample means (using the `sd` function). How does that compare to the theoretical standard error from **1a**?
 4. Compute how often (% of time) the **population mean** (from 1a) is between the lower and upper confidence limits.
 
 # Task 2: Coral reef fish diversity
@@ -104,9 +118,12 @@ We will use the dataset `coral_fish.csv` for this exercise. Load the file using 
 
 It's also a good idea to have a look at the data after you read it; use the `str`, `head`, and `View` functions. Note that you should only use `View` directly in Rstudio, you should not save it as part of a script.
 
-```{r}
+```{r eval = FALSE}
 # You may have to set or change your working directory, or change the file name to include the folder as well
 fish = read.csv("data/coral_fish.csv")
+```
+
+```{r}
 str(fish)
 head(fish)
 ```

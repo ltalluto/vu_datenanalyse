@@ -47,13 +47,13 @@ Students will be graded based on their participation during the exercise session
 			<p class="sm pr5">Mon. 18.12, 9:00-16:00, PR5</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1_basics.html">The Basics</a></p>
+			<p><a href="unit_1/lec1a_basics.html">The Basics</a></p>
 			<p class="sm">Introduction to R</p>
 			<p class="sm">Populations, samples</p>
 			<p class="sm">Descriptive statistics</p>
 		</td>
 		<td>
-			<p><a href="unit_1/1c_univariate.html">Univariate statistics</a></p>
+			<p><a href="unit_1/1b_univariate.html">Univariate statistics</a></p>
 			<p class="sm">Confidence intervals</p>
 			<p class="sm">Significance tests</p>
 			<p class="sm">Type I and II errors</p>
