@@ -1,13 +1,14 @@
 ---
 title: "Multiple regression"
-author: "Matthew Talluto"
-date: "14.02.2023"
+author: "M. Talluto"
+date: "15.12.2023"
 output:
   slidy_presentation:
     theme: cerulean
     toc_depth: 2
     css: ../assets/rmd_style.css
-  beamer_presentation: default
+    self_contained: false
+    lib_dir: lib
 ---
 
 
