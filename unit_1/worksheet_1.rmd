@@ -30,7 +30,7 @@ We can observe that the distribution of forest cover is strongly non-normal!
 ```{r eval = FALSE}
 # remember to set your working directory if needed!
 # setwd("unit_1")
-tirol_forest = read.csv("data/w1t1.csv")
+tirol_forest = read.csv("data/tirol_forest_cover.csv")
 ```
 
 ```{r}
