@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 2"
-author: "Matthew Talluto & Gabriel Singer"
-date: "13.02.2023"
+author: ""
+date: "14.12.2023"
 output: html_document
 ---
 
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, error=TRUE)
 
 Load the environmental values dataset (Pinder et al, 2020, https://doi.org/10.5061/dryad.wdbrv15kn).
 
-```{r}
+```{r eval = FALSE}
 env = read.csv("data/env_values.csv")
 ```
 
@@ -35,7 +35,7 @@ The data has two variables:
 
 The following dataset collects head capsule widths and body masses from Hydropsyche (a genus of caddisflies) in the Danube in Austria. Note that this data file is tab delimited, not comma delimited, so you will need `read.table`.
 
-```{r}
+```{r eval = FALSE}
 hydrop = read.table("data/Hydropsyche.txt", header = TRUE)
 ```
 

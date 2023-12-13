@@ -486,3 +486,68 @@ Procedure: if any VIF > 10, drop the variable with the largest VIF, repeat
 
 
 
+## Last example
+
+* Hypothesis tests give us false confidence about $H_A$!
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+I take the test, p < 0.05, and so I begin treating my condition.
+
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+I take the test, p < 0.05, and so I begin treating my condition.
+
+**Problem**: The probability that I have the disease is only 0.0002!
+
+If we test 100,000 people with unknown status, 5% (5000) will test positive, but only one will have the condition. We made the wrong decision in 4999/5000 of these cases!
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+I take the test, p < 0.05, and so I begin treating my condition.
+
+**Problem**: The probability that I have the disease is only 0.0002!
+
+If we test 100,000 people with unknown status, 5% (5000) will test positive, but only one will have the condition. We made the wrong decision in 4999/5000 of these cases!
+
+* In statistics, often called the **base rate fallacy**
+* In science, we call this **the replication crisis**
+* Considering only $\alpha$ and $H_0$ means we neglect to consider the plausibility of $H_A$
+
+

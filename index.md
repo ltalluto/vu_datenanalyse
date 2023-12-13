@@ -73,17 +73,17 @@ Students will be graded based on their participation during the exercise session
 			<p class="sm pr5">Tues. 19.12, 9:00-16:00, PR5</p>
 		</td>
 		<td>
-			<p><a href="">Basics, Part II</a></p>
+			<p><a href="unit_2/2_correlation_regression.html">Basics, Part II</a></p>
 			<p class="sm">Data structures</p>
 			<p class="sm">Visualisation</p>
 			<p class="sm">Association</p>
 		</td>
 		<td>
-			<p><a href="">Linear Models I</a></p>
+			<p><a href="unit_2/2_correlation_regression.html">Linear Models I</a></p>
 			<p class="sm">Correlation and Regression</p>
 		</td>
 		<td>
-			<p><a href="">Exercise sheet 2</a></p>
+			<p><a href="unit_2/worksheet_2.html">Exercise sheet 2</a></p>
 			<p class="sm">Correlation and Regression</p>
 		</td>
 	</tr>
