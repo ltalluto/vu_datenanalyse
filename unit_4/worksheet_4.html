@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Gabriel Singer" />
+<meta name="author" content="Gabriel Singer/Thomas Fuß" />
 
 
 <title>Worksheet 4</title>
@@ -349,31 +349,40 @@ pre code {
 
 
 <h1 class="title toc-ignore">Worksheet 4</h1>
-<h4 class="author">Gabriel Singer</h4>
-<h4 class="date">12.12.2023</h4>
+<h4 class="author">Gabriel Singer/Thomas Fuß</h4>
+<h4 class="date">18.12.2023</h4>
 
 </div>
 
 
+<div id="niche-optima-of-periphyton" class="section level2">
+<h2>Niche optima of periphyton</h2>
+<p>Periphyton, which consists of algae and cyanobacteria attached to stream sediments, was sampled at 137 locations across the Ybbs river network. Next-generation sequencing of the 137 periphyton samples found in total 215 species (column <code>spec</code>) which were then assigned to three main taxonomical groups (<code>Diatoms</code>, <code>Chrysophytes</code> and <code>Cyanobacteria</code> in the column <code>group</code>). At the same 137 locations flow velocity was measured. Species have environmental preferences (niche optima) based on traits (e.g. morphology). One niche optimum (column <code>vel</code>) was estimated based on species distributions across the 137 locations. (A niche optimum of a species for velocity was calculated as the mean of the measured velocity across locations where the species occurred). E.g. species which only occurred at locations with high flow velocities, prefer high flow velocities, hence, have their niche optima at high flow velocities.</p>
+<p>Hypothesis: Closer related species have more similar traits, hence, have more similar environmental preferences (niche optima) than distant related species. (Two species within a taxonomical group are closer related than two species between groups).</p>
+<ol style="list-style-type: decimal">
+<li>Find out, whether the main taxonomical groups have different preferences (niche optima) in flow velocity. And if yes, which groups differ from each other.</li>
+</ol>
+<pre class="r"><code>data = read.table(&quot;data/nicheoptima.txt&quot;, header = TRUE)
+names(data)</code></pre>
+<pre><code>## [1] &quot;spec&quot;  &quot;group&quot; &quot;vel&quot;</code></pre>
+<pre class="r"><code>dim(data)</code></pre>
+<pre><code>## [1] 215   3</code></pre>
+</div>
 <div id="stoichiometry-of-microbes" class="section level2">
 <h2>Stoichiometry of microbes</h2>
-<p><a href="https://www.nature.com/articles/ismej2010115">Hall et al. (2010)</a> report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verrucomicrobia are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermediate N:P levels 5 and 50. In addition, in each bottle 20 specimens were actually measured under the microscope. The factor <code>all.treat</code> is a <em>combined</em> factor created by <strong>bacterium_growth phase_medium_bottle</strong> and codes for the independent replicates in the experimental design.</p>
-<p>The response variables in this design are signatures extracted from Raman spectra collected from individual bacterial cells. These are proxies for specific macromolecules: 8 carbohydrates, 4 nucleic acids, 3 proteins (coded by <code>ca_</code> and <code>na_</code>, <code>pr_</code>.)</p>
-<pre class="r"><code>mic = read.table(&quot;data/MicrobesStoichiometry.txt&quot;, header = TRUE)</code></pre>
+<p><a href="https://www.nature.com/articles/ismej2010115">Hall et al. (2010)</a> report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. We simplified the dataset, now the experiment uses 2 species measured in 2 growth phases on 2 media differing in stoichiometry. Verrucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design.</p>
+<p>The response variable in this design is a signature extracted from Raman spectra collected from individual bacterial cells. This signature is a proxy for nucleic acids (coded by <code>na_avg</code>)</p>
+<pre class="r"><code>mic = read.table(&quot;data/MicrobesStoichiometry.txt&quot;, header = TRUE)
+names(mic)</code></pre>
+<pre><code>## [1] &quot;species&quot; &quot;phase&quot;   &quot;NP&quot;      &quot;na_avg&quot;</code></pre>
 <ol style="list-style-type: decimal">
-<li>The dataset is fairly large ;-), i.e. <em>exploration</em> could take you a while. Therefore start with filtering a subset of intermediate stoichiometry in the medium (either level 5 or 50).</li>
-</ol>
-<pre class="r"><code>mic$NP = factor(mic$NP)
-mic = subset(mic, subset = (NP==5 | NP==50))</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>The dataset is multivariate, we are mainly interested in abundance of <em>nucleic acids</em>. Could all the nucleic acid Raman signatures be considered to inform about the same property <em>nucleic acid abundance</em>? If so, average the signatures to create a new <em>metavariable</em>. Consider using <code>scale</code> before averaging.</li>
-<li>Measurements of individual bacterial cells are replicates <strong>within</strong> each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 <em>average</em> bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average <em>location</em>. Not collapsing the dataset to bottle means would mean to use a <strong>pseudoreplicated</strong> dataset.</li>
-</ol>
-<pre class="r"><code>mic = mic[, -2] # aggregation will make this factor meaningless
-mic2 = aggregate(. ~ all.treat + species + phase + NP + bottle, data = mic, FUN = median)
-# compare shape and size of mic vs. mic2!</code></pre>
-<ol start="4" style="list-style-type: decimal">
 <li>The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more “growth machinery” = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.</li>
+</ol>
+<p>Start with selecting only one level of stoichiometry in the medium (either level 5 or 50).</p>
+<pre class="r"><code>mic$NP&lt;-factor(mic$NP)
+mic&lt;-subset(mic,subset=(NP==5) )
+mic&lt;-droplevels(mic)</code></pre>
+<ol start="2" style="list-style-type: decimal">
 <li>Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.</li>
 </ol>
 </div>

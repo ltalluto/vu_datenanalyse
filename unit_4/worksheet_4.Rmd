@@ -1,7 +1,7 @@
 ---
 title: "Worksheet 4"
-author: "Gabriel Singer"
-date: "12.12.2023"
+author: "Gabriel Singer/Thomas Fuß"
+date: "18.12.2023"
 output: html_document
 ---
 
@@ -9,34 +9,46 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, error=TRUE)
 ```
 
+## Niche optima of periphyton
+
+Periphyton, which consists of algae and cyanobacteria attached to stream sediments, was sampled at 137 locations across the Ybbs river network. Next-generation sequencing of the 137 periphyton samples found in total 215 species (column `spec`) which were then assigned to three main taxonomical groups (`Diatoms`, `Chrysophytes` and `Cyanobacteria` in the column `group`). At the same 137 locations flow velocity was measured. 
+Species have environmental preferences (niche optima) based on traits (e.g. morphology). One niche optimum (column `vel`) was estimated based on species distributions across the 137 locations. (A niche optimum of a species for velocity was calculated as the mean of the measured velocity across locations where the species occurred). E.g. species which only occurred at locations with high flow velocities, prefer high flow velocities, hence, have their niche optima at high flow velocities.
+
+Hypothesis: Closer related species have more similar traits, hence, have more similar environmental preferences (niche optima) than distant related species. (Two species within a taxonomical group are closer related than two species between groups). 
+
+1. Find out, whether the main taxonomical groups have different preferences (niche optima) in flow velocity. And if yes, which groups differ from each other.
+
+
+
+```{r}
+data = read.table("data/nicheoptima.txt", header = TRUE)
+names(data)
+dim(data)
+```
+
 ## Stoichiometry of microbes
 
-[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verrucomicrobia are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermediate N:P levels 5 and 50. In addition, in each bottle 20 specimens were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_growth phase_medium_bottle** and codes for the independent replicates in the experimental design.
+[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. We simplified the dataset, now the experiment uses 2 species measured in 2 growth phases on 2 media differing in stoichiometry. Verrucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design.
 
-The response variables in this design are signatures extracted from Raman spectra collected from individual bacterial cells. These are proxies for specific macromolecules: 8 carbohydrates, 4 nucleic acids, 3 proteins (coded by `ca_` and `na_`, `pr_`.)
+The response variable in this design is a signature extracted from Raman spectra collected from individual bacterial cells. This signature is a proxy for nucleic acids (coded by `na_avg`)
 
 ```{r}
 mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
+names(mic)
 ```
 
-1. The dataset is fairly large ;-), i.e. *exploration* could take you a while. Therefore start with filtering a subset of intermediate stoichiometry in the medium (either level 5 or 50).
 
+1. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
+
+Start with selecting only one level of stoichiometry in the medium (either level 5 or 50).
 ```{r}
-mic$NP = factor(mic$NP)
-mic = subset(mic, subset = (NP==5 | NP==50))
+mic$NP<-factor(mic$NP)
+mic<-subset(mic,subset=(NP==5) )
+mic<-droplevels(mic)
+
 ```
 
-2. The dataset is multivariate, we are mainly interested in abundance of *nucleic acids*. Could all the nucleic acid Raman signatures be considered to inform about the same property *nucleic acid abundance*? If so, average the signatures to create a new *metavariable*. Consider using `scale` before averaging. 
-3. Measurements of individual bacterial cells are replicates **within** each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 *average* bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average *location*. Not collapsing the dataset to bottle means would mean to use a **pseudoreplicated** dataset.
-
-```{r}
-mic = mic[, -2] # aggregation will make this factor meaningless
-mic2 = aggregate(. ~ all.treat + species + phase + NP + bottle, data = mic, FUN = median)
-# compare shape and size of mic vs. mic2!
-```
-
-4. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
-5. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+2. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
 
 
 
