@@ -1,0 +1,1805 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="M. Talluto" />
+  <title>The Basics</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <script src="lib/kePrint-0.0.1/kePrint.js"></script>
+  <link href="lib/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="../assets/rmd_style.css" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">The Basics</h1>
+  <p class="author">
+M. Talluto
+  </p>
+  <p class="date">13.12.2023</p>
+</div>
+<div id="course-introduction" class="slide section level2">
+<h1>Course Introduction</h1>
+<ul>
+<li>We will cover two major branches of stats</li>
+<li><strong>Descriptive</strong> statistics seeks to summarize natural
+variation in some variable/quantity of interest
+<ul>
+<li>e.g., What is the typical summer temperature of Alpine lakes in
+Tirol?</li>
+<li>How much variability is there in the temperature?</li>
+</ul></li>
+<li><strong>Inferential</strong> statistics uses the laws of
+probability, combined with observations, to test hypotheses
+<ul>
+<li>Lakes from one region/ecozone are colder than lakes from
+another.</li>
+</ul></li>
+</ul>
+<h3 id="course-structure">Course structure</h3>
+<ul>
+<li>Each day will be split between lectures and exercise sessions</li>
+<li>During exercises, we will split into smaller breakout groups and
+work through problems</li>
+<li>Grading: 40% participation, 60% group project/presentation</li>
+</ul>
+<h3 id="website-and-course-materials">Website and course materials</h3>
+<ul>
+<li>The <a href="https://flee-group.github.io/vu_datenanalyse">course
+website</a> has the course schedule and other information.</li>
+<li>The <a
+href="https://github.com/flee-group/vu_datenanalyse_students">students’
+Github repository</a> includes data and scripts for all of the
+exercises</li>
+</ul>
+</div>
+<div id="introduction-to-r" class="slide section level2">
+<h1>Introduction to R</h1>
+<ul>
+<li><code>R</code> is two things:
+<ol style="list-style-type: decimal">
+<li>A statistical programming language</li>
+<li>A software package implementing the R language (available at <a
+href="https://cran.r-project.org/">https://cran.r-project.org/</a>)</li>
+</ol></li>
+<li><code>RStudio</code> is a comprehensive working environment for R
+(<a
+href="https://rstudio.com/products/rstudio/">https://rstudio.com/products/rstudio/</a>)
+<ul>
+<li>An editor, for writing R programs</li>
+<li>Tools to help you write and analyse code</li>
+<li>An R console and interpreter</li>
+</ul></li>
+</ul>
+</div>
+<div id="helpful-vocabulary" class="slide section level2">
+<h1>Helpful vocabulary</h1>
+<ul>
+<li><strong>console</strong>: A window where you can type commands and
+view (text) results and output</li>
+<li><strong>interpreter</strong>: Software that translates R commands
+into instructions for your computer in real time</li>
+<li><strong>script</strong>: a text file containing a program, or series
+of commands
+<ul>
+<li>can be run <strong>interactively</strong> (sending commands one at a
+time to the console)</li>
+<li>or in <strong>batch mode</strong> (all commands run, one after the
+other)</li>
+</ul></li>
+<li><strong>working directory</strong>: location on your computer where
+R will search for files, data, etc.</li>
+</ul>
+<p>Any code that is given to you will assume your working directory is
+set to the <strong>unit</strong> you are working on. So, for today’s
+exercises, you should run the following in the console:
+<code>setwd("unit_1")</code>.</p>
+</div>
+<div id="recommendations" class="slide section level2">
+<h1>Recommendations</h1>
+<ul>
+<li>Create an RStudio project to organize your work for the course (File
+=&gt; New Project).</li>
+<li>Store all files in the project folder (your project will be
+<strong>self-contained</strong>).</li>
+<li>Save related commands together in a script.</li>
+<li>Annotate your code with comments. Write more comments than you need.
+<ul>
+<li>In R, anything after the <code>#</code> character is a comment and
+will be ignored by the interpreter.</li>
+</ul></li>
+</ul>
+</div>
+<div id="variables" class="slide section level2">
+<h1>Variables</h1>
+<div class="left lt">
+<ul>
+<li>A <strong>variable</strong> is a name that points to some data.
+<ul>
+<li>Variable names can contain lower- or upper-case letters, numbers,
+and the <code>_</code> symbol.</li>
+<li>Names must start with letters and (when possible) should be
+descriptive</li>
+</ul></li>
+<li>Variables are given values by <strong>assignment</strong> using
+either the <code>=</code> or <code>&lt;-</code> symbol</li>
+</ul>
+<h3 id="recommendations-1">Recommendations</h3>
+<ul>
+<li>Use descriptive variable names instead of comments.</li>
+<li>Avoid 1- and 2- letter names.</li>
+<li>Separate words with underscores.</li>
+<li>Use a consistent assignment operator (<code>=</code> or
+<code>&lt;-</code>, not both)</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Comments in R start with the # symbol</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># anything after # will not be executed</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># Comments are a useful way to annotate your code so you know what is </span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># happening</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co"># Legal variable names</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>y0 <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>time_of_day <span class="ot">=</span> <span class="st">&quot;20:15&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>dayOfWeek <span class="ot">&lt;-</span> <span class="st">&quot;Monday&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co"># bad!</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co"># d is the diversity in our site, in species</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>d <span class="ot">=</span> <span class="dv">8</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># better!</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>site_diversity <span class="ot">=</span> <span class="dv">8</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co"># error</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="dv">0</span>y <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>my name <span class="ot">=</span> <span class="st">&quot;Matt&quot;</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="do">## Error: &lt;text&gt;:21:2: unexpected symbol</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="do">## 20: # error</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="do">## 21: 0y</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="do">##      ^</span></span></code></pre></div>
+</div>
+</div>
+<div id="data-types" class="slide section level2">
+<h1>Data types</h1>
+<ul>
+<li><code>numeric</code>: integers and floating-point (decimal)
+numbers</li>
+<li><code>logical</code>: yes/no, true/false data; in R represented by
+the special values <code>TRUE</code> and <code>FALSE</code>
+<ul>
+<li><code>T</code> and <code>F</code> (no quotes) can be used as
+shortcuts for <code>TRUE</code>/<code>FALSE</code>, but you should avoid
+this!</li>
+</ul></li>
+<li><code>character</code>: strings, text</li>
+<li><code>factor</code>: special variable type for categorical (nominal
+&amp; ordinal) data</li>
+</ul>
+</div>
+<div id="operators" class="slide section level2">
+<h1>Operators</h1>
+<div class="left lt">
+<p>We use <strong>operators</strong> to perform computations on
+variables and constants</p>
+<ul>
+<li>Assignment: <code>=</code>, <code>&lt;-</code></li>
+<li>Math: <code>+</code>, <code>-</code>, <code>*</code>,
+<code>/</code>, <code>^</code>, <code>%%</code></li>
+<li>Comparison: <code>==</code>, <code>!=</code>, <code>&lt;</code>,
+<code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># assignment</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># math</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>x <span class="sc">+</span> <span class="dv">2</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="do">## [1] 7</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>(<span class="dv">3</span> <span class="sc">+</span> x) <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="do">## [1] 16</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="dv">3</span><span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="do">## [1] 9</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="dv">10</span> <span class="sc">%%</span> <span class="dv">3</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="do">## [1] 1</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co"># comparison</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>x <span class="sc">&lt;</span> <span class="dv">7</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>x <span class="sc">==</span> <span class="fl">5.1</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div>
+</div>
+</div>
+<div id="logic" class="slide section level2">
+<h1>Logic</h1>
+<div class="left lt">
+<ul>
+<li>Logical comparisons can be made with and (<code>&amp;</code>), or
+(<code>|</code>), and not (<code>!</code>).</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># and: both must be true</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="cn">TRUE</span> <span class="sc">&amp;</span> <span class="cn">TRUE</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="cn">TRUE</span> <span class="sc">&amp;</span> <span class="cn">FALSE</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="do">## [1] FALSE</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="cn">FALSE</span> <span class="sc">&amp;</span> <span class="cn">FALSE</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="do">## [1] FALSE</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># or: only one needs to be true</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="cn">TRUE</span> <span class="sc">|</span> <span class="cn">FALSE</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="cn">FALSE</span> <span class="sc">|</span> <span class="cn">FALSE</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="do">## [1] FALSE</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co"># not: returns the opposite</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="sc">!</span><span class="cn">FALSE</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+</div>
+</div>
+<div id="logic-1" class="slide section level2">
+<h1>Logic</h1>
+<div class="left lt">
+<ul>
+<li>Logical comparisons can be made with and (<code>&amp;</code>), or
+(<code>|</code>), and not (<code>!</code>).</li>
+<li>You can use logic to help your script make decision based on the
+outcome of a computation</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># making decisions</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">2</span><span class="sc">^</span><span class="dv">15</span> <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> <span class="dv">100</span>) {</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;x is big&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;x is small&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## [1] &quot;x is big&quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> <span class="dv">100</span> <span class="sc">&amp;</span> x <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;x is big and even&quot;</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;x is either small or an odd number&quot;</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>}</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="do">## [1] &quot;x is either small or an odd number&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="functions" class="slide section level2">
+<h1>Functions</h1>
+<div class="left lt">
+<ul>
+<li><strong>Functions</strong> take a series of
+<strong>arguments</strong> (which can be variables or constants).</li>
+<li>The function performs computations on the arguments.</li>
+<li>Functions can <strong>return</strong> a result, have
+<strong>side-effects</strong>, or both.</li>
+</ul>
+<p><strong>Mathematical &amp; functions</strong></p>
+<ul>
+<li><code>sin()</code>, <code>cos()</code></li>
+<li><code>log()</code>, <code>exp()</code>, <code>sqrt()</code></li>
+</ul>
+<p>Get help on a function with <code>?</code> or <code>help()</code>,
+for example: <code>?log</code> or <code>help(log)</code>. If you don´t
+know a function´s name, you can search for a (likely/suspected) string
+in its name with <code>??</code>.</p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># The print() function takes one or more arguments</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#.      in this case the variable x</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co"># It returns no value, but has the side effect of printing the </span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># value of x to the screen</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">print</span>(x)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="do">## [1] 5</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co"># compute the natural logarithm of x, store it in y, then print the result</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co"># How do I know it is the natural log?</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">log</span>(x)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">print</span>(y)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="do">## [1] 1.609438</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co"># functions can take multiple arguments, and arguments can be named</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co"># here we change the base of the logarithm</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="fu">log</span>(x, <span class="at">base =</span> <span class="dv">10</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="do">## [1] 0.69897</span></span></code></pre></div>
+</div>
+</div>
+<div id="basic-data-structures" class="slide section level2">
+<h1>Basic data structures</h1>
+<div class="left lt">
+<ul>
+<li>A <strong>data structure</strong> is a way of organizing multiple
+pieces of data into a single variable</li>
+<li>Can get very complex; we will start with the two most important
+types</li>
+<li>A <code>vector</code> holds one or more values of a single data type
+<ul>
+<li>You can test both data types and data structures using
+<code>is</code> functions</li>
+<li>You can <strong>coerce</strong> one data type or data structure to
+another using <code>as</code> functions</li>
+<li>You can <strong>subset</strong> vectors <code>[]</code></li>
+</ul></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Creating vectors</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>(<span class="at">one_to_ten =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="do">##  [1]  1  2  3  4  5  6  7  8  9 10</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co"># The c() function stands for concatenate</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co"># it groups items together into a vector</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>(<span class="at">five_numbers =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="fl">8.6</span>, <span class="dv">4</span>, <span class="fl">9.75</span>))</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="do">## [1] 3.00 2.00 8.60 4.00 9.75</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># Get part of a vector using []</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>five_numbers[<span class="dv">3</span>]</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="do">## [1] 8.6</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>five_numbers[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="do">## [1] 8.60 4.00 9.75</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>five_numbers[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>)]</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="do">## [1] 3 4</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co"># get vector length</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="fu">length</span>(five_numbers)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="do">## [1] 5</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co"># sequences and repeats</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="fl">0.4</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="do">##  [1] 1.0 1.4 1.8 2.2 2.6 3.0 3.4 3.8 4.2 4.6 5.0</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="do">## [1] 0 0 0</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co"># testing and coersion</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>x <span class="ot">=</span> <span class="fl">5.5</span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="fu">is.vector</span>(x) <span class="do">## even a single value is a vector in R</span></span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="fu">is.integer</span>(x)</span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="do">## [1] FALSE</span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="fu">as.integer</span>(x)</span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="do">## [1] 5</span></span></code></pre></div>
+</div>
+</div>
+<div id="working-with-data-frames" class="slide section level2">
+<h1>Working with data frames</h1>
+<div class="left lt">
+<ul>
+<li>A <code>data.frame</code> holds tabular data
+<ul>
+<li>Each <code>row</code> of a data frame is a single
+<strong>case</strong> (i.e., an observation)</li>
+<li>Each <code>column</code> of a data frame is a single variable (i.e.,
+a <code>vector</code>, all the same data type)</li>
+</ul></li>
+<li><code>head</code> shows the first few rows of a data frame</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Load a dataset named &#39;penguins&#39; and convert it to a data frame</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># this dataset comes from a package, &quot;palmerpenguins&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">data</span>(penguins, <span class="at">package =</span> <span class="st">&quot;palmerpenguins&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>penguins <span class="ot">=</span> <span class="fu">as.data.frame</span>(penguins)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">head</span>(penguins)</span></code></pre></div>
+<table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+species
+</th>
+<th style="text-align:left;">
+island
+</th>
+<th style="text-align:right;">
+bill_length_mm
+</th>
+<th style="text-align:right;">
+bill_depth_mm
+</th>
+<th style="text-align:right;">
+flipper_length_mm
+</th>
+<th style="text-align:right;">
+body_mass_g
+</th>
+<th style="text-align:left;">
+sex
+</th>
+<th style="text-align:right;">
+year
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Adelie
+</td>
+<td style="text-align:left;">
+Torgersen
+</td>
+<td style="text-align:right;">
+39.1
+</td>
+<td style="text-align:right;">
+18.7
+</td>
+<td style="text-align:right;">
+181
+</td>
+<td style="text-align:right;">
+3750
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+2007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adelie
+</td>
+<td style="text-align:left;">
+Torgersen
+</td>
+<td style="text-align:right;">
+39.5
+</td>
+<td style="text-align:right;">
+17.4
+</td>
+<td style="text-align:right;">
+186
+</td>
+<td style="text-align:right;">
+3800
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:right;">
+2007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adelie
+</td>
+<td style="text-align:left;">
+Torgersen
+</td>
+<td style="text-align:right;">
+40.3
+</td>
+<td style="text-align:right;">
+18.0
+</td>
+<td style="text-align:right;">
+195
+</td>
+<td style="text-align:right;">
+3250
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:right;">
+2007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adelie
+</td>
+<td style="text-align:left;">
+Torgersen
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+2007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adelie
+</td>
+<td style="text-align:left;">
+Torgersen
+</td>
+<td style="text-align:right;">
+36.7
+</td>
+<td style="text-align:right;">
+19.3
+</td>
+<td style="text-align:right;">
+193
+</td>
+<td style="text-align:right;">
+3450
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:right;">
+2007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adelie
+</td>
+<td style="text-align:left;">
+Torgersen
+</td>
+<td style="text-align:right;">
+39.3
+</td>
+<td style="text-align:right;">
+20.6
+</td>
+<td style="text-align:right;">
+190
+</td>
+<td style="text-align:right;">
+3650
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+2007
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="working-with-data-frames-1" class="slide section level2">
+<h1>Working with data frames</h1>
+<ul>
+<li><code>View</code> shows the data frame in a graphical window</li>
+<li><code>str</code> gives you a summary of the
+<strong>str</strong>ucture of the data</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">str</span>(penguins)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">## &#39;data.frame&#39;:    344 obs. of  8 variables:</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">##  $ species          : Factor w/ 3 levels &quot;Adelie&quot;,&quot;Chinstrap&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">##  $ island           : Factor w/ 3 levels &quot;Biscoe&quot;,&quot;Dream&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">##  $ bill_length_mm   : num  39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">##  $ bill_depth_mm    : num  18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">##  $ flipper_length_mm: int  181 186 195 NA 193 190 181 195 193 190 ...</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="do">##  $ body_mass_g      : int  3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="do">##  $ sex              : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 1 1 NA 1 2 1 2 NA NA ...</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="do">##  $ year             : int  2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span></span></code></pre></div>
+<ul>
+<li><code>nrow</code>, <code>ncol</code>, <code>dim</code> give you
+dimensions of the data frame</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># data frame dimensions</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">nrow</span>(penguins)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## [1] 344</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">ncol</span>(penguins)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">## [1] 8</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">dim</span>(penguins)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="do">## [1] 344   8</span></span></code></pre></div>
+</div>
+<div id="working-with-data-frames-2" class="slide section level2">
+<h1>Working with data frames</h1>
+<ul>
+<li>Access an individual variable using <code>$</code> or
+<code>[]</code></li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># accessing a variable by name</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>penguins<span class="sc">$</span>bill_length_mm</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># accessing a variable by position</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>penguins[,<span class="dv">1</span>] <span class="co"># [,1] get every row in the first column</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># accessing a variable by name, and subsetting rows</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>penguins[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">&quot;bill_length_mm&quot;</span>] <span class="co"># another way to access by name, gets the first 10 entries</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="do">##  [1] 39.1 39.5 40.3   NA 36.7 39.3 38.9 39.2 34.1 42.0</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># getting rid of NA values</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>penguins <span class="ot">=</span> penguins[<span class="fu">complete.cases</span>(penguins),]</span></code></pre></div>
+</div>
+<div id="working-with-data-frames-3" class="slide section level2">
+<h1>Working with data frames</h1>
+<p>The variable <code>species</code> is a factor.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">str</span>(penguins)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="do">## &#39;data.frame&#39;:    333 obs. of  8 variables:</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="do">##  $ species          : Factor w/ 3 levels &quot;Adelie&quot;,&quot;Chinstrap&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="do">##  $ island           : Factor w/ 3 levels &quot;Biscoe&quot;,&quot;Dream&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="do">##  $ bill_length_mm   : num  39.1 39.5 40.3 36.7 39.3 38.9 39.2 41.1 38.6 34.6 ...</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="do">##  $ bill_depth_mm    : num  18.7 17.4 18 19.3 20.6 17.8 19.6 17.6 21.2 21.1 ...</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="do">##  $ flipper_length_mm: int  181 186 195 193 190 181 195 182 191 198 ...</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="do">##  $ body_mass_g      : int  3750 3800 3250 3450 3650 3625 4675 3200 3800 4400 ...</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="do">##  $ sex              : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 1 1 1 2 1 2 1 2 2 ...</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="do">##  $ year             : int  2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span></span></code></pre></div>
+<p>Useful functions for factors include <code>levels</code> and
+<code>table</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">levels</span>(penguins<span class="sc">$</span>species)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="do">## [1] &quot;Adelie&quot;    &quot;Chinstrap&quot; &quot;Gentoo&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">table</span>(penguins<span class="sc">$</span>species)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="do">##    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="do">##       146        68       119</span></span></code></pre></div>
+</div>
+<div id="graphics-in-r" class="slide section level2">
+<h1>Graphics in R</h1>
+<p>R currently has two dominant graphical engines</p>
+<h3 id="base-graphics">Base graphics</h3>
+<ul>
+<li>Built in to R.</li>
+<li>Simple to use</li>
+<li>Relatively easy syntax</li>
+<li>Plots usually need a lot of customization before they are
+finished</li>
+</ul>
+<h3 id="ggplot2">ggplot2</h3>
+<ul>
+<li>A package you must install.</li>
+<li>More complex syntax</li>
+<li>Produces publication-quality graphics with less customization
+needed.</li>
+<li>Plots can be saved in a variable, with customization added as
+needed.</li>
+</ul>
+<p>We will mostly use base graphics in the course</p>
+<p>If you want to learn ggplot, ask Matt</p>
+</div>
+<div id="histograms-base-graphics" class="slide section level2">
+<h1>Histograms: Base graphics</h1>
+<div class="left lt">
+<ul>
+<li>The workhorse function is <code>hist</code></li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># generate some random numbers from the lognormal distribution</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>my_var <span class="ot">=</span> <span class="fu">rlnorm</span>(<span class="dv">1000</span>, <span class="fu">log</span>(<span class="dv">10</span>), <span class="fl">0.5</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">hist</span>(my_var)</span></code></pre></div>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-16-1.png" width="528" /></p>
+</div>
+</div>
+<div id="histograms-base-graphics-1" class="slide section level2">
+<h1>Histograms: Base graphics</h1>
+<div class="left lt">
+<ul>
+<li>The workhorse function is <code>hist</code></li>
+</ul>
+<p>The defaults are not very nice, so lets improve things</p>
+<ul>
+<li><code>main = ""</code> disables the title</li>
+<li><code>xlab</code> and <code>ylab</code> control axis labels</li>
+<li><code>breaks</code> controls the number of bins in the
+histogram</li>
+<li><code>col</code> sets the color of the bars</li>
+<li><code>border</code> sets the color of the borders (<code>NA</code>:
+no border)</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">hist</span>(my_var, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Variable of interest&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Frequency&quot;</span>, </span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col=</span><span class="st">&quot;#999999&quot;</span>, <span class="at">border=</span><span class="cn">NA</span>)</span></code></pre></div>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-18-1.png" width="528" /></p>
+</div>
+</div>
+<div id="colors" class="slide section level2">
+<h1>Colors</h1>
+<div class="left lt">
+<ul>
+<li>R supports colors using the common HTML color coding:
+<code>#RRGGBB</code>
+<ul>
+<li>RR, GG, BB are the amounts of red, green, and blue</li>
+<li>each ranges from <code>00</code> (none) to <code>FF</code>
+(most)</li>
+<li><a href="https://www.w3schools.com/colors/colors_picker.asp">Color
+pickers</a> online help you translate a color in real life to a coded
+color</li>
+</ul></li>
+<li>R also has 657 named colors: <code>col = rosybrown</code></li>
+<li>see the <code>colors()</code> function for the names</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colors</span>())</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="do">## [1] &quot;white&quot;         &quot;aliceblue&quot;     &quot;antiquewhite&quot;  &quot;antiquewhite1&quot;</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="do">## [5] &quot;antiquewhite2&quot; &quot;antiquewhite3&quot;</span></span></code></pre></div>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-20-1.png" width="3360" /></p>
+</div>
+</div>
+<div id="populations-samples" class="slide section level2">
+<h1>Populations &amp; Samples</h1>
+<div class="left lt">
+<ul>
+<li>A <strong>population</strong> is the unit about which we want to use
+statistics to describe, analyse, or perform inference.
+<ul>
+<li>e.g., all the trees in a forest</li>
+</ul></li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="img/forest1.png" /></p>
+</div>
+</div>
+<div id="populations-samples-1" class="slide section level2">
+<h1>Populations &amp; Samples</h1>
+<div class="left lt">
+<ul>
+<li>A <strong>population</strong> is the unit about which we want to use
+statistics to describe, analyse, or perform inference.
+<ul>
+<li>e.g., all the trees in a forest</li>
+</ul></li>
+<li>A <strong>sample</strong> is a subset of a population that is
+observed with the goal of obtaining knowledge about a population.</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="img/forest2.png" /></p>
+</div>
+</div>
+<div id="populations-samples-2" class="slide section level2">
+<h1>Populations &amp; Samples</h1>
+<div class="left lt">
+<ul>
+<li>A <strong>population</strong> is the unit about which we want to use
+statistics to describe, analyse, or perform inference.
+<ul>
+<li>e.g., all the trees in a forest</li>
+</ul></li>
+<li>A <strong>sample</strong> is a subset of a population that is
+observed with the goal of obtaining knowledge about a population.
+<ul>
+<li>select 7 trees at random</li>
+<li>Samples must be taken carefully so that they are representative of
+the entire population!</li>
+<li>Gold standard: sample sizes must be <strong>large</strong> and drawn
+<strong>randomly</strong> from the population</li>
+<li><strong>Experimental design</strong>: designing the sample such that
+it represents the desired population</li>
+</ul></li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="img/forest2.png" /></p>
+</div>
+</div>
+<div id="describing-populations-and-samples"
+class="slide section level2">
+<h1>Describing populations and samples</h1>
+<div class="left lt">
+<ul>
+<li>We can visualise the distribution of values within a population
+using a <strong>histogram</strong></li>
+</ul>
+<ul class="incremental">
+<li>We use <strong>summary statistics</strong> to describe the values
+numerically.</li>
+<li>In practise, we must estimate population statistics via sample
+statistics.</li>
+<li>We can formally describe the shape of the distribution of values
+using special statistics called <strong>moments</strong>.</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-21-1.png" width="528" /></p>
+</div>
+</div>
+<div id="summary-statistics-location" class="slide section level2">
+<h1>Summary statistics: location</h1>
+<div class="left lt">
+<ul>
+<li><strong>First moment</strong>: Arithmetic mean.</li>
+</ul>
+<p>The population mean (<span class="math inline">\(\mu\)</span>) can be
+approximated with the <strong>sample mean</strong>:</p>
+<p><span class="math display">\[
+\mu \approx \bar{x} = \frac{1}{n}\sum_{i=1}^n x_i
+\]</span></p>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-22-1.png" width="528" /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">mean</span>(my_var)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="do">## [1] 11.57833</span></span></code></pre></div>
+</div>
+</div>
+<div id="summary-statistics-location-1" class="slide section level2">
+<h1>Summary statistics: location</h1>
+<div class="left lt">
+<ul>
+<li><strong>First moment</strong>: Arithmetic mean.</li>
+</ul>
+<h3 id="other-location-statistics">Other location statistics</h3>
+<p>The mean can be strongly influenced by outliers.</p>
+<ul>
+<li>median: The 50% quantile (i.e., half the values of x are above the
+median, half below)</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-24-1.png" width="528" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">median</span>(my_var)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="do">## [1] 10.36461</span></span></code></pre></div>
+</div>
+</div>
+<div id="summary-statistics-location-2" class="slide section level2">
+<h1>Summary statistics: location</h1>
+<div class="left lt">
+<ul>
+<li><strong>First moment</strong>: Arithmetic mean.</li>
+</ul>
+<h3 id="other-location-statistics-1">Other location statistics</h3>
+<p>The mean can be strongly influenced by outliers.</p>
+<ul>
+<li>median: The 50% quantile (i.e., half the values of x are above the
+median, half below)</li>
+<li>mode: the most common value, the “peak” of a distribution</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-26-1.png" width="528" /></p>
+</div>
+</div>
+<div id="summary-statistics-location-3" class="slide section level2">
+<h1>Summary statistics: location</h1>
+<div class="left lt">
+<ul>
+<li><strong>First moment</strong>: Arithmetic mean.</li>
+</ul>
+<h3 id="other-location-statistics-2">Other location statistics</h3>
+<p>The mean can be strongly influenced by outliers.</p>
+<ul>
+<li>median: The 50% quantile (i.e., half the values of x are above the
+median, half below)</li>
+<li>mode: the most common value, the “peak” of a distribution</li>
+<li>How to compute the mode? Use <code>hist</code>!</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># mode</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">mode</span>(my_var) <span class="co"># wrong!</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="do">## [1] &quot;numeric&quot;</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co"># we can use the histogram function to approximate the sample mode</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co"># changing the number of breaks will have a large impact on the results</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>my_hist <span class="ot">=</span> <span class="fu">hist</span>(my_var, <span class="at">breaks =</span> <span class="dv">30</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co"># the mids variable gives you the midpoint of each bin</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co"># counts gives you the count each bin</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co"># cbind shows them together in columns</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(my_hist<span class="sc">$</span>mids, my_hist<span class="sc">$</span>counts))</span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="do">##      [,1] [,2]</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="do">## [1,]    3   27</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="do">## [2,]    5  119</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="do">## [3,]    7  150</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="do">## [4,]    9  172</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="do">## [5,]   11  160</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="do">## [6,]   13  109</span></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co"># use this to get the mode</span></span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co"># first find out which one is the tallest with which.max</span></span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a>(<span class="at">mode_position =</span> <span class="fu">which.max</span>(my_hist<span class="sc">$</span>counts))</span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="do">## [1] 4</span></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a>my_hist<span class="sc">$</span>mids[mode_position]</span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="do">## [1] 9</span></span></code></pre></div>
+</div>
+</div>
+<div id="summary-statistics-location-4" class="slide section level2">
+<h1>Summary statistics: location</h1>
+<div class="left lt">
+<ul>
+<li><strong>First moment</strong>: Arithmetic mean.</li>
+</ul>
+<h3 id="other-location-statistics-3">Other location statistics</h3>
+<ul>
+<li>minimum, maximum values</li>
+<li>quantiles: the p-th quantile of x is the value of x such that p% of
+values are beneath the quantile
+<ul>
+<li>commonly used: (2.5%, 97.5%), 50%, (25%, 75%)</li>
+</ul></li>
+</ul>
+<h3 id="comparing-variables">Comparing variables</h3>
+<p>We can compare variables in a way that is <em>location
+independent</em> by <strong>centering</strong> (subtracting the
+mean)</p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">min</span>(my_var), <span class="fu">max</span>(my_var))</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="do">## [1]  2.385838 49.740117</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">range</span>(my_var)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="do">## [1]  2.385838 49.740117</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="fu">quantile</span>(my_var, <span class="fl">0.4</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="do">##      40% </span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="do">## 9.304718</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co"># Centre the variable</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co"># note! arithmetic operators like `-` are vectorized!</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>my_var_ctr <span class="ot">=</span> my_var <span class="sc">-</span> <span class="fu">mean</span>(my_var)</span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="fu">mean</span>(my_var_ctr)</span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="do">## [1] -5.329071e-17</span></span></code></pre></div>
+</div>
+</div>
+<div id="summary-statistics-dispersion-or-scale"
+class="slide section level2">
+<h1>Summary statistics: dispersion (or scale)</h1>
+<div class="left lt">
+<ul>
+<li><strong>Second moment</strong>: Variance (<span
+class="math inline">\(\sigma^2\)</span>)</li>
+</ul>
+<p><span class="math display">\[
+\sigma^2 = \frac{1}{N}\sum_{i=1}^N (X_i-\mu)^2
+\]</span></p>
+<p>We can estimate <span class="math inline">\(\sigma^2\)</span> using
+the <strong>sample variance</strong>:</p>
+<p><span class="math display">\[
+\sigma^2 \approx s^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i -\bar{x})^2
+\]</span></p>
+<p>It is convenient to talk about the scale of <span
+class="math inline">\(x\)</span> in the same units as <span
+class="math inline">\(x\)</span> itself, so we use the (population or
+sample) <strong>standard deviation</strong>:</p>
+<p><span class="math display">\[
+\sigma = \sqrt{\sigma^2} \approx s = \sqrt{s^2}
+\]</span></p>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-29-1.png" width="528" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># Population variance -- biased if x is a sample!</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">sum</span>((my_var <span class="sc">-</span> <span class="fu">mean</span>(my_var))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(my_var)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="do">## [1] 35.11269</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co"># These R functions always produce the sample variance and sd</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="fu">var</span>(my_var)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="do">## [1] 35.14784</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="fu">sd</span>(my_var)</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="do">## [1] 5.928561</span></span></code></pre></div>
+</div>
+</div>
+<div id="summary-statistics-dispersion-or-scale-1"
+class="slide section level2">
+<h1>Summary statistics: dispersion (or scale)</h1>
+<div id="other-dispersion-statistics" class="left lt">
+<h3>Other dispersion statistics</h3>
+<ul>
+<li>range: <code>max(x) - min(x)</code></li>
+<li>interquartile range (IQR): the difference between the third and
+first quartiles</li>
+<li>coefficient of variation (CV): <span class="math display">\[
+\frac{s}{|\bar{x}|}
+\]</span></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># the range function gives you the min and max</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co"># Take the difference to get the statistical range</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">diff</span>(<span class="fu">range</span>(my_var))</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="do">## [1] 47.35428</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="fu">max</span>(my_var) <span class="sc">-</span> <span class="fu">min</span>(my_var)</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="do">## [1] 47.35428</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="fu">IQR</span>(my_var)</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="do">## [1] 6.799564</span></span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="fu">quantile</span>(my_var, <span class="fl">0.75</span>) <span class="sc">-</span> <span class="fu">quantile</span>(my_var, <span class="fl">0.25</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="do">##      75% </span></span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="do">## 6.799564</span></span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="co"># coefficient of variation can be done manually</span></span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="fu">sd</span>(my_var)<span class="sc">/</span><span class="fu">mean</span>(my_var)</span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="do">## [1] 0.5120393</span></span></code></pre></div>
+</div>
+</div>
+<div id="summary-statistics-higher-moments"
+class="slide section level2">
+<h1>Summary statistics: higher moments</h1>
+<div id="asymmetry-skewness" class="left lt">
+<h3>Asymmetry: skewness</h3>
+<p>Is the distribution weighted to one side or the other?</p>
+<p><span class="math display">\[
+\mathrm{skewness} = \frac{\sum_{i=1}^{n}(x_i-\bar{x})^3}{(n-1)s^3}
+\]</span></p>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-32-1.png" width="528" /></p>
+</div>
+<div id="tailedness-kurtosis" class="right rt">
+<h3>Tailedness: kurtosis</h3>
+<p>How fat are the tails relative to a normal distribution?</p>
+<p><span class="math display">\[
+\mathrm{kurtosis} = \frac{\sum_{i=1}^{n}(x_i-\bar{x})^4}{(n-1)s^4}
+\]</span></p>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-33-1.png" width="528" /></p>
+</div>
+</div>
+<div id="another-way-to-visualise-a-sample-boxplots"
+class="slide section level2">
+<h1>Another way to visualise a sample: boxplots</h1>
+<div class="left lt">
+<ul>
+<li><strong>Boxplots</strong> (sometimes
+<strong>box-and-whisker</strong> diagrams) summarize key statistics.
+<ul>
+<li>median</li>
+<li>first and third quartiles (hinges)</li>
+<li>approx. 95% confidence interval for median (notch)</li>
+<li>min/max (or quartile + 1.5*IQR) (whiskers)</li>
+</ul></li>
+<li>They are very useful for comparing variables among groups.</li>
+<li>Base graphics: we use the <code>boxplot</code> function</li>
+<li><code>y ~ group</code> is a special data type called a
+<code>formula</code></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">boxplot</span>(body_mass_g <span class="sc">~</span> species, <span class="at">data =</span> penguins, <span class="at">boxwex=</span><span class="fl">0.4</span>, <span class="at">notch =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-34-1.png" width="528" /></p>
+</div>
+</div>
+<div id="more-on-boxplots" class="slide section level2">
+<h1>More on boxplots</h1>
+<div class="left lt">
+<ul>
+<li><strong>Boxplots</strong> (sometimes
+<strong>box-and-whisker</strong> diagrams) summarize key statistics.
+<ul>
+<li>median</li>
+<li>first and third quartiles (hinges)</li>
+<li>approx. 95% confidence interval for median (notch)</li>
+<li>min/max (or quartile + 1.5*IQR) (whiskers)</li>
+</ul></li>
+<li>They are very useful for comparing variables among groups.</li>
+<li>Base graphics: we use the <code>boxplot</code> function</li>
+<li><code>y ~ group</code> is a special data type called a
+<code>formula</code></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">boxplot</span>(body_mass_g <span class="sc">~</span> species, <span class="at">data =</span> penguins, <span class="at">boxwex=</span><span class="fl">0.4</span>, <span class="at">notch =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-36-1.png" width="528" /></p>
+</div>
+</div>
+<div id="programming-mini-lesson-repeating-yourself"
+class="slide section level2">
+<h1>Programming mini-lesson: repeating yourself</h1>
+<div class="left lt">
+<ul>
+<li>An important programming concept is <strong>DRY</strong>: Don’t
+Repeat Yourself!
+<ul>
+<li>Don’t copy and paste code if you can instead instruct the computer
+to repeat things for you.</li>
+</ul></li>
+<li>There are many ways to execute the same code repeatedly; we will
+cover these in detail as they are needed.</li>
+<li>A motivating example:
+<ul>
+<li>Compute the mean of every numeric variable in the
+<code>penguins</code> dataset</li>
+</ul></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># bad!</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>(<span class="at">col_means =</span> <span class="fu">c</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>]),</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">4</span>]),</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">5</span>]),</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>])  <span class="co"># it&#39;s easy to introduce mistakes this way!</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>))</span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="do">## [1]  43.99279  17.16486 200.96697  43.99279</span></span></code></pre></div>
+</div>
+</div>
+<div id="applying-functions" class="slide section level2">
+<h1>Applying functions</h1>
+<ul>
+<li>We want to <strong>apply</strong> the function named
+<code>mean</code> separately to every variable in
+<code>penguins</code></li>
+<li>R has many different ways to apply functions, in this case we use
+<code>s</code>imple <code>apply</code> (<code>sapply</code>)</li>
+</ul>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># bad!</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>(<span class="at">col_means =</span> <span class="fu">c</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>]),</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">4</span>]),</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">5</span>]),</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>  <span class="fu">mean</span>(penguins[,<span class="dv">3</span>])  <span class="co"># it&#39;s easy to introduce mistakes this way!</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>))</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="do">## [1]  43.99279  17.16486 200.96697  43.99279</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="co"># better</span></span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="co"># use columns 3:6 because these are the numeric columns</span></span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="co"># doesn&#39;t make sense to take the mean of penguins$species</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a>(<span class="at">col_means =</span> <span class="fu">sapply</span>(penguins[,<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], mean)) <span class="co"># apply the function mean to each variable</span></span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="do">##    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g </span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="do">##          43.99279          17.16486         200.96697        4207.05706</span></span></code></pre></div>
+</div>
+<div id="applying-functions-1" class="slide section level2">
+<h1>Applying functions</h1>
+<ul>
+<li>We want to <strong>apply</strong> the function named
+<code>mean</code> separately to every variable in
+<code>penguins</code></li>
+<li>R has many different ways to apply functions, in this case we use
+<code>s</code>imple <code>apply</code> (<code>sapply</code>)</li>
+<li>this works with any function that accepts a vector, even when they
+return more than a single value</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">sapply</span>(penguins[,<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], range)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="do">##      bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="do">## [1,]           32.1          13.1               172        2700</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">## [2,]           59.6          21.5               231        6300</span></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="co"># here, we pass an additional argument named probs to quantile</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="co"># see ?quantile for what this does</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a><span class="fu">sapply</span>(penguins[,<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>))</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="do">##     bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a><span class="do">## 25%           39.5          15.6               190        3550</span></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a><span class="do">## 50%           44.5          17.3               197        4050</span></span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a><span class="do">## 75%           48.6          18.7               213        4775</span></span></code></pre></div>
+</div>
+<div id="tabular-applies" class="slide section level2">
+<h1>Tabular applies</h1>
+<div class="left lt">
+<ul>
+<li>There are three species of penguin; it makes more sense to have
+summary statistics for each one</li>
+<li><code>tapply</code>: <code>t</code>abular <code>apply</code>
+<ul>
+<li>produces a summary table for a single variable (e.g.,
+<code>bill_length_mm</code>) based on categories in another variable
+(e.g., <code>species</code>)</li>
+</ul></li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># with: use the variables found in the data.frame penguins</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co"># allows us to not write penguins$species to access the variable species</span></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">with</span>(penguins, </span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>     <span class="co"># compute the mean of bill_length_mm for each of the three species</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>     <span class="fu">tapply</span>(bill_length_mm, species, mean)</span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>)</span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a><span class="do">##    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a><span class="do">##  38.82397  48.83382  47.56807</span></span></code></pre></div>
+</div>
+</div>
+<div id="probability-distributions" class="slide section level2">
+<h1>Probability distributions</h1>
+<div class="left lt">
+<p><strong>Thought experiment</strong></p>
+<p>You and 99 of your closest friends gather on the centre line of a
+100-m football pitch. We define the centre line as 0m, the western
+boundary -50 m, and the eastern boundary as +50 m.</p>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-41-1.png" width="528" /><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-41-2.png" width="528" /></p>
+</div>
+</div>
+<div id="probability-distributions-1" class="slide section level2">
+<h1>Probability distributions</h1>
+<div class="left lt">
+<p><strong>Thought experiment</strong></p>
+<p>You and 99 of your closest friends gather on the centre line of a
+100-m football pitch. We define the centre line as 0m, the western
+boundary -50 m, and the eastern boundary as +50 m.</p>
+<p>Each person flips a coin. If the coin is heads, they take a step east
+(add 0.5 m to their location), if its tails, they take a step west
+(subtract 0.5 m from their location).</p>
+<p><strong>Question</strong>: What is the long-run distribution of
+positions on the field?</p>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-42-2.png" width="528" /></p>
+</div>
+</div>
+<div id="probability-distributions-2" class="slide section level2">
+<h1>Probability distributions</h1>
+<div class="left lt">
+<p><strong>Thought experiment</strong></p>
+<p>You and 99 of your closest friends gather on the centre line of a
+100-m football pitch. We define the centre line as 0m, the western
+boundary -50 m, and the eastern boundary as +50 m.</p>
+<p>Each person flips a coin. If the coin is heads, they take a step east
+(add 0.5 m to their location), if its tails, they take a step west
+(subtract 0.5 m from their location).</p>
+<p><strong>Question</strong>: What is the long-run distribution of
+positions on the field?</p>
+<p><strong>Exercise</strong>: Try to simulate this process in R. What
+does the distribution of locations look like after 10 steps? After 100?
+What is the long-run distribution with many steps and many players?</p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># if you want to draw the soccer pitch, you can read the function for it</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;r/football.r&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co"># 100 players, all on the centre line (value = 0)</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>nplayers <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>players <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nplayers)</span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a><span class="co"># define the size of the steps for each coin flip</span></span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>heads <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>tails <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.5</span></span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a><span class="co"># simulate one step for each player</span></span>
+<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a>steps <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">c</span>(heads, tails), nplayers, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" tabindex="-1"></a><span class="co"># update player locations</span></span>
+<span id="cb29-16"><a href="#cb29-16" tabindex="-1"></a>players <span class="ot">=</span> players <span class="sc">+</span> steps</span>
+<span id="cb29-17"><a href="#cb29-17" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" tabindex="-1"></a><span class="co"># visualise, if desired</span></span>
+<span id="cb29-19"><a href="#cb29-19" tabindex="-1"></a><span class="fu">draw_pitch</span>(players)</span>
+<span id="cb29-20"><a href="#cb29-20" tabindex="-1"></a><span class="fu">hist</span>(players)</span></code></pre></div>
+</div>
+</div>
+<div id="probability-distributions-3" class="slide section level2">
+<h1>Probability distributions</h1>
+<div class="left lt">
+<p><strong>Thought experiment</strong></p>
+<p>You and 99 of your closest friends gather on the centre line of a
+100-m football pitch. We define the centre line as 0m, the western
+boundary -50 m, and the eastern boundary as +50 m.</p>
+<p>Each person flips a coin. If the coin is heads, they take a step east
+(add 0.5 m to their location), if its tails, they take a step west
+(subtract 0.5 m from their location).</p>
+<p><strong>Question</strong>: What is the long-run distribution of
+positions on the field?</p>
+<p><strong>Exercise</strong>: Try to simulate this process in R. What
+does the distribution of locations look like after 10 steps? After 100?
+What is the long-run distribution with many steps and many players?</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># simulate 500 steps with 1000 players</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>nplayers <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>players <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nplayers)</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>) {</span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>    steps <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">c</span>(heads, tails), nplayers, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>    players <span class="ot">=</span> players <span class="sc">+</span> steps</span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>}</span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a><span class="co"># visualise, if desired</span></span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a><span class="fu">draw_pitch</span>(players)</span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a><span class="fu">hist</span>(players)</span></code></pre></div>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-46-1.png" width="528" /><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-46-2.png" width="528" /></p>
+</div>
+</div>
+<div id="probability-distributions-pdfs" class="slide section level2">
+<h1>Probability distributions: PDFs</h1>
+<div class="left lt">
+<ul>
+<li>We can rescale this histogram, such that the <strong>area</strong>
+of each bar represents the proportion of samples within that bin.</li>
+</ul>
+<ul class="incremental">
+<li>The height of each bar is the <strong>probability
+density</strong>.</li>
+<li>The figure approximates an empirical <strong>probability density
+function</strong>.</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">hist</span>(players, <span class="at">breaks=</span><span class="dv">30</span>, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">freq=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-47-1.png" width="528" /></p>
+</div>
+</div>
+<div id="probability-distributions-pdfs-1" class="slide section level2">
+<h1>Probability distributions: PDFs</h1>
+<div class="left lt">
+<ul>
+<li>We can rescale this histogram, such that the <strong>area</strong>
+of each bar represents the proportion of samples within that bin.</li>
+<li>The height of each bar is the <strong>probability
+density</strong>.</li>
+<li>The figure approximates an empirical <strong>probability density
+function</strong>.</li>
+<li>We can use the <code>density</code> function in R to add a curve
+approximating this density.</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">hist</span>(players, <span class="at">breaks=</span><span class="dv">30</span>, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">freq=</span><span class="cn">FALSE</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(players, <span class="at">adjust=</span><span class="fl">1.5</span>), <span class="at">col=</span><span class="st">&#39;red&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-48-1.png" width="528" /></p>
+</div>
+</div>
+<div id="normal-distributions" class="slide section level2">
+<h1>Normal distributions</h1>
+<div class="left lt">
+<ul>
+<li>This looks a lot like a normal distribution.</li>
+<li>As we take smaller and smaller steps, and do more coin flips, the
+distribution of values will converge exactly on a normal
+distribution.</li>
+<li>Here we add a normal <strong>PDF</strong> based on the sample mean
+and sd (in blue).</li>
+</ul>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">hist</span>(players, <span class="at">breaks=</span><span class="dv">40</span>, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">freq=</span><span class="cn">FALSE</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(players, <span class="at">adjust=</span><span class="fl">1.5</span>), <span class="at">col=</span><span class="st">&#39;red&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>mu <span class="ot">=</span> <span class="fu">mean</span>(players)</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>sig <span class="ot">=</span> <span class="fu">sd</span>(players)</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>x_norm <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(players), <span class="fu">max</span>(players), <span class="at">length.out =</span> <span class="dv">400</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a>y_norm <span class="ot">=</span> <span class="fu">dnorm</span>(x_norm, mu, sig)</span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a><span class="fu">lines</span>(x_norm, y_norm, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;blue&#39;</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">&quot;sample mean =&quot;</span>, <span class="fu">round</span>(mu, <span class="dv">2</span>)), </span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a>                            <span class="fu">paste</span>(<span class="st">&quot;sample sd =&quot;</span>, <span class="fu">round</span>(sig, <span class="dv">2</span>))), <span class="at">lwd=</span><span class="dv">0</span>, <span class="at">bty=</span><span class="st">&#39;n&#39;</span>)</span></code></pre></div>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-49-1.png" width="528" /></p>
+</div>
+</div>
+<div id="normal-distributions-1" class="slide section level2">
+<h1>Normal distributions</h1>
+<ul class="incremental">
+<li>In nature, any process that involves summing small random values
+produces exactly this shape.</li>
+<li>The distribution is <strong>symmetric</strong> and
+<strong>unimodal</strong>.</li>
+<li>mean, median, mode are all equal.</li>
+<li>The distribution has two <strong>parameters</strong>, the mean
+(<span class="math inline">\(\mu\)</span>) and the standard deviation
+(<span class="math inline">\(\sigma\)</span>).</li>
+<li>If <span class="math inline">\(\mu = 0\)</span> and <span
+class="math inline">\(\sigma = 1\)</span>, the distribution is called
+the <strong>standard normal</strong>.</li>
+<li>Transforming a variable so that <span class="math inline">\(\mu =
+0\)</span> and <span class="math inline">\(\sigma = 1\)</span> is called
+<strong>standardization</strong>. <span class="math display">\[
+x_{std} = \frac{(x - \bar{x})}{s}\approx\frac{(x - \mu)}{\sigma}
+\]</span></li>
+<li>In R, we can use the <code>scale</code> function.</li>
+</ul>
+</div>
+<div id="normal-distributions-2" class="slide section level2">
+<h1>Normal distributions</h1>
+<div class="left lt">
+<ul>
+<li>The typical “bell-curve” shape of the normal distribution is the
+Normal <strong>Probability Density Function</strong> (PDF)</li>
+</ul>
+<p><span class="math display">\[
+\mathcal{f}(x) = \frac{1}{\sigma \sqrt{2\pi}} \mathcal{e}^{-\frac{1}{2}
+\left (\frac{x-\mu}{\sigma} \right )^2}
+\]</span></p>
+<ul>
+<li>It is easiest to understand what this function represents by
+understanding its <strong>integral</strong>.</li>
+<li>Recall that the area of each bar in our histogram represents the
+<em>proportion</em> of observations in that bin.</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-50-1.png" width="528" /></p>
+</div>
+</div>
+<div id="normal-distributions-area-under-the-curve"
+class="slide section level2">
+<h1>Normal distributions: area under the curve</h1>
+<div class="left lt">
+<ul>
+<li>The integral between two values <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> is equal to the area under the
+curve.</li>
+<li>This is exactly the probability of observing a value between <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>.</li>
+<li>Rule of thumb: about 68% of values in any normal distribution will
+be within 1 standard deviation of the mean.</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-51-1.png" width="528" /></p>
+</div>
+</div>
+<div id="normal-distributions-area-under-the-curve-1"
+class="slide section level2">
+<h1>Normal distributions: area under the curve</h1>
+<div class="left lt">
+<ul>
+<li>The integral between two values <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> is equal to the area under the
+curve.</li>
+<li>This is exactly the probability of observing a value between <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>.</li>
+<li>Rule of thumb: about 68% of values in any normal distribution will
+be within 1 standard deviation of the mean.</li>
+<li>Rule of thumb: 95% of values are <span class="math inline">\(\mu \pm
+1.96 \sigma \approx \mu \pm 2 \sigma\)</span>.</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-52-1.png" width="528" /></p>
+</div>
+</div>
+<div id="normal-distributions-cdf" class="slide section level2">
+<h1>Normal distributions: CDF</h1>
+<div class="left lt">
+<ul>
+<li>If we integrate from <span class="math inline">\(-\infty\)</span> to
+some value <span class="math inline">\(x\)</span>, then we have the
+probability of observing a value <strong>less than</strong> <span
+class="math inline">\(x\)</span>.</li>
+<li>This integral of the Normal PDF is known as the Normal
+<strong>cumulative distribution function</strong>.</li>
+</ul>
+<p><span class="math display">\[
+\mathcal{g}(x) = \int_{-\infty}^{x} \frac{1}{\sigma \sqrt{2\pi}}
+\mathcal{e}^{-\frac{1}{2} \left (\frac{x-\mu}{\sigma} \right )^2} dx
+\]</span></p>
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-53-1.png" width="528" /></p>
+</div>
+<div class="right rt">
+<p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-54-1.png" width="528" /></p>
+</div>
+</div>
+<div id="distributions-in-r" class="slide section level2">
+<h1>Distributions in R</h1>
+<ul>
+<li>R has four functions in common for many families of
+distributions:</li>
+</ul>
+<p><strong>PDF</strong>: what is the probability <code>d</code>ensity
+when <span class="math inline">\(x=3\)</span> (the height of the bell
+curve)</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="dv">3</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="do">## [1] 0.004431848</span></span></code></pre></div>
+</div>
+<div id="distributions-in-r-1" class="slide section level2">
+<h1>Distributions in R</h1>
+<ul>
+<li>R has four functions in common for many families of
+distributions:</li>
+</ul>
+<p><strong>PDF</strong>: what is the probability <code>d</code>ensity
+when <span class="math inline">\(x=3\)</span> (the height of the bell
+curve)</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="dv">3</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a><span class="do">## [1] 0.004431848</span></span></code></pre></div>
+<p><strong>CDF</strong>: what is the cumulative <code>p</code>robability
+when <span class="math inline">\(x=q\)</span></p>
+<p>(area under the bell curve from <span
+class="math inline">\(-\infty\)</span> to <span
+class="math inline">\(q\)</span>)</p>
+<p>(probability of observing a value &lt; <span
+class="math inline">\(q\)</span>)</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="sc">-</span><span class="fl">1.96</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="do">## [1] 0.0249979</span></span></code></pre></div>
+</div>
+<div id="distributions-in-r-2" class="slide section level2">
+<h1>Distributions in R</h1>
+<ul>
+<li>R has four functions in common for many families of
+distributions:</li>
+</ul>
+<p><strong>PDF</strong>: what is the probability <code>d</code>ensity
+when <span class="math inline">\(x=3\)</span> (the height of the bell
+curve)</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="dv">3</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="do">## [1] 0.004431848</span></span></code></pre></div>
+<p><strong>CDF</strong>: what is the cumulative <code>p</code>robability
+when <span class="math inline">\(x=q\)</span></p>
+<p>(area under the bell curve from <span
+class="math inline">\(-\infty\)</span> to <span
+class="math inline">\(q\)</span>)</p>
+<p>(probability of observing a value &lt; <span
+class="math inline">\(q\)</span>)</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="sc">-</span><span class="fl">1.96</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="do">## [1] 0.0249979</span></span></code></pre></div>
+<p><strong>Quantiles</strong>: what is the value of <span
+class="math inline">\(x\)</span>, such that the probability of observing
+<strong>x or smaller</strong> is <span
+class="math inline">\(p\)</span></p>
+<p>(inverse of the CDF)</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="fl">0.025</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a><span class="do">## [1] -1.959964</span></span></code></pre></div>
+</div>
+<div id="distributions-in-r-3" class="slide section level2">
+<h1>Distributions in R</h1>
+<ul>
+<li>R has four functions in common for many families of
+distributions:</li>
+</ul>
+<p><strong>PDF</strong>: what is the probability <code>d</code>ensity
+when <span class="math inline">\(x=3\)</span> (the height of the bell
+curve)</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="dv">3</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="do">## [1] 0.004431848</span></span></code></pre></div>
+<p><strong>CDF</strong>: what is the cumulative <code>p</code>robability
+when <span class="math inline">\(x=q\)</span></p>
+<p>(area under the bell curve from <span
+class="math inline">\(-\infty\)</span> to <span
+class="math inline">\(q\)</span>)</p>
+<p>(probability of observing a value &lt; <span
+class="math inline">\(q\)</span>)</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="sc">-</span><span class="fl">1.96</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="do">## [1] 0.0249979</span></span></code></pre></div>
+<p><strong>Quantiles</strong>: what is the value of <span
+class="math inline">\(x\)</span>, such that the probability of observing
+<strong>x or smaller</strong> is <span
+class="math inline">\(p\)</span></p>
+<p>(inverse of the CDF)</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="fl">0.025</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a><span class="do">## [1] -1.959964</span></span></code></pre></div>
+<p><strong>RNG</strong>: Random number generator, produces <span
+class="math inline">\(n\)</span> random numbers from the desired
+distribution</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean=</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="do">##  [1] -1.7879356  1.6209792 -0.9772414  0.7117817 -0.9274279 -0.5008930</span></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="do">##  [7] -1.9062491 -0.1495901 -0.7830480  0.2145755</span></span></code></pre></div>
+</div>
+<div id="sampling-error" class="slide section level2">
+<h1>Sampling error</h1>
+<ul class="incremental">
+<li>In practise, we work with samples, which are imperfectly
+representative of the populations from which they are drawn.</li>
+<li>The <strong>sample mean</strong> <span
+class="math inline">\((\bar{x})\)</span> and <strong>sample standard
+deviation</strong> <span class="math inline">\((s)\)</span> approximate
+the population <span class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\sigma\)</span>.</li>
+<li>We would like to known how good our estimates are!</li>
+<li>A <strong>standard error</strong> tells you how well a
+<strong>sample statistic</strong> represents the <strong>population
+parameter</strong>.</li>
+<li>If you repeat your sampling many times, and compute a separate
+sample statistic each time (e.g., <span
+class="math inline">\(\bar{x}\)</span>, <span
+class="math inline">\(s\)</span>, etc)…</li>
+<li>The sample statistics will converge on a normal distribution (if the
+sample size is large).</li>
+<li>The <strong>standard deviation of sample statistics</strong> will
+equal the <strong>standard error</strong> of the statistic.</li>
+</ul>
+</div>
+<div id="standard-error-of-the-mean" class="slide section level2">
+<h1>Standard error of the mean</h1>
+<ul>
+<li>In practise, we work with samples, which are imperfectly
+representative of the populations from which they are drawn</li>
+<li>The <strong>sample mean</strong> <span
+class="math inline">\((\bar{x})\)</span> and <strong>sample standard
+deviation</strong> <span class="math inline">\((s)\)</span> approximate
+the population <span class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\sigma\)</span></li>
+<li>We would like to known how good our estimates are!</li>
+<li>A <strong>standard error</strong> tells you how well a
+<strong>sample statistic</strong> represents the <strong>population
+parameter</strong>.</li>
+<li>If you repeat your sampling many times, and compute a separate
+sample statistic each time (e.g., <span
+class="math inline">\(\bar{x}\)</span>, <span
+class="math inline">\(s\)</span>, etc)…</li>
+<li>The sample statistics will converge on a normal distribution (if the
+sample size is large)</li>
+<li>The <strong>standard deviation of sample statistics</strong> will
+equal the <strong>standard error</strong> of the statistic.</li>
+<li>We commonly use the <strong>standard error of the mean</strong> to
+make inferences about the mean of a sample</li>
+<li>A larger sample size results in a smaller standard error</li>
+</ul>
+<p><span class="math display">\[
+\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}} \approx \frac{s}{\sqrt{n}}
+\]</span></p>
+</div>
+<div id="central-limit-theorem" class="slide section level2">
+<h1>Central limit theorem</h1>
+<ul>
+<li>If you repeat your sampling many times, and compute a separate
+sample statistic each time (e.g., <span
+class="math inline">\(\bar{x}\)</span>, <span
+class="math inline">\(s\)</span>, etc)…</li>
+<li>The sample statistics will converge on a normal distribution (if the
+sample size is large).</li>
+</ul>
+<ul class="incremental">
+<li>This holds generally in many natural systems.</li>
+<li>If a variable <span class="math inline">\(x\)</span> is normally
+distributed, then <span class="math inline">\(\bar{x}\)</span> will be
+normally distributed, regardless of sample size.</li>
+<li>The farther <span class="math inline">\(x\)</span> is away from a
+normal distribution, the larger <span class="math inline">\(n\)</span>
+must be before <span class="math inline">\(\bar{x}\)</span> follows a
+normal distribution.</li>
+<li>If <span class="math inline">\(n\)</span> is large enough…</li>
+<li><span class="math inline">\(\bar{x}\)</span> will be normally
+distributed with a mean = <span class="math inline">\(\mu\)</span> and
+standard deviation = the standard error of the mean.</li>
+</ul>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>
