@@ -44,6 +44,15 @@ hist(data$vel[data$group=="Cyanobacteria"], main="Cyanobacteria", xlab="preferre
 hist(data$vel[data$group=="Diatoms"], main="Diatoms", xlab="preferred velocity (niche optima)")
 #histograms look fine
 
+#qqplots
+qqnorm(data$vel[data$group=="Chrysophytes"], main="Chrysophytes")
+qqline(data$vel[data$group=="Chrysophytes"])
+qqnorm(data$vel[data$group=="Cyanobacteria"], main="Cyanobacteria")
+qqline(data$vel[data$group=="Cyanobacteria"])
+qqnorm(data$vel[data$group=="Diatoms"], main="Diatoms")
+qqline(data$vel[data$group=="Diatoms"])
+
+
 shapiro.test(data$vel[data$group=="Chrysophytes"])
 shapiro.test(data$vel[data$group=="Cyanobacteria"]) 
 shapiro.test(data$vel[data$group=="Diatoms"])
