@@ -245,19 +245,35 @@ Hucho model1: fish mass = 14.9+2.4 * log(Q)
 
 2. A potential confounding variable could be population size. When a population of Hucho is very small, it is less likely to contain large specimens. The dataset includes an estimate of population size based on expert (= fishermen) opinion. Explore differences in maximum Hucho body size captured in the various systems depending on population size. Test for differences and produce a publishable final graph showing average maximum fish size in dependence from population size. Don´t forget to check assumptions before running your statistical analysis and justify your choice of method.
 ```{r}
+hucho$population<-factor(hucho$population)
+
 boxplot(mass~population,data=hucho)
+table(hucho$population)
+
 # anova-problem
 hist(hucho$mass[hucho$population=="limited"]) # ND will anyway be hard to judge...
+hist(hucho$mass[hucho$population=="medium"]) # ND will anyway be hard to judge...
+hist(hucho$mass[hucho$population=="large"]) # ND will anyway be hard to judge...
+
 qqnorm(hucho$mass[hucho$population=="limited"])
+qqline(hucho$mass[hucho$population=="limited"])
 qqnorm(hucho$mass[hucho$population=="medium"])
+qqline(hucho$mass[hucho$population=="medium"])
 qqnorm(hucho$mass[hucho$population=="large"])
+qqline(hucho$mass[hucho$population=="large"])
+
 hist(unlist(tapply(hucho$mass,INDEX=hucho$population,FUN=scale)))
 qqnorm(unlist(tapply(hucho$mass,INDEX=hucho$population,FUN=scale)))
+qqline(unlist(tapply(hucho$mass,INDEX=hucho$population,FUN=scale)))
+
 shapiro.test(unlist(tapply(hucho$mass,INDEX=hucho$population,FUN=scale))) # check ND
 bartlett.test(mass~population,data=hucho) # check var.hom.
+
 humo2<-lm(mass~population,data=hucho)
 summary(humo2)
 anova(humo2)
+summary(aov(mass~population,data=hucho))
+
 # Anova population size does not affect fish size significantly
 pairwise.t.test(hucho$mass,hucho$population,method="bonferroni",pool.sd=TRUE)
 # pairwise no significant difference!
@@ -267,23 +283,63 @@ Population size does not significantly influence maximum fish size (F=2.6, df1=2
 
 3. You will find that both river size and population size affect maximum Hucho size. How can you test both predictors at once? Which would be the best model for fish ladder builders if they wanted to improve the conservation status of Danube salmon in the future?
 ```{r}
-hucho$population<-factor(hucho$population)
 levels(hucho$population) # check order of levels
+#default color is black, red, green
+
 plot(mass~log(discharge),data=hucho,col=hucho$population)
 abline(humo1)
 boxplot(humo1$residuals~hucho$population) # this residual analysis strongly hints at an effect of population!
-humo3<-lm(mass~log(discharge)*population,data=hucho)
 
-summary(humo3)
-anova(humo3)
+# humo3<-lm(mass~log(discharge)*population,data=hucho)
+# summary(humo3)
+# anova(humo3)
+
 humo4<-lm(mass~log(discharge)+population,data=hucho)
 anova(humo4)
-summary(humo4)
+# --> note significant effect of both variables
 
-plot(mass~log(discharge),data=hucho,col=c("green","red","black"))
-abline(a=coef(humo4)[1],b=coef(humo4)[2],col="green")
+summary(humo4)
+# --> estimate column gives constants to add to any fish mass of level=0 (population="large") or to intercept...
+# ...to get fish mass for levels "medium" and "limited" at the same river size
+# --> thus: for the same river size, the maximum fish mass is 6.2 and 1.2 kg lighter 
+# in limited and medium populations compared to large populations
+
+# adjusted means (formula in handout)
+common.slope<-coef(humo4)[2]
+adj.m<-tapply(hucho$mass,INDEX=hucho$population,FUN=mean)-common.slope*tapply(log(hucho$discharge),INDEX=hucho$population,FUN=mean)-mean(log(hucho$discharge))
+adj.m-adj.m[1] # these are the differences of adjusted means to reference level=large (same as in the summary() output)
+
+# compare with unadjusted means
+m<-tapply(X=hucho$mass,INDEX=hucho$population,FUN=mean)
+m-m[1] # these are the differences of unadjusted means to reference level=large
+
+#
+
+pop.col<-hucho$population
+levels(pop.col)<-c("black","red","green")
+pop.col<-as.character(pop.col) # needed to get rid of "factor" attribute
+
+plot(mass~log(discharge),data=hucho,col=pop.col)
+abline(a=coef(humo4)[1],b=coef(humo4)[2],col="black")
 abline(a=coef(humo4)[1]+coef(humo4)[3],b=coef(humo4)[2],col="red")
-abline(a=coef(humo4)[1]+coef(humo4)[4],b=coef(humo4)[2],col="black")
+abline(a=coef(humo4)[1]+coef(humo4)[4],b=coef(humo4)[2],col="green")
+
+
+# checking assumptions
+shapiro.test(humo4$res)
+
+bartlett.test(humo4$res~hucho$population)
+
+layout(matrix(1:4,2,2))
+hist(humo4$res)
+qqnorm(humo4$res); qqline(humo4$res)
+
+plot(humo4$res~humo4$fitted) # unexplained relationship/pattern left?
+plot(humo4$res^2~humo4$fitted) # variances homogeneous? should not show any trend
+
+layout(matrix(1:4,2,2))
+plot(humo4)
+
 ```
 
 The best model to estimate fish ladder dimension comes from mass~log(Q) using only data from large populations:

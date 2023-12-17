@@ -64,6 +64,13 @@ The Danube salmon is an endangered species in now dwindling populations. It need
 
 ```{r}
 hucho = read.table("data/HuchoRatschan2012.txt", header = TRUE)
+names(data)
+# river: name of river
+# population: categorical, size and health of adult fish population
+# length: largest fish caught since 1970, body length given in cm
+# mass: body mass of largest fish in kg
+# discharge: annual mean discharge of river in m3 s-1
+# width: width of river in m
 ```
 
 1. Look for a reasonable relationship of a river size measure with a fish size measure. Deliver a model that could guide construction of fish passes. Consider transformations to linearize relationships.
