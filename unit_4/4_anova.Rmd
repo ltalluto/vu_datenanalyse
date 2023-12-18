@@ -517,7 +517,7 @@ $$
 SS_{interaction}=SS_t-(SS_{sex}+SS_{food}+SS_w)
 $$
 
-The variation of the whole dataset is partitioned into two 4 (!) components depending on origin! All MS except $MS_w$ are expressions for group-to-group variation (and thus *explained* SS, i.e. *due to treatment*).
+The variation of the whole dataset is partitioned into 4 (!) components depending on origin! All MS except $MS_w$ are expressions for group-to-group variation (and thus *explained* SS, i.e. *due to treatment*).
 
 </div>
 
