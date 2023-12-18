@@ -983,7 +983,7 @@ approximated with the <strong>sample mean</strong>:</p>
 <div class="right rt">
 <p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-22-1.png" width="528" /></p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">mean</span>(my_var)</span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="do">## [1] 11.57833</span></span></code></pre></div>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="do">## [1] 11.27819</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-location-1" class="slide section level2">
@@ -1002,7 +1002,7 @@ median, half below)</li>
 <div class="right rt">
 <p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-24-1.png" width="528" /></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">median</span>(my_var)</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="do">## [1] 10.36461</span></span></code></pre></div>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="do">## [1] 9.730802</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-location-2" class="slide section level2">
@@ -1052,19 +1052,19 @@ median, half below)</li>
 <span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co"># cbind shows them together in columns</span></span>
 <span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(my_hist<span class="sc">$</span>mids, my_hist<span class="sc">$</span>counts))</span>
 <span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="do">##      [,1] [,2]</span></span>
-<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="do">## [1,]    3   27</span></span>
-<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="do">## [2,]    5  119</span></span>
-<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="do">## [3,]    7  150</span></span>
-<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="do">## [4,]    9  172</span></span>
-<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="do">## [5,]   11  160</span></span>
-<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="do">## [6,]   13  109</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="do">## [1,]    3   33</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="do">## [2,]    5  118</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="do">## [3,]    7  186</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="do">## [4,]    9  180</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="do">## [5,]   11  141</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="do">## [6,]   13  103</span></span>
 <span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a></span>
 <span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co"># use this to get the mode</span></span>
 <span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co"># first find out which one is the tallest with which.max</span></span>
 <span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a>(<span class="at">mode_position =</span> <span class="fu">which.max</span>(my_hist<span class="sc">$</span>counts))</span>
-<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="do">## [1] 4</span></span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="do">## [1] 3</span></span>
 <span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a>my_hist<span class="sc">$</span>mids[mode_position]</span>
-<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="do">## [1] 9</span></span></code></pre></div>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="do">## [1] 7</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-location-4" class="slide section level2">
@@ -1089,19 +1089,19 @@ mean)</p>
 </div>
 <div class="right rt">
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">min</span>(my_var), <span class="fu">max</span>(my_var))</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="do">## [1]  2.385838 49.740117</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="do">## [1]  2.070701 58.776355</span></span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">range</span>(my_var)</span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="do">## [1]  2.385838 49.740117</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="do">## [1]  2.070701 58.776355</span></span>
 <span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a></span>
 <span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="fu">quantile</span>(my_var, <span class="fl">0.4</span>)</span>
 <span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="do">##      40% </span></span>
-<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="do">## 9.304718</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="do">## 8.662068</span></span>
 <span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a></span>
 <span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co"># Centre the variable</span></span>
 <span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co"># note! arithmetic operators like `-` are vectorized!</span></span>
 <span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>my_var_ctr <span class="ot">=</span> my_var <span class="sc">-</span> <span class="fu">mean</span>(my_var)</span>
 <span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="fu">mean</span>(my_var_ctr)</span>
-<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="do">## [1] -5.329071e-17</span></span></code></pre></div>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="do">## [1] -1.065814e-17</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-dispersion-or-scale"
@@ -1132,13 +1132,13 @@ sample) <strong>standard deviation</strong>:</p>
 <p><img src="lec1a_basics_files/figure-slidy/unnamed-chunk-29-1.png" width="528" /></p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># Population variance -- biased if x is a sample!</span></span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">sum</span>((my_var <span class="sc">-</span> <span class="fu">mean</span>(my_var))<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">length</span>(my_var)</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="do">## [1] 35.11269</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="do">## [1] 39.09541</span></span>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a></span>
 <span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co"># These R functions always produce the sample variance and sd</span></span>
 <span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="fu">var</span>(my_var)</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="do">## [1] 35.14784</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="do">## [1] 39.13455</span></span>
 <span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="fu">sd</span>(my_var)</span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="do">## [1] 5.928561</span></span></code></pre></div>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="do">## [1] 6.255761</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-dispersion-or-scale-1"
@@ -1159,19 +1159,19 @@ first quartiles</li>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># the range function gives you the min and max</span></span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co"># Take the difference to get the statistical range</span></span>
 <span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">diff</span>(<span class="fu">range</span>(my_var))</span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="do">## [1] 47.35428</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="do">## [1] 56.70565</span></span>
 <span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="fu">max</span>(my_var) <span class="sc">-</span> <span class="fu">min</span>(my_var)</span>
-<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="do">## [1] 47.35428</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="do">## [1] 56.70565</span></span>
 <span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a></span>
 <span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="fu">IQR</span>(my_var)</span>
-<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="do">## [1] 6.799564</span></span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="do">## [1] 6.531818</span></span>
 <span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="fu">quantile</span>(my_var, <span class="fl">0.75</span>) <span class="sc">-</span> <span class="fu">quantile</span>(my_var, <span class="fl">0.25</span>)</span>
 <span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="do">##      75% </span></span>
-<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="do">## 6.799564</span></span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="do">## 6.531818</span></span>
 <span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a></span>
 <span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="co"># coefficient of variation can be done manually</span></span>
 <span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="fu">sd</span>(my_var)<span class="sc">/</span><span class="fu">mean</span>(my_var)</span>
-<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="do">## [1] 0.5120393</span></span></code></pre></div>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="do">## [1] 0.5546777</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-statistics-higher-moments"
