@@ -1,0 +1,706 @@
+---
+title: "Abnormal Statistics"
+author: "Matthew Talluto"
+date: "24.02.2022"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: ../assets/rmd_style.css
+  beamer_presentation: default
+---
+
+
+```{r setup, include=FALSE, results = "hide"}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=7, fig.height=7, collapse = TRUE, comment = "##", dev="png", error=TRUE, warning = FALSE, message = FALSE)
+library(RColorBrewer)
+library(ggplot2)
+library(gridExtra)
+cols = brewer.pal(8, "Set1")
+set.seed(37)
+```
+
+## One test to rule them all
+
+We've learned a great big pile of tests. In reality, they are all the same test:
+
+1. Develop a **null hypothesis** about some **effect** (e.g., there is no difference in means between two groups)
+2. Collect some **data**
+3. Compute a **test statistic** describing the **effect size**
+4. Compute the distribution of the test statistic, *assuming* $H_0$ *is true*
+5. Using the distribution, compute how often you would observe a test statistic **as or more extreme** if $H_0$ is true
+
+
+## Parametric tests have a theoretical distribution
+
+Our tests so far have been (mostly) **parametric**. There is a known theoretical distribution that
+our test statistic follows.
+
+* The **t-statistic** describes how large a difference between two means is, and follows a t-distribution.
+* The **F-statistic** describes a ratio of variances, and follows an F-distribution.
+
+
+
+## Arbitrary test statistics
+
+What do we do if we don't know the theoretical distribution of our test statistic, or if it doesn't exist?
+
+
+## Back to coral reefs
+
+<div class="left lt">
+
+We previously computed parametric confidence intervals for the mean richness in each reef type. However, richness is highly skewed; the mean is a poor estimate of **location** for these data.
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+library(ggplot2)
+fish = read.csv("../unit_1/data/coral_fish.csv")
+ablines = data.frame(
+	value = c(tapply(fish$richness, fish$type, mean), 
+			  tapply(fish$richness, fish$type, median)),
+	stat = rep(c("mean", "median"), each = 2),
+	type = rep(c("subtropical", "tropical"), 2))
+pl = ggplot(fish, aes(x = richness, fill = type)) + 
+	geom_histogram(aes(y = ..density..), position = "dodge", bins = 15) + 
+	geom_density(aes(col = type), fill = "00000000") + 
+	xlab("Species Richness") + theme_minimal() + 
+	geom_vline(data = ablines, aes(xintercept = value, color = type, linetype = stat))
+pl
+```
+</div>
+
+
+
+## Back to coral reefs
+
+<div class="left lt">
+
+We previously computed parametric confidence intervals for the mean richness in each reef type. However, richness is highly skewed; the mean is a poor estimate of **location** for these data.
+
+### Hypothesis test
+
+$H_0$: The difference in medians is zero
+
+**Rephrased**: Group doesn't matter, any difference in median we observe is due to chance.
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+pl
+```
+</div>
+
+
+
+## Back to coral reefs
+
+<div class="left lt">
+
+$H_0$: The difference in medians is zero
+
+We can test this hypothesis by **permutation**.
+
+* If we randomly assign the groups, we simulate a world where $H_0$ is true.
+
+```{r}
+# randomly shuffle the order of the grouping variable
+type_shuffle = sample(fish$type)
+head(cbind(fish, type_shuffle), 12)
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+pl
+```
+</div>
+
+
+
+
+
+## Permutation test for coral reefs
+
+<div class="left lt">
+
+$H_0$: The difference in medians is zero
+
+1. Randomly assign the groups
+2. Compute the test statistic (difference between medians)
+
+```{r}
+compute_diff = function(richness, groups) {
+	med_trop = median(richness[groups == "tropical"])
+	med_sub = median(richness[groups == "subtropical"])
+	return(med_trop - med_sub)
+}
+compute_diff(fish$richness, type_shuffle)
+
+# compare to non-shuffled
+compute_diff(fish$richness, fish$type)
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+xmax = 300
+ymax = 1300
+stat = data.frame(diff = compute_diff(fish$richness, type_shuffle))
+pl2 = ggplot(stat, aes(x = diff)) + geom_histogram() + xlim(c(-xmax, xmax)) + ylim(c(0, 10)) + 
+	geom_vline(xintercept = compute_diff(fish$richness, fish$type), col = "red") + 
+	theme_minimal() + ggtitle("n = 1")
+pl2
+```
+</div>
+
+
+## Permutation test for coral reefs
+
+<div class="left lt">
+
+$H_0$: The difference in medians is zero
+
+1. Randomly assign the groups
+2. Compute the test statistic (difference between medians)
+3. Repeat many times
+
+```{r}
+n = 100 # number of repeats
+# make an empty numeric vector to store the results
+results = numeric(n)
+
+# repeat n times
+for(i in 1:n) {
+	# shuffle the groups
+	type_shuffle = sample(fish$type)
+	# compute and save the test statistic
+	results[i] = compute_diff(fish$richness, type_shuffle)
+}
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+stat = data.frame(diff = results)
+pl2 = ggplot(stat, aes(x = diff)) + geom_histogram() + xlim(c(-xmax, xmax)) + 
+	geom_vline(xintercept = compute_diff(fish$richness, fish$type), col = "red") + 
+	theme_minimal() + ggtitle(paste0("n = ", n))
+pl2
+```
+</div>
+
+
+
+## Permutation test for coral reefs
+
+<div class="left lt">
+
+$H_0$: The difference in medians is zero
+
+1. Randomly assign the groups
+2. Compute the test statistic (difference between medians)
+3. Repeat **many** times
+
+```{r cache = TRUE}
+n = 1e6 # number of repeats
+# make an empty numeric vector to store the results
+results = numeric(n)
+
+# repeat n times
+for(i in 1:n) {
+	# shuffle the groups
+	type_shuffle = sample(fish$type)
+	# compute and save the test statistic
+	results[i] = compute_diff(fish$richness, type_shuffle)
+}
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+stat = data.frame(diff = results)
+pl2 = ggplot(stat, aes(x = diff)) + geom_histogram() + xlim(c(-xmax, xmax)) + 
+	geom_vline(xintercept = compute_diff(fish$richness, fish$type), col = "red") + 
+	theme_minimal() + ggtitle(paste0("n = ", n))
+pl2
+```
+</div>
+
+
+## Permutation test for coral reefs
+
+<div class="left lt">
+
+$H_0$: The difference in medians is zero
+
+1. Randomly assign the groups
+2. Compute the test statistic (difference between medians)
+3. Repeat **many** times
+4. Compute how often a you get a result **as or more extreme** than observed in the sample
+
+```{r}
+# the real difference observed in my sample
+(samp_diff = compute_diff(fish$richness, fish$type))
+
+# the frequency: how many times were my sims as or more extreme?
+(freq = sum(abs(results) >= samp_diff)) 
+freq / length(results) ## the p-value
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+pl2
+```
+</div>
+
+
+
+## Parameter estimation
+<div class="left lt">
+
+* My permutation test lets me conclude that the medians of the two reef types are not the same. But what if I instead want a confidence interval for the medians?
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+fish_meds = data.frame(richness = tapply(fish$richness, fish$type, median), 
+				 type = c("subtropical", "tropical"), 
+				 lower = c(113, 313), upper = c(380, 580))
+
+pl3 = ggplot(fish, aes(x = type, y = richness, fill = type)) + 
+	geom_boxplot(notch = TRUE, show.legend = FALSE) + theme_minimal() + xlab("Reef Type") + 
+	ylab("Species Richness")
+pl3
+```
+</div>
+
+
+## Nonparametric bootstrap
+<div class="left lt">
+
+* My permutation test lets me conclude that the medians of the two reef types are not the same. But what if I instead want a confidence interval for the medians?
+* A **nonparametric bootstrap** lets you estimate a confidence interval for (nearly) any statistic.
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+
+(pl4 = ggplot(fish[fish$type == "subtropical",], aes(x = richness, fill = type)) + 
+	geom_histogram(binwidth = 40) + theme_minimal() + 
+	xlab("Species Richness"))
+```
+</div>
+
+
+
+
+## Nonparametric bootstrap
+<div class="left lt">
+
+* My permutation test lets me conclude that the medians of the two reef types are not the same. But what if I instead want a confidence interval for the medians?
+* A **nonparametric bootstrap** lets you estimate a confidence interval for (nearly) any statistic.
+	- Basic idea: our sample is the best information we have about the population. 
+	- The population probably resembles the sample, just much larger
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE, cache = TRUE}
+fish_resampled = fish[sample(which(fish$type == "subtropical"), 1e4, replace = TRUE),]
+
+pl5 = ggplot(fish_resampled, aes(x = richness, fill = type)) + 
+	geom_histogram(binwidth = 40) + theme_minimal() + 
+	xlab("Population Species Richness") + ylim(0,2000)
+grid.arrange(pl4 + ylim(0,50), pl5, nrow=2)
+```
+</div>
+
+
+
+## Nonparametric bootstrap
+<div class="left lt">
+
+* My permutation test lets me conclude that the medians of the two reef types are not the same. But what if I instead want a confidence interval for the medians?
+* A **nonparametric bootstrap** lets you estimate a confidence interval for (nearly) any statistic.
+	- Basic idea: our sample is the best information we have about the population. 
+	- The population probably resembles the sample, just much larger
+	- We can understand the distribution of our statistic by sampling repeatedly from the population.
+	
+</div>
+
+<div class="right rt">
+```{r eval = FALSE}
+for(i in 1:1000) 
+	median(sample(population$richness))
+```
+
+```{r echo = FALSE, cache = TRUE}
+fish_resampled = fish[sample(which(fish$type == "subtropical"), 1e4, replace = TRUE),]
+grid.arrange(pl4 + ylim(0,50), pl5, nrow=2)
+```
+</div>
+
+
+
+## Nonparametric bootstrap
+<div class="left lt">
+
+* My permutation test lets me conclude that the medians of the two reef types are not the same. But what if I instead want a confidence interval for the medians?
+* A **nonparametric bootstrap** lets you estimate a confidence interval for (nearly) any statistic.
+	- Basic idea: our sample is the best information we have about the population. 
+	- The population probably resembles the sample, just much larger
+	- We can understand the distribution of our statistic by sampling repeatedly from the population.
+	- We don't have access to the population, so we just use the best information we have: the sample.
+	
+</div>
+
+<div class="right rt">
+```{r}
+fish_subtropical = subset(fish, type == "subtropical")
+
+# generates a new "simulated" sample
+new_sample = sample(fish_subtropical$richness, 
+					nrow(fish_subtropical), 
+					replace = TRUE)
+
+c(median(new_sample),
+	median(fish_subtropical$richness))
+```
+
+
+```{r echo = FALSE}
+grid.arrange(pl4 + ylim(0,50), pl5, nrow=2)
+```
+</div>
+
+
+## Nonparametric bootstrap
+<div class="left lt">
+
+* My permutation test lets me conclude that the medians of the two reef types are not the same. But what if I instead want a confidence interval for the medians?
+* A **nonparametric bootstrap** lets you estimate a confidence interval for (nearly) any statistic.
+	- Basic idea: our sample is the best information we have about the population. 
+	- The population probably resembles the sample, just much larger
+	- We can understand the distribution of our statistic by sampling repeatedly from the population.
+	- We don't have access to the population, so we just use the best information we have: the sample.
+	- Do this lots of times
+	
+</div>
+
+<div class="right rt">
+```{r cache = TRUE}
+n = 10000
+# one column for tropical medians, one for subtropical
+# initially fill with NA values, but warn R that the matrix will take numbers
+bs_medians = matrix(as.numeric(NA), ncol = 2, nrow=n)
+colnames(bs_medians) = c("subtropical", "tropical")
+
+# split the data frame, for clarity
+fish_st = subset(fish, type == "subtropical")
+fish_t = subset(fish, type == "tropical")
+
+for(i in 1:n) {
+	bs_medians[i, 1] = median(sample(fish_st$richness, 
+			nrow(fish_st), replace = TRUE))
+	bs_medians[i, 2] = median(sample(fish_t$richness, 
+			nrow(fish_t), replace = TRUE))
+}
+```
+
+
+```{r echo = FALSE}
+library(reshape2)
+bs_med_df = melt(bs_medians)[,2:3]
+colnames(bs_med_df) = c("type", "richness")
+(pl_bs = ggplot(bs_med_df, aes(x = richness, fill = type)) + 
+		geom_histogram(binwidth = 20, alpha = 0.8) + 
+	theme_minimal() + geom_vline(data = fish_meds, aes(xintercept = richness)))
+```
+</div>
+
+
+
+
+## Nonparametric bootstrap
+<div class="left lt">
+
+* My permutation test lets me conclude that the medians of the two reef types are not the same. But what if I instead want a confidence interval for the medians?
+* A **nonparametric bootstrap** lets you estimate a confidence interval for (nearly) any statistic.
+	- Basic idea: our sample is the best information we have about the population. 
+	- The population probably resembles the sample, just much larger
+	- We can understand the distribution of our statistic by sampling repeatedly from the population.
+	- We don't have access to the population, so we just use the best information we have: the sample.
+	- Do this lots of times
+	- Get empirical quantiles for the confidence intervals
+	
+</div>
+
+<div class="right rt">
+```{r}
+	(cis = apply(bs_medians, 2, quantile, c(0.025, 0.975)))
+```
+
+
+```{r echo = FALSE}
+pl_bs + geom_vline(xintercept = cis, linetype = 2)
+```
+</div>
+
+
+
+## Special case: linear models
+
+* We have mentioned that the linear model assumes a normal distribution of the residuals.
+* Non-parametric linear models are quite weak.
+* Transformations of the y-variable change hypotheses and can introduce bias.
+* Can we assume other distributions?
+* Can we change the linear assumption?
+
+## Generalised linear models
+
+* What about the case of count data?
+* Count data often result from a **Poisson process** and follow a Poisson distribution
+* Poisson processes are **exponential** with a rate of occurrence $\lambda$
+* **Examples**
+	- Clicks of a Geiger counter
+	- Animals born when birth rate (within subgroups) is constant
+	- Number of individuals/species in a study plot
+
+$$
+\begin{aligned}
+\lambda & = e^{\beta_0 + \beta_1x_1 \ldots \beta_k x_k} \\
+ & = e^{\mathbf{B}\mathbf{X}} \\
+y & \sim \mathcal{P}(\lambda)
+\end{aligned}
+$$
+
+
+## Example: Poisson
+
+<div class="left lt">
+
+**Hypothesis**: The rate of technological development $\lambda_{\mathrm{tools}}$ among indigenous populations increases with log-population size and with the degree of contact with other civilisations. 
+
+
+```{r, echo = FALSE}
+tools = data.frame(
+  culture = c("Malekula", "Tikopia", "Santa Cruz", "Yap", "Lau Fiji", 
+              'Trobriand', 'Chuuk', 'Manus', 'Tonga', 'Hawaii'), 
+  tool_types = c(13,22,24,43,33,19,40,28,55,71),
+  population = c(1100, 1500, 3600, 4791, 7400, 8000, 9200, 13000, 17500, 275000),
+  contact = factor(c("lo", "lo", "lo", "hi", "hi", "hi", "hi", "lo", "hi", "lo")),
+  age_ky = c(0.5, 0.7, 3.3, 1, 3.5, 3.3, 2.2, 3, 2.9, 1.1)  ## wild guesses from instructor :-)
+)
+scale = scale_x_continuous(trans='log', 
+						   labels = c("1000", "10000", "100000"), minor_breaks = 
+					   	c(seq(1e3, 1e4, length.out=10), seq(1e4, 1e5, length.out=10),
+					   	  seq(1e5, 1e6, length.out = 10)),
+					   breaks = c(1000, 10000, 100000))
+
+pl_tools = ggplot(tools, aes(x=population, y=tool_types, col = contact)) + 
+	geom_point(size=5) + theme_minimal() + scale + ylim(c(10,75)) + 
+	ylab("Number of tool types") + xlab("Population Size") 
+
+```
+
+```{r fig.show='hide'}
+head(tools)
+pl_tools
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE, fig.height=8, figh.width=8}
+pl_tools
+```
+</div>
+
+
+## Example: Poisson
+
+<div class="left lt">
+
+**Hypothesis**: The rate of technological development $\lambda_{\mathrm{tools}}$ among indigenous populations increases with log-population size and with the degree of contact with other civilisations. 
+
+* We can fit an ANCOVA with a Poisson assumption instead of a normal assumption
+
+```{r fig.show='hide'}
+tool_model = glm(tool_types ~ contact + population, 
+				 data = tools, family = poisson)
+anova(tool_model, test = "Chisq")
+
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE, fig.height=8, figh.width=8}
+cidat = data.frame(
+	population = rep(seq(min(tools$population), 
+					 max(tools$population), length.out = 1000), 2),
+	contact = rep(c('lo', 'hi'), each = 1000))
+preds = data.frame(predict(tool_model, newdata = cidat, se.fit = TRUE))
+preds$lower = exp(preds$fit - preds$se.fit * 1.96)
+preds$upper = exp(preds$fit + preds$se.fit * 1.96)
+preds$expect = exp(preds$fit)
+cidat = cbind(cidat, preds)
+ymax = 75
+cidat = cidat[cidat$upper < ymax,]
+
+
+ggplot() +  ylim(c(10,ymax)) + 
+	geom_ribbon(data = cidat, aes(x = population, ymin = lower, 
+				ymax = upper, fill = contact), alpha = 0.3) + 
+	geom_line(data = cidat, aes(x = population, y = expect, color = contact)) + 
+	geom_point(data = tools, aes(x=population, y=tool_types, col = contact), 
+			   size=5) + theme_minimal() + scale + 
+	ylab("Number of tool types") + xlab("Population Size") 
+
+```
+</div>
+
+
+## Why not just transform y?
+
+```{r echo = FALSE}
+set.seed(123)
+x1 = rnorm(100)
+pr = plogis(0.7 - 0.9 * x1)
+xx = seq(-4, 4, length.out=100)
+yy = plogis(0.7 - 0.9*xx)
+
+dat = data.frame(x = x1, y = rbeta(plogis(x1), 50*pr, 50*(1-pr)))
+plot(y~x, data=dat, xlab = "Standardized winter snow cover", 
+     ylab = "Proportion plant cover", pch=16, bty='n', xlim=c(-4, 4), ylim=c(-0.2, 1.4), yaxp=c(-0.2, 1.4, 8))
+mod = lm(y ~ x, data = dat)
+abline(mod)
+xn = c(-3.5, 3.9)
+yn = predict(mod, newdata=data.frame(x=xn))
+points(xn, yn, pch=16, col=cols[1])
+abline(h = yn, lty=2)
+lines(xx, yy, col=cols[1], lty=1, lwd=1.5)
+legend("right", legend=c("True relationship", "LM"), col=c(cols[1], "black"), 
+	   lty=1, bty='n', cex=0.8)
+y = dat$y
+
+```
+
+
+## Why not just transform y?
+
+```{r}
+	c(true_mean = mean(y),
+	  trans_y = exp(mean(log(y))),
+	  glm = exp(log(mean(y))))
+```
+
+
+```{r echo = FALSE}
+plot(y~x, data=dat, xlab = "Standardized winter snow cover", 
+     ylab = "Proportion plant cover", pch=16, bty='n', xlim=c(-4, 4), ylim=c(-0.2, 1.4), yaxp=c(-0.2, 1.4, 8))
+abline(mod)
+xn = c(-3.5, 3.9)
+yn = predict(mod, newdata=data.frame(x=xn))
+points(xn, yn, pch=16, col=cols[1])
+abline(h = yn, lty=2)
+lines(xx, yy, col=cols[1], lty=1, lwd=1.5)
+
+mod2 = lm(y ~ plogis(x), data = dat)
+yy2 = plogis(coef(mod2)[1] + coef(mod2)[2]*xx)
+lines(xx, yy2, col=cols[2], lty=1, lwd=2.5)
+
+legend("right", legend=c("True relationship", "LM", "LM: transform y"), 
+	   col=c(cols[1], "black", cols[2]), 
+	   lty=1, bty='n', cex=0.8)
+```
+
+
+## Last example
+
+* Hypothesis tests give us false confidence about $H_A$!
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+I take the test, p < 0.05, and so I begin treating my condition.
+
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+I take the test, p < 0.05, and so I begin treating my condition.
+
+**Problem**: The probability that I have the disease is only 0.0002!
+
+If we test 100,000 people with unknown status, 5% (5000) will test positive, but only one will have the condition. We made the wrong decision in 4999/5000 of these cases!
+
+
+## Last example
+
+One in 100,000 people have a condition, sigmocogititis, that causes you to think too much about statistics.
+
+* $H_0$: I do not have the disease
+* $H_A$: I have it!
+
+We have a test with a type 1 error rate ($\alpha$) = 0.05, and a type 2 error rate ($\beta$) of 0.
+
+I take the test, p < 0.05, and so I begin treating my condition.
+
+**Problem**: The probability that I have the disease is only 0.0002!
+
+If we test 100,000 people with unknown status, 5% (5000) will test positive, but only one will have the condition. We made the wrong decision in 4999/5000 of these cases!
+
+* In statistics, often called the **base rate fallacy**
+* In science, we call this **the replication crisis**
+* Considering only $\alpha$ and $H_0$ means we neglect to consider the plausibility of $H_A$
