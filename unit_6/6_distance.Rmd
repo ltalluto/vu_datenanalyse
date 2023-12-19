@@ -1,7 +1,7 @@
 ---
 title: "Introducing ordination: distance-based methods"
 author: "Gabriel Singer"
-date: "17.02.2023"
+date: "19.12.2023/31.01.2024"
 output:
   slidy_presentation:
     theme: cerulean
