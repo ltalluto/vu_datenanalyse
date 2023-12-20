@@ -391,10 +391,8 @@ names(lipids)</code></pre>
 <li>To warm up test for location differences in the variables SA_branprop and FA1_SAnb for warm isolates only, i.e. search for a possible acclimation reaction between incubation temperatures.</li>
 </ol>
 <pre class="r"><code>lipids$temperature = factor(lipids$temperature)
-subset()</code></pre>
-<pre><code>## Error in subset.default(): argument &quot;subset&quot; is missing, with no default</code></pre>
-<pre class="r"><code>t.test()</code></pre>
-<pre><code>## Error in t.test.default(): argument &quot;x&quot; is missing, with no default</code></pre>
+subset()
+t.test()</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Assume you have forgotten how P-values for a two-sample location test are computed. Instead of relying on a fancy test statistic and a parameterized distribution giving you P-values for it, you can also test a null hypothesis by permutation of the data at hand. The assumption is simple: If the null hypothesis of identical means is correct, then assignment of the data to the samples is exchangeable. Any random assignment to the two groups is as good as the one observed. The question is how “extreme” is the one observed? You can assess this probability (i.e. compare it to alpha!) by designing an appropriate test statistic that somehow expresses the difference between the two groups (the <em>effect size</em> in fact).</li>
 </ol>
@@ -423,40 +421,30 @@ hist(TS_p)
 # assess how likely your &quot;empirical&quot; TS is given this null distribution
 # the &quot;empirical&quot; one is the TS computed for the unpermuted data!
 abline(v = TS_emp, col='red', lwd=2)</code></pre>
-<pre><code>## Error: &lt;text&gt;:13:1: unexpected '}'
-## 12:         TS_p[i] = # computing your TS
-## 13: }
-##     ^</code></pre>
 <p>Such permutation-based significance tests are a standard strategy in multivariate tests. Permutation is not always as simple as here (<em>complete</em>) and can be restrained to adequately test more complex designs with multiple factors and dependencies (random factors).</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Compute dissimilarities with regard to fatty acid composition between isolates and temperature treatments using an adequate dissimilarity/distance measure. Explore dissimilarity among isolates and temperature treatments using a dendrogram. You will not only have to make a choice about transformation and the dissimilarity metric, but also decide about which linkage algorithm to use.</li>
 </ol>
 <pre class="r"><code>library(vegan)
-subset() # choose only FA columns</code></pre>
-<pre><code>## Error in subset.default(): argument &quot;subset&quot; is missing, with no default</code></pre>
-<pre class="r"><code>dmat = vegdist(data, method = &quot;bray&quot;) # compute a dissimilarity matrix</code></pre>
-<pre><code>## Error in as.vector(x, mode): cannot coerce type 'closure' to vector of type 'any'</code></pre>
-<pre class="r"><code>clu_1&lt;-hclust(dmat, method = &quot;single&quot;) # one of many possible solutions, play with setting for method, check help(hclust)</code></pre>
-<pre><code>## Error in hclust(dmat, method = &quot;single&quot;): object 'dmat' not found</code></pre>
-<pre class="r"><code>plot(clu_1)</code></pre>
-<pre><code>## Error in plot(clu_1): object 'clu_1' not found</code></pre>
-<pre class="r"><code>cophenetic(clu_2) # linkage distances in dendrogram</code></pre>
-<pre><code>## Error in cophenetic(clu_2): object 'clu_2' not found</code></pre>
-<pre class="r"><code>cor(dmat, cophenetic(clu_1), method = &quot;spearman&quot;)</code></pre>
-<pre><code>## Error in cophenetic(clu_1): object 'clu_1' not found</code></pre>
-<pre class="r"><code>plot(dmat, cophenetic(clu_1))</code></pre>
-<pre><code>## Error in plot(dmat, cophenetic(clu_1)): object 'dmat' not found</code></pre>
+subset() # choose only FA columns
+dmat = vegdist(data, method = &quot;bray&quot;) # compute a dissimilarity matrix
+
+clu_1&lt;-hclust(dmat, method = &quot;single&quot;) # one of many possible solutions, play with setting for method, check help(hclust)
+
+plot(clu_1)
+
+cophenetic(clu_2) # linkage distances in dendrogram
+cor(dmat, cophenetic(clu_1), method = &quot;spearman&quot;)
+plot(dmat, cophenetic(clu_1))</code></pre>
 <p>Choose a final dendrogram. Which problems have you encountered?</p>
 <ol start="4" style="list-style-type: decimal">
 <li>The subjectivity of clustering can be overcome by simply asking for the “best” reproduction of given dissimilarities in a low (usually 2) dimensional space. Metric scaling (aka PCoA) tries to reproduce the actual dissimilarities as distances. Use it on an (inadequate) Euclidean distance matrix. How many axes do you expect in order to properly show treatment-induced variation? How many do you finally need acccording to your analysis? And which fatty acids <em>define</em> these axes?</li>
 </ol>
-<pre class="r"><code>pcoa = cmdscale(dmat, k = 2, eig=TRUE) # always computes all axes, but will only report scores of k=2</code></pre>
-<pre><code>## Error in cmdscale(dmat, k = 2, eig = TRUE): object 'dmat' not found</code></pre>
-<pre class="r"><code>pcoa$eig # to assess importance of axes</code></pre>
-<pre><code>## Error in eval(expr, envir, enclos): object 'pcoa' not found</code></pre>
-<pre class="r"><code>plot(pcoa$points) # score plot</code></pre>
-<pre><code>## Error in plot(pcoa$points): object 'pcoa' not found</code></pre>
-<pre class="r"><code># but use isolate and temperature information to color and set point characters
+<pre class="r"><code>pcoa = cmdscale(dmat, k = 2, eig=TRUE) # always computes all axes, but will only report scores of k=2
+pcoa$eig # to assess importance of axes
+
+plot(pcoa$points) # score plot
+# but use isolate and temperature information to color and set point characters
 
 pch.temperature &lt;- as.integer(as.character(lipids$temperature))
 pch.temperature[pch.temperature==6]&lt;-21
@@ -465,62 +453,44 @@ pch.temperature[pch.temperature==28]&lt;-23
 library(RColorBrewer)
 cols = brewer.pal(8, &quot;Set2&quot;)
 col.isolate = lipids$isolate
-col.isolate[col.isolate == &quot;warm&quot;] = cols[1]</code></pre>
-<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, col.isolate == &quot;warm&quot;, value = &quot;#66C2A5&quot;):
-## invalid factor level, NA generated</code></pre>
-<pre class="r"><code>col.isolate[col.isolate == &quot;cold&quot;] = cols[2]</code></pre>
-<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, col.isolate == &quot;cold&quot;, value = &quot;#FC8D62&quot;):
-## invalid factor level, NA generated</code></pre>
-<pre class="r"><code># to show variables
-plot(envfit())</code></pre>
-<pre><code>## Error in weights(ord, display): argument &quot;ord&quot; is missing, with no default</code></pre>
-<pre class="r"><code>ordisurf() # as contourplot</code></pre>
-<pre><code>## Error in weights(x, display): argument &quot;x&quot; is missing, with no default</code></pre>
+col.isolate[col.isolate == &quot;warm&quot;] = cols[1]
+col.isolate[col.isolate == &quot;cold&quot;] = cols[2]
+
+# to show variables
+plot(envfit())
+ordisurf() # as contourplot</code></pre>
 <p><strong>Bonus</strong>: Compare PCoA results with results of a PCA on the raw data.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>For non-metric dissimilarities an often more appropriate ordination is created by searching for a low-dimensional configuration whose distances reproduce the rank order of observed dissimilarities. Use such a non-metric multidimensional scaling on a more appropriate Bray-Curtis dissimilarity matrix. How many dimensions do you need for an adequate representation of the data? Produce a nice graph demonstrating differences between isolates and temperatures. Which fatty acids drive the differences (or: are typical for specific treatments)?</li>
 </ol>
-<pre class="r"><code>mds_lipids = metaMDS(comm = , distance = &quot;bray&quot;, k = 2, trymax = 100) # to run a NMDS, $points to get scores, $stress to get information about fit</code></pre>
-<pre><code>## Error in metaMDS(comm = , distance = &quot;bray&quot;, k = 2, trymax = 100): argument &quot;comm&quot; is missing, with no default</code></pre>
-<pre class="r"><code>mds_lipids$stress</code></pre>
-<pre><code>## Error in eval(expr, envir, enclos): object 'mds_lipids' not found</code></pre>
-<pre class="r"><code>## % of dissimilarities unrepresented
+<pre class="r"><code>mds_lipids = metaMDS(comm = , distance = &quot;bray&quot;, k = 2, trymax = 100) # to run a NMDS, $points to get scores, $stress to get information about fit
+mds_lipids$stress
+## % of dissimilarities unrepresented
 
-stressplot() # to compare configuration distances with dissimilarities</code></pre>
-<pre><code>## Error in inherits(object, &quot;metaMDS&quot;): argument &quot;object&quot; is missing, with no default</code></pre>
-<pre class="r"><code>goodness() # sample-specific goodness of fit</code></pre>
-<pre><code>## Error in UseMethod(&quot;goodness&quot;): no applicable method for 'goodness' applied to an object of class &quot;NULL&quot;</code></pre>
-<pre class="r"><code>plot(mds_lipids$points,asp=1)</code></pre>
-<pre><code>## Error in plot(mds_lipids$points, asp = 1): object 'mds_lipids' not found</code></pre>
-<pre class="r"><code># will need better colors and pch settings again
+stressplot() # to compare configuration distances with dissimilarities
+goodness() # sample-specific goodness of fit
+
+plot(mds_lipids$points,asp=1)
+# will need better colors and pch settings again
 
 # to define space using the variables
-wascores(configuration,data) # variables as weighted averages of site (=sample) scores</code></pre>
-<pre><code>## Error in w &lt; 0: comparison (3) is possible only for atomic and list types</code></pre>
-<pre class="r"><code>ordisurf() # as contourplot</code></pre>
-<pre><code>## Error in weights(x, display): argument &quot;x&quot; is missing, with no default</code></pre>
-<pre class="r"><code>envfit() # take care: behaviour of variables not necessarily monotonous in ordination space</code></pre>
-<pre><code>## Error in weights(ord, display): argument &quot;ord&quot; is missing, with no default</code></pre>
-<pre class="r"><code># some more useful graphical tools
-ordispider() # you will want 1 factor with 4 levels here</code></pre>
-<pre><code>## Error in inherits(ord, &quot;cca&quot;): argument &quot;ord&quot; is missing, with no default</code></pre>
-<pre class="r"><code>ordihull()</code></pre>
-<pre><code>## Error in scores(ord, display = display, ...): argument &quot;ord&quot; is missing, with no default</code></pre>
-<pre class="r"><code>ordiellipse()</code></pre>
-<pre><code>## Error in scores(ord, display = display, ...): argument &quot;ord&quot; is missing, with no default</code></pre>
-<pre class="r"><code>ordicluster()</code></pre>
-<pre><code>## Error in weights(ord, display): argument &quot;ord&quot; is missing, with no default</code></pre>
+wascores(configuration,data) # variables as weighted averages of site (=sample) scores
+ordisurf() # as contourplot
+envfit() # take care: behaviour of variables not necessarily monotonous in ordination space
+
+# some more useful graphical tools
+ordispider() # you will want 1 factor with 4 levels here
+ordihull()
+ordiellipse()
+ordicluster()</code></pre>
 <ol start="6" style="list-style-type: decimal">
 <li>The results clearly suggest differences in fatty acid composition due to isolate and temperature. Specify hypotheses for these two main effects and a potential interaction. Test using PERMANOVA. Just like in ANOVA, where variance homogeneity is of interest, here we should check multivariate variance (<em>cloud shape</em>) known as <em>dispersion</em>.</li>
 </ol>
 <div id="section" class="section level46">
 <p></p>
-<pre class="r"><code>bd&lt;-betadisper() # to test dispersion, works only with one factor</code></pre>
-<pre><code>## Error in inherits(d, &quot;dist&quot;): argument &quot;d&quot; is missing, with no default</code></pre>
-<pre class="r"><code>anova(bd) # test for dispersion differences</code></pre>
-<pre><code>## Error in anova(bd): object 'bd' not found</code></pre>
-<pre class="r"><code>adonis() # PERMANOVA, just use like aov() or lm()</code></pre>
-<pre><code>## Error in terms(formula, data = data): argument &quot;formula&quot; is missing, with no default</code></pre>
+<pre class="r"><code>bd&lt;-betadisper() # to test dispersion, works only with one factor
+anova(bd) # test for dispersion differences
+adonis() # PERMANOVA, just use like aov() or lm()</code></pre>
 </div>
 </div>
 

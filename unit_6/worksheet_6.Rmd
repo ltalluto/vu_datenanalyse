@@ -29,7 +29,7 @@ abbreviations: MU = mono-unsaturated, SA = saturated, nb = non-branched, b = bra
 
 1. To warm up test for location differences in the variables SA_branprop and FA1_SAnb for warm isolates only, i.e. search for a possible acclimation reaction between incubation temperatures.
 
-```{r}
+```{r eval=FALSE}
 lipids$temperature = factor(lipids$temperature)
 subset()
 t.test()
@@ -45,7 +45,7 @@ Make your own permutation test by:
 * Assessing how extreme your observed outcome is relative to the permutation results.
 
 
-```{r}
+```{r eval=FALSE}
 lipids_warm = lipids[lipids$isolate == 'warm',]
 # several "homemade" TSs possible: difference of rank sums between samples, difference of sample means, difference of sample means weighted by variance, just the formula of the t-statistic anyway. 
 # ranks(x) # to get ranks of a vector if such a transformation is desired
@@ -71,7 +71,7 @@ Such permutation-based significance tests are a standard strategy in multivariat
 
 3. Compute dissimilarities with regard to fatty acid composition between isolates and temperature treatments using an adequate dissimilarity/distance measure. Explore dissimilarity among isolates and temperature treatments using a dendrogram. You will not only have to make a choice about transformation and the dissimilarity metric, but also decide about which linkage algorithm to use.
 
-```{r}
+```{r  eval=FALSE}
 library(vegan)
 subset() # choose only FA columns
 dmat = vegdist(data, method = "bray") # compute a dissimilarity matrix
@@ -90,7 +90,7 @@ Choose a final dendrogram. Which problems have you encountered?
 
 4. The subjectivity of clustering can be overcome by simply asking for the "best" reproduction of given dissimilarities in a low (usually 2) dimensional space. Metric scaling (aka PCoA) tries to reproduce the actual dissimilarities as distances. Use it on an (inadequate) Euclidean distance matrix. How many axes do you expect in order to properly show treatment-induced variation? How many do you finally need acccording to your analysis? And which fatty acids *define* these axes?
 
-```{r}
+```{r eval=FALSE}
 pcoa = cmdscale(dmat, k = 2, eig=TRUE) # always computes all axes, but will only report scores of k=2
 pcoa$eig # to assess importance of axes
 
@@ -117,7 +117,7 @@ ordisurf() # as contourplot
 
 5. For non-metric dissimilarities an often more appropriate ordination is created by searching for a low-dimensional configuration whose distances reproduce the rank order of observed dissimilarities. Use such a non-metric multidimensional scaling on a more appropriate Bray-Curtis dissimilarity matrix. How many dimensions do you need for an adequate representation of the data? Produce a nice graph demonstrating differences between isolates and temperatures. Which fatty acids drive the differences (or: are typical for specific treatments)?
 
-```{r}
+```{r eval=FALSE}
 mds_lipids = metaMDS(comm = , distance = "bray", k = 2, trymax = 100) # to run a NMDS, $points to get scores, $stress to get information about fit
 mds_lipids$stress
 ## % of dissimilarities unrepresented
@@ -144,7 +144,7 @@ ordicluster()
 
 ##############################################
 
-```{r}
+```{r eval=FALSE}
 bd<-betadisper() # to test dispersion, works only with one factor
 anova(bd) # test for dispersion differences
 adonis() # PERMANOVA, just use like aov() or lm()

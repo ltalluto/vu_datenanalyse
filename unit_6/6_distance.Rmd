@@ -27,7 +27,17 @@ library(vegan)
 ## Methods based on distance/dissimilarity/similarity
 
 ![](img/distance.png){width=90%}
+The most known dissimilarity is a (physical) distance: Euclidean distance, in a 2D-coordinate system it is just computed based on Pythagoras:
 
+$$
+d_{Euc}=\sqrt{\Delta{x_1}^2+\Delta{x_2}^2}
+$$
+
+Euclidean distance computed between any two sites for $p$ variables:
+
+$$
+d_{Euc}=\sqrt{\Delta{x_1}^2+\Delta{x_2}^2+...+\Delta{x_p}^2}
+$$
 
 ## Why use dissimilarity-based methods?
 
@@ -35,7 +45,6 @@ library(vegan)
 
 * Quantify how similar or how dissimilar various observations are with regard to many variables simultaneously.
 * An efficient way to collapse information from a much too high-dimensional dataset.
-* An explicit way to express (and analyze) community turnover in space and time (beta-diversity).
 * Use various variable types from continuous to presence-absence and qualitative, even simultaneously.
 * Choice of appropriate dissimilarity coefficient may allow avoiding *strange* transformations.
 * Better handling of double-zeros, less horseshoe patterns in ordinations in situations of strong community turnover.
@@ -44,6 +53,8 @@ library(vegan)
 </div>
 
 <div class="right rt">
+
+* An explicit way to express (and analyze) community turnover in space and time (beta-diversity).
 
 Whenever compositional turnover at regional scale is of interest!
 
@@ -76,16 +87,11 @@ which includes a notable normalization of differences between two sites with reg
 
 * symmetrical: consider a double zero as contributing to resemblance just like any other value
 * asymmetrical: skip double zeros, considering that these are not informative (absence of a species at two sites does not tell anything about how similar these sites are!)
-
-<br/>
-
 * metric: minimum 0, positive for inequality, symmetric ($D_{(a,b)}=D_{(b,a)}$), triangle inequality holds
 
 $$
 D_{(a,b)}+D_{(b,c)}\geq{D_{(a,c)}}
 $$
-(think of a triangle: the distance from A to C via B must be larger than the direct distance from A to C)
-
 * semimetric: do not follow the triangle inequality
 
 $$
@@ -96,6 +102,10 @@ $$
 </div>
 
 <div class="right rt">
+
+<br/>
+
+Triangle inequality: Distance via an intermediate point must be higher than or equal to distance without such an intermediate point. E.g. consider B as intermediate between A and C as in a triangle: the distance from A to C via B must be larger than the direct distance from A to C.
 
 ![](img/triangle.png)
 
@@ -161,7 +171,7 @@ lipids_cluster$height<-sqrt(lipids_cluster$height) # may help
 plot(lipids_cluster, hang = -1, labels = combifac, ylab = "BC")
 
 # which agglomeration method (and thus dendrogram) is best?
-cophenetic(lipids_cluster) # linkage distances in dendrogram
+#cophenetic(lipids_cluster) # linkage distances in dendrogram
 plot(lipids_distBC,cophenetic(lipids_cluster))
 cor(lipids_distBC,cophenetic(lipids_cluster),method="spearman")
 
