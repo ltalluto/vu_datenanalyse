@@ -31,14 +31,10 @@ Following the course, students should be able to:
 * Interpret (with the help of visualisation) multivariate analyses in terms of the original variables.
 
 ### Assessment
-Students will be graded based on their participation during the exercise sessions (40%) and on completion of three protocols (one per unit, 20% each, total of 60%). Detailed assignments will be provided the first day of class. Note that attendence is mandatory.
+Students will be graded based on their participation during the exercise sessions (40%) and on completion of three protocols (one per unit, 20% each, total of 60%). These protocols can  be completed individually or in small groups (max. 3 students per group) and will be due on **14 February 2025**. Details about the assignments and expectations will be provided on the first day of class.
 
-### Meeting locations
-<p class="rr18">Rechneraum 18, Architekturgebäude UG (RR18)</p>
-<p class="rr19">Rechneraum 19, Architekturgebäude UG (RR19)</p>
-<p class="rr20">Rechneraum 20, Architekturgebäude UG (RR20)</p>
-<p class="rr21">Rechneraum 21, Architekturgebäude UG (RR21)</p>
-<p class="srb">Seminarraum Biologie, EG, Technikerstr. 25 (SRB)</p><br/>
+Note that attendence is mandatory.
+
 
 ### Course Outline
 
