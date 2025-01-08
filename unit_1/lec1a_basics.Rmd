@@ -1,7 +1,7 @@
 ---
 title: "The Basics"
-author: "M. Talluto"
-date: "13.12.2023"
+author: "Lauren Talluto"
+date: "13.01.2025"
 output:
   slidy_presentation:
     theme: cerulean

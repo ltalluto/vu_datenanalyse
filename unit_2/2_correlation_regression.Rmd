@@ -1,7 +1,7 @@
 ---
 title: "Correlation and Regression"
-author: "Matthew Talluto"
-date: "14.12.2023"
+author: "Lauren Talluto"
+date: "15.01.2024"
 output:
   slidy_presentation:
     theme: cerulean
