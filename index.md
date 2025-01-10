@@ -58,13 +58,13 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 16.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1a_basics.html">The Basics</a></p>
+			<p><a href="unit_1/lec_1_i_basics.html">The Basics</a></p>
 			<p class="sm">Introduction to R</p>
 			<p class="sm">Populations, samples</p>
 			<p class="sm">Descriptive statistics</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_1_1.html">Exercises 1.1</a></p>
+			<p><a href="unit_1/worksheet_1_i.html">Exercises 1.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
@@ -78,13 +78,13 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 17.01 12:00–15:15, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1b_univariate.html">Univariate statistics</a></p>
+			<p><a href="unit_1/lec_1_ii_univariate.html">Univariate statistics</a></p>
 			<p class="sm">Confidence intervals</p>
 			<p class="sm">Significance tests</p>
 			<p class="sm">Type I and II errors</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_1_2.html">Exercises 1.2</a></p>
+			<p><a href="unit_1/worksheet_1_ii.html">Exercises 1.2</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -94,13 +94,13 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 20.01 13:45–18:30, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1c_basics2.html">The Basics part II</a></p>
+			<p><a href="unit_1/lec_1_iii_basics2.html">The Basics part II</a></p>
 			<p class="sm">Data structures</p>
 			<p class="sm">Visualisation</p>
 			<p class="sm">Association and Correlation</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_1_3.html">Exercises 1.3</a></p>
+			<p><a href="unit_1/worksheet_1_iii.html">Exercises 1.3</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -114,11 +114,11 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 23.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1a_basics.html">Linear Models I</a></p>
+			<p><a href="unit_2/lec_2_i_regression.html">Linear Models I</a></p>
 			<p class="sm">Linear regression</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_2_1.html">Exercises 2.1</a></p>
+			<p><a href="unit_2/worksheet_2_i.html">Exercises 2.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
@@ -132,12 +132,12 @@ Note that attendence is mandatory.
 			<p class="sm rr19">G1: 24.01 14:30–18:45, RR19</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1b_univariate.html">Linear Models II</a></p>
+			<p><a href="unit_2/lec_2_ii_mlr.html">Linear Models II</a></p>
 			<p class="sm">Multiple linear regression</p>
 			<p class="sm">Model selection</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_2_2.html">Exercises 2.2</a></p>
+			<p><a href="unit_2/worksheet_2_2.html">Exercises 2.2</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -147,13 +147,13 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 27.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1a_basics.html">Analysis of Variance</a></p>
+			<p><a href="unit_2/lec_2_iii_anova.html">Analysis of Variance</a></p>
 			<p class="sm">ANOVA</p>
 			<p class="sm">ANCOVA</p>
 			<p class="sm">Nonparametric location tests</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_2_3.html">Exercises 2.3</a></p>
+			<p><a href="unit_2/worksheet_2_iii.html">Exercises 2.3</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -163,16 +163,16 @@ Note that attendence is mandatory.
 		</td>
 		<td>
 			Day 7
-			<p class="sm rr18">G0: 27.01 12:00–16:15, RR18</p>
+			<p class="sm srb">G0: 27.01 9:00–13:15, SRB</p>
 			<p class="sm rr21">G1: 29.01 13:00–17:15, RR21</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1a_basics.html">Multivariate Stats I</a></p>
+			<p><a href="unit_3/lec_3_i_pca.html">Multivariate Stats I</a></p>
 			<p class="sm">Principle components analysis (PCA)</p>
 			<p class="sm">Redundancy analysis (RDA)</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_3_1.html">Exercises 3.1</a></p>
+			<p><a href="unit_3/worksheet_3_1.html">Exercises 3.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
@@ -186,12 +186,12 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 30.01 8:00–11:45, RR18</p>
 		</td>		
 		<td>
-			<p><a href="unit_1/lec1a_basics.html">Multivariate Stats II</a></p>
+			<p><a href="unit_3/lec_3_ii_rda.html">Multivariate Stats II</a></p>
 			<p class="sm">RDA continued</p>
 			<p class="sm">Permutation tests</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_3_2.html">Exercises 3.2</a></p>
+			<p><a href="unit_3/worksheet_3_2.html">Exercises 3.2</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -201,11 +201,11 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 31.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec1a_basics.html">Multivariate Stats III</a></p>
+			<p><a href="unit_3/lec_3_iii_nmds.html">Multivariate Stats III</a></p>
 			<p class="sm">Nonmetric multidimensional scaling (NMDS)</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_3_3.html">Exercises 3.3</a></p>
+			<p><a href="unit_3/worksheet_3_iii.html">Exercises 3.3</a></p>
 		</td>
 	</tr>
 	<tr>
