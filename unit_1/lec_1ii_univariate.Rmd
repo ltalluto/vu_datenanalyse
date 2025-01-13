@@ -7,6 +7,8 @@ output:
     theme: cerulean
     toc_depth: 2
     css: ../assets/rmd_style.css
+    mathjax: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
 ---
 
 
@@ -176,8 +178,7 @@ $$
 
 If we know $\mu$ and $\sigma$, we can define an interval around $\mu$ such that:
 
-* For a sample of size $n$
-* There is a fixed probability $\alpha$ of finding the *sample mean*
+* For a sample of size $n$, we know the sample mean $\bar(x)$ will occur within an interval with some probability (called **confidence**), 
 
 </div>
 
@@ -192,7 +193,7 @@ abline(v = qnorm(c(0.025, 0.975), 0, sd = 1/sqrt(6)), col = 'red', lwd = 2)
 text(-0.3, 0.5, expression(symbol(sigma)/sqrt(6)),col="red")
 text(-1.5, 0.65, expression(symbol(sigma)/sqrt(3)),col="orange")
 text(-2.4, 0.8, expression(symbol(sigma)/sqrt(1)))
-text(-3.4, 1, expression(symbol(alpha)==0.95), cex=1.3)
+text(-3.4, 1, expression(pr==0.95), cex=1.3)
 ```
 
 
@@ -206,7 +207,7 @@ text(-3.4, 1, expression(symbol(alpha)==0.95), cex=1.3)
 
 * We can also reverse this logic!
 * For a sample mean $\bar{x}$, we can define an interval that includes $\mu$ with a certain **confidence**
-	- confidence = $1 - \alpha$
+
 
 
 $$
@@ -236,63 +237,14 @@ $$
 * This **confidence interval** is constructed symmetric around $\bar{x}$. 
 * With repeated sampling, 95% of similar intervals will contain $\mu$ (assuming $\alpha = 0.05$)
 
-* Cool! **One sample** is enough for a good **interval estimate** of $\mu$. But wait - how do I know $\sigma$?? 
+* Cool! **One sample** is enough for a good **interval estimate** of $\mu$. 
 
-
-
-
-
-
-
-
-
-
-
-## Putting the central limit theorem to work: Confidence intervals
-
-<div class="left lt">
-* We can also reverse this logic!
-
-Vice versa, we could compute an interval around any found sample mean, which includes $\mu$ with a certain probability. This probability - called confidence - should be close to 1. Its complement to 1 is here called $\alpha$.
-
-$$
-z = \frac{(\bar{x}-\mu)}{\frac{\sigma}{\sqrt{n}}}
-$$
-$$
-P(-z_\frac{\alpha}{2}\leq \frac{(\bar{x}-\mu)}{\frac{\sigma}{\sqrt{n}}}\leq+z_\frac{\alpha}{2})=1-\alpha
-$$
-$$
-P(\bar{x}-z_\frac{\alpha}{2}\frac{\sigma}{\sqrt{n}}\leq \mu \leq\bar{x}+z_\frac{\alpha}{2}\frac{\sigma}{\sqrt{n}})=1-\alpha
-$$
-$$
-CI: \bar{x}\pm z_\frac{\alpha}{2}\frac{\sigma}{\sqrt{n}}
-$$
-
-A confidence interval is constructed symmetrically around a sample mean $\bar{x}$. With a high probability (usually 95%) $\mu$ is included in intervals constructed around $\bar{x}$'s.
-
-</div>
-
-<div class="right rt">
-
-Graphically this is just a translation of the density distributions of the means from $\mu$ as center to $\bar{x}$ as center.
-```{r echo=FALSE}
-x<-seq(-3,3,by=0.01)
-plot(x,dnorm(x),col="black",bty="n",type="l",lwd=2,xlab="sample means of X",ylim=c(0,.5))
-lines(x,dnorm(x,mean=-.7),col="orange",lwd=2)
-lines(x,dnorm(x,mean=2.5),col="red",lwd=2)
-abline(v=c(0,-.7,2.5),lwd=2,col=c("black","orange","red"),lty=3)
-text(c(0,-.7,2.5),0.45,c(expression(symbol(mu)),expression(bar(x)),expression(bar(x))),col=c("black","orange","red"),pos=4)
-```
-
-Cool! **One sample** is enough for a good **interval estimate** of $\mu$. But wait - where from do I know $\sigma$?!? 
-
-</div>
-
+But wait - how do I know $\sigma$?? 
 
 ## The t-distribution
 <div class="left lt">
 
-If the S.E.M. is estimated using the *sample* standard deviation, then *standardized* sample means follow a Student´s t-distribution:
+If the standard error is estimated using the **sample** standard deviation, then **standardized** sample means follow a Student's t-distribution:
 
 $$
 \sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}} \approx \frac{s}{\sqrt{n}} = S.E.M.
@@ -301,17 +253,23 @@ $$
 {t} = \frac{(\bar{x}-\mu)}{\frac{s}{\sqrt{n}}}
 $$
 
-The t-distribution is wider, i.e. has fatter tails, when n is low, but converges to a normal with infinite n. Its shape is determined by d.f.=n-1. Functions in R are `qt`, `pt`,`dt` and `rt`.
+Relative to the normal distribution, the t distribution is:
+
+* Has fatter tails (i.e., is **leptokurtic**)
+* Has a shape defined by a **location** (usually 0) and **degrees of freedom** (usually $n-1$)
+* Converges to a normal as $n$ approaches $\infty$
+* Functions in R: `qt`, `pt`,`dt` and `rt`.
 
 </div>
 
 <div class="right rt">
 
-```{r echo=FALSE,fig.width=7}
-plot(seq(-5,5,length.out=100),dt(seq(-5,5,length.out=100),df=3),bty="n",ylim=c(0,.41),xlab="standardised sample means", ylab="density",type="l")
-lines(seq(-5,5,length.out=100),dt(seq(-5,5,length.out=100),df=20),lt=2)
-lines(seq(-5,5,length.out=100),dnorm(seq(-5,5,length.out=100)),lt=3)
-legend(-4,0.3,legend=c("t (d.f.=3)","t (d.f.=20)","normal"),lty=c(1,2,3),bty="n")
+```{r echo=FALSE,fig.width=5, fig.height = 5}
+x = seq(-5,5,length.out=100)
+plot(x ,dt(x, df=3), bty="n", ylim=c(0,.41), xlab="standardised sample means", ylab = "density", type="l", col = 'blue', lwd = 2)
+lines(x, dt(x, df=20), col = 'red', lwd = 2)
+lines(x,dnorm(x), lwd = 2)
+legend("topright",legend=c("t (d.f.=3)","t (d.f.=20)","normal"),col=c('blue','red','black'),bty="n", lwd = 2, cex = 1)
 ```
 
 Above 100 df, t is basically equivalent to a normal distribution.
@@ -341,13 +299,21 @@ Allows an **interval estimate** of $\mu$ with an estimate for $\sigma$ derived f
 
 <div class="right rt">
 
+```{r echo = FALSE}
+data = read.table("../vu_datenanalyse_students/unit_1/data/Glaciers.txt", header=TRUE)
+```
+
+```{r eval = FALSE}
+data = read.table("data/Glaciers.txt", header=TRUE)
+```
+
 ```{r}
 
-data = read.table("../datasets/Glaciers.txt", header=TRUE)
 # radiocarbon in dissolved organic carbon from glacier ice samples 
 d14C = data$delta14C.permil
 
-# Give mean and confidence interval with alpha=0.05 #
+# Give mean and confidence interval with confidence = 0.95
+
 (m = mean(d14C))
 (s = sd(d14C))
 (n = length(d14C))
@@ -355,6 +321,7 @@ alpha = 0.05
 accuracy = 1-alpha
 
 (t = qt(p = 1 - alpha/2, df = n-1)) # two-sided, P goes 50/50 to both tails
+
 (aprec = t*s/sqrt(n))
 aprec # absolute precision = half the CI width
 (rprec = aprec/m*100) # relative precision
@@ -437,7 +404,7 @@ We must solve this formula iteratively ($n$ is on both sides)
 ```{r}
 # Regard data as pilot study
 # Set accuracy and rprec as needed
-accuracy = .95 # <90-95 % is questionable
+accuracy = .95
 rprec = 0.10 # assume more (or less) precise estimate is needed
 
 alpha = 1-accuracy
@@ -446,7 +413,7 @@ n = 2   # left side of formula, low n as starting value
 t = qt(1 - alpha/2, n-1)  
 (rhs = (t * s/(rprec * m))^2)  # right side of formula
 
-# right side minus left side, you want this to be close to zero, 
+# right side minus left side
 # when diff falls below zero - then enough sampling effort 
 diff = rhs - n
 
@@ -455,7 +422,8 @@ while(diff >= 0) {
 	t = qt(1 - alpha/2, n - 1)
 	diff = ((t * s/(rprec * m))^2) - n
 }
-n # -> this is the needed sample size (minimum) to achieve the desired precision and accuracy
+# sample size needed to hit the required precision and accuracy
+n 
 ```
 </div>
 
@@ -506,7 +474,9 @@ uniroot(f, lower = 2, upper = 1000)
 ... at the heart of inferential statistics: learning about the population from sample(s).
 
 * **Statistical decision**: a decision about the population based on sample information.
-* **Statistical hypothesis**: an assumption about the population to reach a decision, formulated as a (paired) statement, often derived from a research question.
+	- I conclude that the mean of group 1 is larger than group 2
+* **Statistical hypothesis**: a statment about the population, usually informed by a research question
+	- I think the mean of group 1 might be larger than that of group 2
 
 
 
@@ -515,62 +485,34 @@ uniroot(f, lower = 2, upper = 1000)
 ... at the heart of inferential statistics: learning about the population from sample(s).
 
 * **Statistical decision**: a decision about the population based on sample information.
-* **Statistical hypothesis**: an assumption about the population to reach a decision, formulated as a (paired) statement, often derived from a research question.
+	- I conclude that the mean of group 1 is larger than group 2
+* **Statistical hypothesis**: a statment about the population, usually informed by a research question
+	- I think the mean of group 1 might be larger than that of group 2
 
 <br/>
 
 
-* **Null hypothesis**: the assumption that an eventually obtained result (from sampling) is **entirely due to chance** (*initial innocence*)
-* **Alternative hypothesis**: any hypothesis that differs from the null.
-
-## Statistical decision theory
-
-... at the heart of inferential statistics: learning about the population from sample(s).
-
-* **Statistical decision**: a decision about the population based on sample information.
-* **Statistical hypothesis**: an assumption about the population to reach a decision, formulated as a (paired) statement, often derived from a research question.
-
-<br/>
+* **Null hypothesis** ($H_0$): The default assumption, that any result is observed **entirely due to chance**
+	- The means of group 1 and 2 are not different, if $\bar{x}_1$ and $\bar{x}_2$ are different it is just due to random chance
+* **Alternative hypothesis** ($H_A$): any hypothesis that differs from the null.
+	- The group means are different
+	- Group 1 is larger than group 2
+	- Group 1 is smaller than group 2
 
 
-* **Null hypothesis**: the assumption that an eventually obtained result (from sampling) is **entirely due to chance** (*initial innocence*)
-* **Alternative hypothesis**: any hypothesis that differs from the null.
 
-<br/>
 
-Example:
-
-**H0: Two populations do not differ.** An eventually observed difference obtained from two samples is entirely due to chance. If the studied property is naturally variable, then samples will never be identical.
-
-**HA: Two populations differ.** An observed difference between two samples reflects this difference, the samples were collected from two different underlying populations.
 
 
 ## Statistical decision theory
 
-... at the heart of inferential statistics: learning about the population from sample(s).
+* A decision is made by rejecting/accepting the hypotheses, our aim is to reject ($H_0$) and accept ($H_A$) (the other direction is harder).
 
-* **Statistical decision**: a decision about the population based on sample information.
-* **Statistical hypothesis**: an assumption about the population to reach a decision, formulated as a (paired) statement, often derived from a research question.
+* Now, imagine you observe a difference between two samples: $\bar{x}_1 > \bar{x}_2$ 
 
-<br/>
+* How can you make a decision?
 
-
-* **Null hypothesis**: the assumption that an eventually obtained result (from sampling) is **entirely due to chance** (*initial innocence*)
-* **Alternative hypothesis**: any hypothesis that differs from the null.
-
-<br/>
-
-Example:
-
-**H0: Two populations do not differ.** An eventually observed difference obtained from two samples is entirely due to chance. If the studied property is naturally variable, then samples will never be identical.
-
-**HA: Two populations differ.** An observed difference between two samples reflects this difference, the samples were collected from two different underlying populations.
-
-<br/>
-
-A decision is made by rejecting/accepting the hypotheses, our aim is to reject H0 and accept HA (the other direction is harder).
-
-Now, imagine you observe a difference between two samples. If asked to make a decision you will probably look at the absolute observed difference (sample mean B is X-times larger than sample mean A), maybe also try to take into account the observable variation in the two samples. **Make a decision** ;-) 
+* Look at observed difference in means, and probably also the variability
 
 
 
@@ -672,11 +614,9 @@ To test, we have collected empirical information, i.e. each population is repres
 <div class="left lt">
 **Example:** Mice population on an island. We do a census and identify body size (as weight) of ALL MICE. 
 
-Weight ~ Normal($\mu_0$, $\sigma$) 
-
-On the way home between island and mainland we find a single mouse on a drifting log, it is surprisingly large
-
-Is it from the island? From the mainland? We will use a 1-sample test with a size n = 1.
+* Weight ~ Normal($\mu_0$, $\sigma$) 
+* On the way home between island and mainland we find a single mouse on a drifting log, it is surprisingly large.
+* Is it from the island? From the mainland? We will use a 1-sample test with a size n = 1.
 
 </div>
 
@@ -685,14 +625,18 @@ Is it from the island? From the mainland? We will use a 1-sample test with a siz
 <div class="left lt">
 **Example:** Mice population on an island. We do a census and identify body size (as weight) of ALL MICE. 
 
-Weight ~ Normal($\mu_0$, $\sigma$) 
+* Weight ~ Normal($\mu_0$, $\sigma$) 
+* On the way home between island and mainland we find a single mouse on a drifting log, it is surprisingly large.
+* Is it from the island? From the mainland? We will use a 1-sample test with a size n = 1.
 
-On the way home between island and mainland we find a single mouse on a drifting log, it is surprisingly large
-
-Is it from the island? From the mainland? We will use a 1-sample test with a size n = 1.
+```{r echo = FALSE}
+data = read.table("../datasets/IslandMice.txt", header=TRUE)
+```
+```{r eval = FALSE}
+data = read.table("data/IslandMice.txt", header=TRUE)
+```
 
 ```{r fig.height=5, fig.width=5}
-data = read.table("../datasets/IslandMice.txt", header=TRUE)
 x = data$weight
 x1 = 13 # Drifting mouse (x1)
 (mu = mean(x)) # population mean of island mice
@@ -725,21 +669,12 @@ lines(x_curve, y_curve, lwd = 2)
 
 ## Mechanics of testing illustrated step-by-step: one-sample test
 <div class="left lt">
-**Example:** Mice population on an island. We do a census and identify body size (as weight) of ALL MICE. 
 
-Weight ~ Normal($\mu_0$, $\sigma$) 
-
-On the way home between island and mainland we find a single mouse on a drifting log, it is surprisingly large
-
-Is it from the island? From the mainland? We will use a 1-sample test with a size n = 1.
-
-
-<br/>
 **Testable hypotheses:**
 
-**H0: The ‘new’ mouse belongs to the island population.** Its weight is similar to those of other island mice: Its relatively high weight is entirely due to chance, it´s just a slightly heavy mouse of the population. 
+**H0: The ‘new’ mouse belongs to the island population.** Its weight is similar to those of other island mice: Its relatively high weight is entirely due to chance.
 
-**HA: The ‘new’ mouse does not belong to the island population.** Its weight is higher than that of other island mice, it must belong to some other mouse population, say from the mainland.
+**HA: The ‘new’ mouse does not belong to the island population.** Its weight is so high that it must belong to some other mouse population, say from the mainland.
 
 </div>
 
@@ -794,7 +729,7 @@ z1<-(x1-mu)/sigma
 abline(v=z1,col='red',lwd=2)
 polygon(c(z1,seq(z1,3,by=.01),3),c(0,dnorm(seq(z1,3,by=.01)),0),col='red')
 text(z1,0.35,expression("z"[1]),pos=4,col="red")
-legend(-3,0.35,legend=expression("P(z">="z"[1]*")"),fill=c("red"),bty="n")
+legend("topleft",legend=expression("P(z">="z"[1]*")"),fill=c("red"),bty="n")
 ```
 
 </div>
@@ -825,7 +760,7 @@ z1<-(x1-mu)/sigma
 abline(v=z1,col='red',lwd=2)
 polygon(c(z1,seq(z1,3,by=.01),3),c(0,dnorm(seq(z1,3,by=.01)),0),col='red')
 text(z1,0.35,expression("z"[1]),pos=4,col="red")
-legend(-3,0.35,legend=expression("P(z">="z"[1]*")"),fill=c("red"),bty="n")
+legend("topleft",legend=expression("P(z">="z"[1]*")"),fill=c("red"),bty="n")
 ```
 
 </div>
@@ -842,11 +777,13 @@ legend(-3,0.35,legend=expression("P(z">="z"[1]*")"),fill=c("red"),bty="n")
 hist(scale(x),xlab="z (scaled mouse weight)",freq=F,ylim=c(0,.4),main="H0 is right")
 lines(seq(-3,3,by=.01),dnorm(seq(-3,3,by=.01)),lwd=2)
 z1<-(x1-mu)/sigma
+z2 = 1.96
 abline(v=z1,col="red",lwd=2)
 polygon(c(z1,seq(z1,3,by=.01),3),c(0,dnorm(seq(z1,3,by=.01)),0),col="red")
+polygon(c(z2,seq(z2,3,by=.01),3),c(0,dnorm(seq(z2,3,by=.01)),0),col="blue")
 #text(0.75,0.1,"z1"); arrows(0.85,0.1,z1-0.1,0.01)
 text(z1,0.35,expression("z"[1]),pos=2,col="red")
-legend(-3,0.35,legend=c(expression("P(z">="z"[1]*")"),expression(symbol(alpha))),fill=c("red","black"),density=c(NA,20),angle=c(0,045),bty="n")
+legend("topleft",legend=c(expression("P(z">="z"[1]*")"),expression(symbol(alpha))),fill=c("red", "blue"),bty="n")
 ```
 
 </div>
@@ -861,11 +798,13 @@ legend(-3,0.35,legend=c(expression("P(z">="z"[1]*")"),expression(symbol(alpha)))
 hist(scale(x),xlab="z (scaled mouse weight)",freq=F,ylim=c(0,.4),main="H0 is right")
 lines(seq(-3,3,by=.01),dnorm(seq(-3,3,by=.01)),lwd=2)
 z1<-(x1-mu)/sigma
+z2 = 1.96
 abline(v=z1,col="red",lwd=2)
 polygon(c(z1,seq(z1,3,by=.01),3),c(0,dnorm(seq(z1,3,by=.01)),0),col="red")
+polygon(c(z2,seq(z2,3,by=.01),3),c(0,dnorm(seq(z2,3,by=.01)),0),col="blue")
 #text(0.75,0.1,"z1"); arrows(0.85,0.1,z1-0.1,0.01)
 text(z1,0.35,expression("z"[1]),pos=2,col="red")
-legend(-3,0.35,legend=c(expression("P(z">="z"[1]*")"),expression(symbol(alpha))),fill=c("red","black"),density=c(NA,20),angle=c(0,045),bty="n")
+legend("topleft",legend=c(expression("P(z">="z"[1]*")"),expression(symbol(alpha))),fill=c("red", "blue"),bty="n")
 ```
 
 </div>
@@ -891,15 +830,7 @@ The probability that a mouse is as heavy as (or heavier than) the drifting mouse
 ## Mechanics of testing: assessing error
 
 <div class="left lt">
-```{r truth_table, echo = FALSE}
-tab = matrix(c("", "Decision", "accept H$_0$", "reject H$_0$", 
-			   "Reality", "H$_0$ true", "correct decision", "type I error (α)", 
-			   "", "H$_0$ false", "type II error (β)", "correct decision"), ncol = 3)
-ktab = column_spec(kable(tab), 1, border_right = TRUE, bold = TRUE)
-ktab = row_spec(ktab, 1:2, bold = TRUE)
-ktab = row_spec(ktab, 2, extra_css = "border-bottom: solid")
-ktab
-```
+![](img/table.err2.png)
 </div>
 
 
@@ -907,9 +838,8 @@ ktab
 ## Mechanics of testing: assessing error
 
 <div class="left lt">
-```{r truth_table2, echo = FALSE}
-ktab
-```
+![](img/table.err2.png)
+
 <br/><br/>
 For every test statistic, there will exist a critical test statistic where $P(z \ge z_{crit}) = \alpha$.
 </div>
@@ -919,9 +849,7 @@ For every test statistic, there will exist a critical test statistic where $P(z 
 ## Mechanics of testing: assessing error
 
 <div class="left lt">
-```{r truth_table3, echo = FALSE}
-ktab
-```
+![](img/table.err2.png)
 <br/><br/>
 For every test statistic, there will exist a critical test statistic where $P(z \ge z_{crit}) = \alpha$.
 </div>
@@ -957,9 +885,7 @@ Decision:
 ## Mechanics of testing: assessing error
 
 <div class="left lt">
-```{r truth_table4, echo = FALSE}
-ktab
-```
+![](img/table.err2.png)
 <br/><br/>
 For every test statistic, there will exist a critical test statistic where $P(z \ge z_{crit}) = \alpha$.
 </div>
@@ -1025,12 +951,15 @@ legend(2,0.1,legend=c(expression(symbol(alpha)),expression(symbol(beta)),"power"
 </div>
 
 <div class="right rt">
+```{r eval = FALSE}
+# Read file of mainland mice
+data_main = read.table("data/MainlandMice.txt", header=TRUE)
+```
 
 ```{r}
-# Read file of mainland mice
-data_main = read.table("../datasets/MainlandMice.txt", header=TRUE)
 (mu_main = mean(data_main$weight))
-c(sd(y), sigma) # sd of mainland mice is ~identical to island mice
+# sd of mainland mice is ~identical to island mice
+c(sd(data_main$weight), sigma) 
 
 # critical value on original scale
 (x_crit = qnorm(0.95, mu, sigma)) 
@@ -1232,9 +1161,16 @@ $$
 
 <div class="right rt">
 
+```{r echo = FALSE}
+data = read.table("../datasets/Crabs.txt", header=TRUE)
+```
+
+```{r eval = FALSE}
+data = read.table("data/Crabs.txt", header=TRUE)
+```
+
 ```{r}
 # Body temperature of crabs
-data = read.table("../datasets/Crabs.txt", header=TRUE)
 x = data$body_temp
 
 # null hypothesis: body temp is equal to air temp
@@ -1340,9 +1276,17 @@ Our interval does not include $\mu$, so we can reject the hypothesis that the po
 > - Compute the test statistic $TS$ and if needed the degrees of freedom $\nu$
 > - Compute the probability $P(TS | \nu, H_0)$ (this is the $p$-value)
 > - **Decide**:
->-   - $p \ge \alpha$: Fail to reject $H_0$
->-   - $p < \alpha$: Reject $H_0$
 
+## Steps to conduct a (two-sided) statistical test.
+
+* Set $\alpha$ (before collecting data!)
+* Define $H_0$ and $H_a$
+* Collect data $X$
+* Compute the test statistic $TS$ and if needed the degrees of freedom $\nu$
+* Compute the probability $P(TS | \nu, H_0)$ (this is the $p$-value)
+* **Decide**:
+  - $p \ge \alpha$: Fail to reject $H_0$
+  - $p < \alpha$: Reject $H_0$
 
 
 ## Significance levels and example statements
@@ -1486,7 +1430,7 @@ Conclusions/advice:
 >- `shapiro.test` and similar tests are very commonly used and *almost completely useless*. Forget them!
 >- Graphically evaluate your data
 >- If graphically obviously non-normal, consider the robustness of the chosen test, or transformations
->- Fall back to other distributions or to **non-parametric** tests (more on Thursday)
+>- Fall back to other distributions or to **non-parametric** tests 
 
 
 
@@ -1497,7 +1441,7 @@ Conclusions/advice:
 Another thought experiment:
 
 1. Take two samples from a population ($\mathcal{N}[\mu, \sigma]$)
-2. Calculate $s_1^2$ (from sample 1 with $n_1$) and Calculate $s_2^2$ (from sample 1 with $n_2$)
+2. Calculate $s_1^2$ (from sample 1 with $n_1$) and Calculate $s_2^2$ (from sample 2 with $n_2$)
 3. Calculate test statistic F:
 $$
 F=\frac{s_1^2}{s_2^2}
@@ -1630,7 +1574,6 @@ t.test(x1 - x2)
 * Convert data to **ordinal** scale (i.e., rank data)
 * Use for small (ish) samples when population normality cannot be assumed 
 * Loss of information == low statistical power!
-	- More powerful alternatives will be discussed Thursday
 
 **Independent samples**: Mann-Whitney U-test
 
