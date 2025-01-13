@@ -35,6 +35,9 @@ Students will be graded based on their participation during the exercise session
 
 Note that attendence is mandatory.
 
+### Student files
+
+You can get student files for the course, as well as instructions for setting up your workspace, at the [student github repository](https://github.com/flee-group/vu_datenanalyse_students)
 
 ### Course Outline
 

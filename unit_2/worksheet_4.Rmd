@@ -1,0 +1,81 @@
+---
+title: "Worksheet 4"
+author: "Gabriel Singer/Thomas Fuß"
+date: "18.12.2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE)
+```
+
+## Niche optima of periphyton
+
+Periphyton, which consists of algae and cyanobacteria attached to stream sediments, was sampled at 137 locations across the Ybbs river network. Next-generation sequencing of the 137 periphyton samples found in total 215 species (column `spec`) which were then assigned to three main taxonomical groups (`Diatoms`, `Chrysophytes` and `Cyanobacteria` in the column `group`). At the same 137 locations flow velocity was measured. 
+Species have environmental preferences (niche optima) based on traits (e.g. morphology). One niche optimum (column `vel`) was estimated based on species distributions across the 137 locations. (A niche optimum of a species for velocity was calculated as the mean of the measured velocity across locations where the species occurred). E.g. species which only occurred at locations with high flow velocities, prefer high flow velocities, hence, have their niche optima at high flow velocities.
+
+Hypothesis: Closer related species have more similar traits, hence, have more similar environmental preferences (niche optima) than distant related species. (Two species within a taxonomical group are closer related than two species between groups). 
+
+1. Find out, whether the main taxonomical groups have different preferences (niche optima) in flow velocity. And if yes, which groups differ from each other.
+
+
+
+```{r}
+data = read.table("data/nicheoptima.txt", header = TRUE)
+names(data)
+dim(data)
+```
+
+## Stoichiometry of microbes
+
+[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. We simplified the dataset, now the experiment uses 2 species measured in 2 growth phases on 2 media differing in stoichiometry. Verrucomicroba are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design.
+
+The response variable in this design is a signature extracted from Raman spectra collected from individual bacterial cells. This signature is a proxy for nucleic acids (coded by `na_avg`)
+
+```{r}
+mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
+names(mic)
+```
+
+
+1. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
+
+Start with selecting only one level of stoichiometry in the medium (either level 5 or 50).
+```{r}
+mic$NP<-factor(mic$NP)
+mic<-subset(mic,subset=(NP==5) )
+mic<-droplevels(mic)
+
+```
+
+2. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+
+
+
+## Hucho record captures in Austrian rivers
+
+Fishermen like to catch record-breaking large fish and if successful will do a bit of effort to document their historic achievement in the local pub ;-) This dataset contains sizes of such record catches of Hucho in various Austrian streams and rivers of various size, the data was collected from various sources including the eventual black-and-white photograph hanging in a pub.
+
+Here is one such picture from the author of the study:
+s
+![](img/Hucho.jpg)
+
+The Danube salmon is an endangered species in now dwindling populations. It needs intact river corridors for migration. Hydropower facilities should have a fish ladder allowing the fish to bypass turbines. The size of such a fish ladder is a cost issue AND an ecological issue - it needs to be large enough to accommodate the expected fish size in any given system. Usually large rivers host large fish. So, river size could be taken as a proxy of fish size to be expected.
+
+```{r}
+hucho = read.table("data/HuchoRatschan2012.txt", header = TRUE)
+names(data)
+# river: name of river
+# population: categorical, size and health of adult fish population
+# length: largest fish caught since 1970, body length given in cm
+# mass: body mass of largest fish in kg
+# discharge: annual mean discharge of river in m3 s-1
+# width: width of river in m
+```
+
+1. Look for a reasonable relationship of a river size measure with a fish size measure. Deliver a model that could guide construction of fish passes. Consider transformations to linearize relationships.
+2. A potential confounding variable could be population size. When a population of Hucho is very small, it is less likely to contain large specimens. The dataset includes an estimate of population size based on expert (= fishermen) opinion. Explore differences in maximum Hucho body size captured in the various systems depending on population size. Test for differences and produce a publishable final graph showing average maximum fish size in dependence from population size. Don´t forget to check assumptions before running your statistical analysis and justify your choice of method.
+3. You will find that both river size and population size affect maximum Hucho size. How can you test both predictors at once? Which would be the best model for fish ladder builders if they wanted to improve the conservation status of Danube salmon in the future?
+
+
+
