@@ -36,10 +36,12 @@ cols = brewer.pal(8, "Set1")
 * **Inferential** statistics uses the laws of probability, combined with observations, to test hypotheses
    - Lakes from one region/ecozone are colder than lakes from another.
 
+## Course Introduction
+
 ### Course structure
 * Each day will be split between lectures and exercise sessions
-* During exercises, we will split into smaller breakout groups and work through problems
-* Grading: 40% participation, 60% group project/presentation
+* During exercises, we will split into smaller groups and work through problems
+* Grading: 40% participation, 60% protocols
 
 ### Website and course materials
 
@@ -118,9 +120,9 @@ d = 8
 site_diversity = 8
 
 
-# error
+# errors
 0y = 5
-my name = "Matt"
+my name = "Lauren"
 ```
 
 </div>
@@ -230,7 +232,7 @@ if(x > 100 & x %% 2 == 0) {
 * The function performs computations on the arguments.
 * Functions can **return** a result, have **side-effects**, or both.
 
-**Mathematical & functions**
+**Mathematical functions**
 
 * `sin()`, `cos()`
 * `log()`, `exp()`, `sqrt()`
@@ -266,41 +268,70 @@ log(x, base = 10)
 
 
 
-
-
-## Basic data structures
+## Basic data structures: vectors
 
 <div class="left lt">
 * A **data structure** is a way of organizing multiple pieces of data into a single variable
 * Can get very complex; we will start with the two most important types
 * A `vector` holds one or more values of a single data type
-    - You can test both data types and data structures using `is` functions
-    - You can **coerce** one data type or data structure to another using `as` functions
-    - You can **subset** vectors `[]`
+    - Vectors can be created using the concatenate function `c()`
+</div>
+
+<div class="right rt">
+
+```{r}
+# The c() function stands for concatenate
+# it groups items together into a vector
+(five_numbers = c(3, 2, 8.6, 4, 9.75))
+
+# create a vector of type character
+colours = c("red", "red", "blue", "green", "red")
+
+# can also create sequences and repeats directly into a vector
+(one_to_ten = 1:10)
+(count_by_threes = seq(0, 15, 3))
+rep(0, 3)
+
+```
+
+</div>
+
+
+
+## Basic data structures: vectors
+
+<div class="left lt">
+* A `vector` holds one or more values of a single data type
+    - Vectors can be created using the concatenate function `c()`
+    - You can **subset** vectors using `[]`
 
 </div>
 
 <div class="right rt">
 
 ```{r}
-# Creating vectors
-(one_to_ten = 1:10)
-
-# The c() function stands for concatenate
-# it groups items together into a vector
-(five_numbers = c(3, 2, 8.6, 4, 9.75))
 
 # Get part of a vector using []
 five_numbers[3]
 five_numbers[3:5]
 five_numbers[c(1,4)]
+```
+</div>
 
+## Basic data structures: vectors
+
+<div class="left lt">
+* A `vector` holds one or more values of a single data type
+    - Vectors can be created using the concatenate function `c()`
+    - You can **subset** vectors using `[]`
+	- Other helpful functions can let you examine vectors
+</div>
+
+<div class="right rt">
+
+```{r}
 # get vector length
 length(five_numbers)
-
-# sequences and repeats
-seq(1, 5, 0.4)
-rep(0, 3)
 
 # testing and coersion
 x = 5.5
@@ -314,7 +345,10 @@ as.integer(x)
 </div>
 
 
-## Working with data frames
+
+
+
+## Basic data structures: data frames
 
 <div class="left lt">
 * A `data.frame` holds tabular data
@@ -327,7 +361,8 @@ as.integer(x)
 <div class="right rt">
    
 ```{r, results = "hide"}
-# Load a dataset named 'penguins' and convert it to a data frame
+# Load a dataset named 'penguins' and 
+# convert it to a data frame
 # this dataset comes from a package, "palmerpenguins"
 data(penguins, package = "palmerpenguins")
 penguins = as.data.frame(penguins)
@@ -351,6 +386,8 @@ kable_styling(kable(head(penguins)), font_size = 12)
 ```{r}
 str(penguins)
 ```
+
+## Working with data frames
 
 * `nrow`, `ncol`, `dim` give you dimensions of the data frame
 
@@ -377,7 +414,25 @@ penguins[,1] # [,1] get every row in the first column
 # accessing a variable by name, and subsetting rows
 penguins[1:10,"bill_length_mm"] # another way to access by name, gets the first 10 entries
 
+
+```
+
+### Code Style
+* Here we show 3 ways of accessing a column (`$bill_length_mm`, `[,1]`, `[, 'bill_length_mm']`).
+* Are any of these preferable to the others? Why?
+
+## Working with data frames
+
+* We saw on the last slide there are some NAs in the data, representing missing values.
+* Many analyses fail with NAs. We must either remove them or instruct our analysis how to deal with them.
+* Here we use `complete.cases`, which returns the rown numbers of all rows that do not contain *any* NAs.
+
+```{r}
+# There is an NA in this vector
+penguins[1:10,"bill_length_mm"] 
+
 # getting rid of NA values
+# DANGER - this will erase the original penguins, make sure you mean to do this!
 penguins = penguins[complete.cases(penguins),]
 ```
 
@@ -385,7 +440,7 @@ penguins = penguins[complete.cases(penguins),]
 
 ## Working with data frames
 
-The variable `species` is a factor.
+The variable `species` is a factor, representing a categorical variable with a fixed set of levels.
 
 ```{r}
 str(penguins)
@@ -404,11 +459,17 @@ table(penguins$species)
 
 R currently has two dominant graphical engines
 
+<div class="left lt">
+
 ### Base graphics
 * Built in to R.
 * Simple to use
 * Relatively easy syntax
 * Plots usually need a lot of customization before they are finished
+
+</div>
+
+<div class="right rt">
 
 ### ggplot2
 * A package you must install.
@@ -416,10 +477,7 @@ R currently has two dominant graphical engines
 * Produces publication-quality graphics with less customization needed.
 * Plots can be saved in a variable, with customization added as needed.
 
-We will mostly use base graphics in the course
-
-If you want to learn ggplot, ask Matt
-
+</div>
 
 
 
@@ -476,7 +534,6 @@ hist(my_var, main = "", xlab="Variable of interest", ylab = "Frequency",
 
 ## Colors
 
-<div class="left lt">
 * R supports colors using the common HTML color coding: `#RRGGBB`
 	- RR, GG, BB are the amounts of red, green, and blue
 	- each ranges from `00` (none) to `FF` (most)
@@ -487,9 +544,8 @@ hist(my_var, main = "", xlab="Variable of interest", ylab = "Frequency",
 ```{r}
 head(colors())
 ```
-</div>
 
-<div class="right rt">
+## Colors
 
 ```{r echo = FALSE, fig.width=35, fig.height=18}
 library(ggdark)
@@ -503,13 +559,12 @@ with(d, rect(xl, yb, 1+xl, 1+yb, col = colors, border = NA))
 with(d, text(xl, yb + 0.5, colors, col = invert_color(colors), cex = 1, adj = 0))
 ```
 
-</div>
 
 
 
 ## Populations & Samples
 <div class="left lt">
-* A **population** is the unit about which we want to use statistics to describe, analyse, or perform inference.
+* A **population** is the unit about which we want to learn about.
   - e.g., all the trees in a forest
 </div>
 
@@ -520,30 +575,35 @@ with(d, text(xl, yb + 0.5, colors, col = invert_color(colors), cex = 1, adj = 0)
 
 ## Populations & Samples
 <div class="left lt">
-* A **population** is the unit about which we want to use statistics to describe, analyse, or perform inference.
+* A **population** is the unit about which we want to learn about.
   - e.g., all the trees in a forest
 * A **sample** is a subset of a population that is observed with the goal of obtaining knowledge about a population.
+	- We use statistics to describe, analyse, or perform inference about a population from a sample.
+
 </div>
 
 <div class="right rt">
 ![](img/forest2.png)
+
 </div>
 
 
 
 ## Populations & Samples
+
 <div class="left lt">
-* A **population** is the unit about which we want to use statistics to describe, analyse, or perform inference.
-  - e.g., all the trees in a forest
-* A **sample** is a subset of a population that is observed with the goal of obtaining knowledge about a population.
-  - select 7 trees at random
-  - Samples must be taken carefully so that they are representative of the entire population!
-  - Gold standard: sample sizes must be **large** and drawn **randomly** from the population
-  - **Experimental design**: designing the sample such that it represents the desired population
+
+### Considerations when sampling:
+* Select, e.g., 7 trees at random
+* Samples must be taken carefully so that they are representative of the entire population!
+* Gold standard: sample sizes must be **large** and drawn **randomly** from the population
+* **Experimental design**: designing the sample such that it represents the desired population
 </div>
 
 <div class="right rt">
+
 ![](img/forest2.png)
+
 </div>
 
 
@@ -649,8 +709,8 @@ The mean can be strongly influenced by outliers.
 <div class="right rt">
 ```{r echo=FALSE}
 my_hist = hist(my_var, breaks = 30, plot = FALSE)
-mode_position = which.max(my_hist$counts)
-md = my_hist$mids[mode_position]
+mode_index = which.max(my_hist$counts)
+md = my_hist$mids[mode_index]
 
 p2 = p2 + geom_vline(xintercept = median(md), col = cols[3])
 p2
@@ -683,18 +743,41 @@ The mean can be strongly influenced by outliers.
 mode(my_var) # wrong!
 
 # we can use the histogram function to approximate the sample mode
-# changing the number of breaks will have a large impact on the results
+# WARNING: changing the number of breaks can have a 
+# large impact on the results
 my_hist = hist(my_var, breaks = 30, plot = FALSE)
 
 # the mids variable gives you the midpoint of each bin
 # counts gives you the count each bin
 # cbind shows them together in columns
-head(cbind(my_hist$mids, my_hist$counts))
+cbind(bar_midpoint = my_hist$mids, count = my_hist$counts)
+```
 
-# use this to get the mode
-# first find out which one is the tallest with which.max
-(mode_position = which.max(my_hist$counts))
-my_hist$mids[mode_position]
+</div>
+
+
+## Summary statistics: location
+
+<div class="left lt">
+
+* **First moment**: Arithmetic mean. 
+
+### Other location statistics
+
+The mean can be strongly influenced by outliers.
+
+* median: The 50% quantile (i.e., half the values of x are above the median, half below)
+* mode: the most common value, the "peak" of a distribution
+* How to compute the mode? Use `hist`!
+</div>
+
+<div class="right rt">
+
+```{r}
+# use which.max to find out which count index (which bar) is the largest
+# then take that midpoint -- this is the mode
+(mode_index = which.max(my_hist$counts))
+my_hist$mids[mode_index]
 ```
 
 </div>
@@ -786,10 +869,45 @@ p3 = p1 + geom_point(data = sdata, aes(x=xm, y =y)) +
 p3
 ```
 
+</div>
+
+
+## Summary statistics: dispersion (or scale)
+
+<div class="left lt">
+
+
+* **Second moment**: Variance ($\sigma^2$)
+
+$$
+\sigma^2 = \frac{1}{N}\sum_{i=1}^N (X_i-\mu)^2
+$$
+
+
+We can estimate $\sigma^2$ using the **sample variance**:
+
+$$
+\sigma^2 \approx s^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i -\bar{x})^2
+$$
+
+It is convenient to talk about the scale of $x$ in the same units as $x$ itself, so we use the (population or sample) **standard deviation**:
+
+$$
+\sigma = \sqrt{\sigma^2} \approx s = \sqrt{s^2}
+$$
+
+
+</div>
+<div class="right rt">
 
 ```{r}
 # Population variance -- biased if x is a sample!
-sum((my_var - mean(my_var))^2)/length(my_var)
+# one-line version:
+# sum((my_var - mean(my_var))^2)/length(my_var)
+
+N = length(my_var)
+sq_dev = (my_var - mean(my_var))^2
+sum(sq_dev)/N
 
 # These R functions always produce the sample variance and sd
 var(my_var)
@@ -977,6 +1095,43 @@ lines(c(1.8, 2), c(5300, 4850), col = cols[5])
 
 
 
+
+## More on boxplots
+
+<div class="left lt">
+
+* **Boxplots** (sometimes **box-and-whisker** diagrams) summarize key statistics.
+	- median
+	- first and third quartiles (hinges)
+	- approx. 95% confidence interval for median (notch)
+	- min/max (or quartile + 1.5*IQR) (whiskers)
+* They are very useful for comparing variables among groups.
+* Base graphics: we use the `boxplot` function
+* `y ~ group` is a special data type called a `formula`
+
+For more complex groupings, better to use `ggplot`
+
+</div>
+
+<div class="right rt">
+
+```{r}
+peng_bplot = ggplot(penguins, aes(y = body_mass_g, x = sex, 
+                            fill = species)) + 
+    geom_boxplot(notch = TRUE) + 
+    theme_minimal() + ylab("Body Mass (g)") + xlab("") +
+    scale_fill_brewer(palette = "Paired") 
+
+peng_bplot
+```
+
+
+</div>
+
+
+
+
+
 ## Programming mini-lesson: repeating yourself
 
 <div class="left lt">
@@ -1019,9 +1174,11 @@ lines(c(1.8, 2), c(5300, 4850), col = cols[5])
 ))
 
 # better
-# use columns 3:6 because these are the numeric columns
-# doesn't make sense to take the mean of penguins$species
-(col_means = sapply(penguins[,3:6], mean)) # apply the function mean to each variable
+# first we find out which columns are numeric
+numeric_columns = sapply(penguins, is.numeric)
+
+# then we get the means of those columns
+(col_means = sapply(penguins[,numeric_columns], mean))
 ```
 
 
@@ -1032,10 +1189,10 @@ lines(c(1.8, 2), c(5300, 4850), col = cols[5])
 * R has many different ways to apply functions, in this case we use `s`imple `apply` (`sapply`)
 * this works with any function that accepts a vector, even when they return more than a single value
 ```{r}
-sapply(penguins[,3:6], range)
+sapply(penguins[,numeric_columns], range)
 # here, we pass an additional argument named probs to quantile
 # see ?quantile for what this does
-sapply(penguins[,3:6], quantile, probs = c(0.25, 0.5, 0.75))
+sapply(penguins[,numeric_columns], quantile, probs = c(0.25, 0.5, 0.75))
 ```
 
 
@@ -1057,7 +1214,6 @@ sapply(penguins[,3:6], quantile, probs = c(0.25, 0.5, 0.75))
 
 ```{r}
 # with: use the variables found in the data.frame penguins
-# allows us to not write penguins$species to access the variable species
 with(penguins, 
 	 # compute the mean of bill_length_mm for each of the three species
 	 tapply(bill_length_mm, species, mean)
@@ -1067,7 +1223,18 @@ with(penguins,
 </div>
 
 
+## Probability distributions
 
+* We have shown several examples of curves we could describe a distribution of values.
+* What does it mean exactly to say that a variable follows a probability distribution?
+* How do these distributions arise in nature?
+
+```{r prob_dist, fig.width = 19, echo = FALSE}
+dat_curve = data.frame(x = seq(-3, 3, 0.1), y = dnorm(seq(-3, 3, 0.1)))
+p_curve = ggplot(dat_curve) + geom_line(aes(x = x, y = y), col = 'red', linewidth = 2)
+gridExtra::grid.arrange(peng_bplot, p1, p_curve, nrow = 1)
+
+```
 
 ## Probability distributions
 
@@ -1439,8 +1606,6 @@ $$
 
 
 ```{r echo = FALSE}
-plot(0,0, xlim=range(x_norm), ylim=c(0,1), xlab = "X", ylab = "Cumulative Probability", bty="n", type='n')
-lines(x_norm, pnorm(x_norm, mu, sig), lwd=2, col='red')
 ```
 
 </div>
@@ -1448,7 +1613,9 @@ lines(x_norm, pnorm(x_norm, mu, sig), lwd=2, col='red')
 <div class="right rt">
 
 
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height = 8}
+par(mfrow = c(2, 1))
+	
 plot(0,0, xlim=range(x_norm), ylim=range(y_norm), xlab = "X", ylab = "Probability Density", bty="n", type='n')
 x_poly = seq(-50, mu-1.96*sig, length.out=100)
 y_poly = dnorm(x_poly, mean(players), sd(players))
@@ -1461,6 +1628,11 @@ text(mu+-1.96*sig, dnorm(mu-1.96*sig, mu, sig), expression(mu-1.96*sigma), pos =
 legend("topright", cex = legcex, legend=c(paste("sample mean =", round(mu, 2)), 
                             paste("sample sd =", round(sig, 2)),
                             paste("area under curve =", round(pnorm(mu-1.96*sig, mu, sig), 4))), lwd=0, bty='n')
+
+plot(0,0, xlim=range(x_norm), ylim=c(0,1), xlab = "X", ylab = "Cumulative Probability", bty="n", type='n')
+lines(x_norm, pnorm(x_norm, mu, sig), lwd=2, col='red')
+
+
 ```
 
 
@@ -1472,18 +1644,35 @@ legend("topright", cex = legcex, legend=c(paste("sample mean =", round(mu, 2)),
 
 
 ## Distributions in R
+<div class="left lt">
 
 * R has four functions in common for many families of distributions:
 
 **PDF**: what is the probability `d`ensity when $x=3$ (the height of the bell curve)
 
+
 ```{r}
-dnorm(x = 3, mean = 0, sd = 1)
+dnorm(x = 3, mean = mean(players), sd = sd(players))
 ```
+
+</div>
+
+<div class="right rt">
+
+
+```{r norm_pdf_plot, echo = FALSE}
+	
+plot(0,0, xlim=range(x_norm), ylim=range(y_norm), xlab = "X", ylab = "Probability Density", bty="n", type='n')
+lines(x_norm, y_norm, lwd=2, col='blue')
+points(3, dnorm(x = 3, mean = mean(players), sd = sd(players)), pch = 16, col = 'red', cex=2)
+```
+</div>
+
 
 
 
 ## Distributions in R
+<div class="left lt">
 
 * R has four functions in common for many families of distributions:
 
@@ -1500,68 +1689,51 @@ dnorm(x = 3, mean = 0, sd = 1)
 (probability of observing a value < $q$)
 
 ```{r}
-pnorm(q = -1.96, mean = 0, sd = 1)
+pnorm(q = mean(players) - 1.96 * sd(players), 
+	  mean = mean(players), sd = sd(players))
 ```
+
+</div>
+
+<div class="right rt">
+
+```{r pnorm_plot, echo = FALSE}
+plot(0,0, xlim=range(x_norm), ylim=range(y_norm), xlab = "X", ylab = "Probability Density", bty="n", type='n')
+x_poly = seq(-50, mu-1.96*sig, length.out=100)
+y_poly = dnorm(x_poly, mean(players), sd(players))
+x_poly = c(x_poly, rev(x_poly))
+y_poly = c(y_poly, rep(0, length(y_poly)))
+polygon(x_poly, y_poly, col=cols[2])
+lines(x_norm, y_norm, lwd=2, col='blue')
+text(mu+-1.96*sig, dnorm(mu-1.96*sig, mu, sig), expression(mu-1.96*sigma), pos = 4)
+
+```
+</div>
 
 
 ## Distributions in R
 
 * R has four functions in common for many families of distributions:
-
-**PDF**: what is the probability `d`ensity when $x=3$ (the height of the bell curve)
-
-```{r}
-dnorm(x = 3, mean = 0, sd = 1)
-```
-
-**CDF**: what is the cumulative `p`robability when $x=q$
-
-(area under the bell curve from $-\infty$ to $q$)
-
-(probability of observing a value < $q$)
-
-```{r}
-pnorm(q = -1.96, mean = 0, sd = 1)
-```
 
 **Quantiles**: what is the value of $x$, such that the probability of observing **x or smaller** is $p$
 
-(inverse of the CDF)
+(inverse of the CDF/`pnorm`)
 
 ```{r}
 qnorm(p = 0.025, mean = 0, sd = 1)
 ```
 
-
 ## Distributions in R
 
 * R has four functions in common for many families of distributions:
 
-**PDF**: what is the probability `d`ensity when $x=3$ (the height of the bell curve)
-
-```{r}
-dnorm(x = 3, mean = 0, sd = 1)
-```
-
-**CDF**: what is the cumulative `p`robability when $x=q$
-
-(area under the bell curve from $-\infty$ to $q$)
-
-(probability of observing a value < $q$)
-
-```{r}
-pnorm(q = -1.96, mean = 0, sd = 1)
-```
-
 **Quantiles**: what is the value of $x$, such that the probability of observing **x or smaller** is $p$
 
-(inverse of the CDF)
+(inverse of the CDF/`pnorm`)
 
 ```{r}
 qnorm(p = 0.025, mean = 0, sd = 1)
 ```
-
-
 
 **RNG**: Random number generator, produces $n$ random numbers from the desired distribution
 

@@ -58,13 +58,13 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 16.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec_1_i_basics.html">The Basics</a></p>
+			<p><a href="unit_1/lec_1i_basics.html">The Basics</a></p>
 			<p class="sm">Introduction to R</p>
 			<p class="sm">Populations, samples</p>
 			<p class="sm">Descriptive statistics</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_1_i.html">Exercises 1.1</a></p>
+			<p><a href="unit_1/worksheet_1i.html">Exercises 1.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
@@ -78,13 +78,13 @@ Note that attendence is mandatory.
 			<p class="sm rr18">G1: 17.01 12:00–15:15, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec_1_ii_univariate.html">Univariate statistics</a></p>
+			<p><a href="unit_1/lec_1ii_univariate.html">Univariate statistics</a></p>
 			<p class="sm">Confidence intervals</p>
 			<p class="sm">Significance tests</p>
 			<p class="sm">Type I and II errors</p>
 		</td>
 		<td>
-			<p><a href="unit_1/worksheet_1_ii.html">Exercises 1.2</a></p>
+			<p><a href="unit_1/worksheet_1ii.html">Exercises 1.2</a></p>
 		</td>
 	</tr>
 	<tr>
