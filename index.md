@@ -67,7 +67,7 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm">Descriptive statistics</p>
 		</td>
 		<td rowspan = 3>
-			<p><a href="unit_1/worksheet_1i.html">Exercises 1.1</a></p>
+			<p><a href="unit_1/worksheet_1i.html">Exercises 1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
