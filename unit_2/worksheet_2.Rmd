@@ -9,27 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, error=TRUE)
 ```
 
-## Environmental values and environmental education
-
-Load the environmental values dataset (Pinder et al, 2020, https://doi.org/10.5061/dryad.wdbrv15kn).
-
-```{r eval = FALSE}
-env = read.csv("data/env_values.csv")
-```
-
-University students in Australia were asked various questions about their environmental values, desires for conservation careers, and educational background. We will examine two variables to address the hypothesis that students from families that value the environment rate more highly the quality of their education about environmental values.
-
-The data has two variables:
-
-* `env_education` contains responses to the question, "Thinking back to your schooling overall, how adequate was your education about environmental problems?", ranging from 0 (extremely inadequate) to 5 (extremely adequate).
-* `value_of_env_protection` has responses for, "How important is protecting the environment in your family?", ranging from 0 (not important) to 7 (very important)... note that one student indicated -1 ;-)
-
-1. Produce a histogram for each variable and a scatterplot for both variables. How do you interpret these plots? 
-2. Which type of correlation is most appropriate for these two variables?
-3. Use the function `cor.test` on `env_education` and `value_of_env_protection`. Is there a significant correlation? What direction is it? What is the estimate of the correlation?
-
-**Hint**: Choose the type of correlation using `method` in `cor.test`. There are missing values in the data, you will need to deal with these. 
-
 
 ## Hydropsyche width-mass relationship
 

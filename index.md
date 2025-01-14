@@ -66,13 +66,15 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm">Populations, samples</p>
 			<p class="sm">Descriptive statistics</p>
 		</td>
-		<td rowspan = 2>
+		<td rowspan = 3>
 			<p><a href="unit_1/worksheet_1i.html">Exercises 1.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
 		</td>
-		<td rowspan = 3>Protocol 1</td>
+		<td rowspan = 3>P
+			<p><a href="unit_1/protocol_1.html">Protocol 1</a></p>
+		</td>
 	</tr>
 	<tr>
 		<td>
@@ -98,9 +100,6 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm">Data structures</p>
 			<p class="sm">Visualisation</p>
 			<p class="sm">Association and Correlation</p>
-		</td>
-		<td>
-			<p><a href="unit_1/worksheet_1_iii.html">Exercises 1.3</a></p>
 		</td>
 	</tr>
 	<tr>

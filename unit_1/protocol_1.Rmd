@@ -1,0 +1,72 @@
+---
+title: "Datenanalyse Unit 1 Protocol"
+date: ""
+output: 
+  html_document:
+    self_contained: true
+    css: ex.css
+    mathjax: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Guidelines
+
+Below you will find a two tasks, similar to exercises we have done in class. Your task is to produce a document answering the numbered questions below using the tools you've learned in unit 1. Please produce a word/PDF document or similar with the answers organised by Task and question. If figures or tables are requested, you can embed them in this document. **Note that figures and tables should be near publication quality - proper use of colours, labeled axes, units included, etc.**
+
+Please do **not** embed code in this document unless specifically asked to do so. Instead, please save your code in a separate R file. You can mark the task and question number using comments in the code. Turn in the code along with the writeup.
+
+You may work on this individually or in small groups (maximal 3 students). Please turn this in to Lauren (lauren.talluto@uibk.ac.at) by **February 14, 2025** at the latest. If you are stuck, please get in touch by email to make an appointment **well in advance**.
+
+## Task 1: Understanding natal and breeding bird dispersal
+
+We will use a dataset (from [Fandos et al. 2022](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13838)) of dispersal distances of European birds. One important question is whether birds overall have greater dispersal requirements when first leaving the nest where they hatched (**natal dispersal**) or when dispersing as adults among different breeding sites (**breeding dispersal**).
+
+Here is some code to load the data (which is located in `vu_datenanalyse_students/unit_1/data/`):
+
+```{r data_load, eval = FALSE}
+# assumes your working directory is already unit_1
+bird_disp = read.csv("data/birddisp.csv")
+```
+
+Note that, because we don't have breeding and natal values for all species, we will have slightly different sample sizes for each.
+
+This dataset has three columns:
+
+* `species`: The species under consideration
+* `type`: Whether the dispersal distance concerns breeding or natal dispersal
+* `disp_dist`: The dispersal distance, in km.
+
+The original paper details many important factors that might influence dispersal distance, but we will focus on a relatively simple hypothesis: **Averaging across all species, natal dispersal exceeds breeding dispersal**.
+
+With that in mind, please do the following:
+
+1. Choose one or two plots that are appropriate for exploring the data. These plots should focus on revealing features in the data that might inform us about the hypothesis.
+2. Compute basic summary statistics for each dispersal type: mean, sd, standard error.
+3. Construct a 95% confidence interval for the mean for both dispersal types. Do the intervals overlap? Please describe how you constructed the interval (using an equation or a single line of code).
+4. Choose (and run) a statistical test to test the hypothesis. What test have you selected, and why? What are the assumptions of the test, and how did you evaluate them? Report the relevant information from the test (test statistic, degrees of freedom, p-value). Did you choose a one-sided or two-sided test? Have you changed any of the other options for the test?
+5. Based on the result of number 4, what do you conclude about the hypothesis?
+
+
+## Task 2: Environmental values and environmental education
+
+Load the environmental values dataset ([Pinder et al, 2020](https://doi.org/10.5061/dryad.wdbrv15kn)).
+
+```{r eval = FALSE}
+env = read.csv("data/env_values.csv")
+```
+
+University students in Australia were asked various questions about their environmental values, desires for conservation careers, and educational background. We will examine two variables to address the hypothesis that **students from families that value the environment rate more highly the quality of their education about environmental values.**
+
+The data has two variables:
+
+* `env_education` contains responses to the question, "Thinking back to your schooling overall, how adequate was your education about environmental problems?", ranging from 0 (extremely inadequate) to 5 (extremely adequate).
+* `value_of_env_protection` has responses for, "How important is protecting the environment in your family?", ranging from 0 (not important) to 7 (very important)... note that one student indicated -1 -- you might have to deal with this somehow.
+
+1. Produce a histogram for each variable and a scatterplot for both variables. Are these plots interpretable? Are they useful? **Bonus**: Can you come up with an improvement on this figure for visualising these data? If so, include it!
+2. Produce summary statistics for both variables (mean/median, standard deviation, first and third quartiles, etc).
+3. Choose a test to evaluate the hypothesis (above) that these two variables are **correlated**. Which test did you choose, and why? What are the assumptions of the test? What are the results of the test? Note that there are NAs in the data, so you will probably need to deal with these before running your analysis.
+4. What do you conclude about the hypothesis above?

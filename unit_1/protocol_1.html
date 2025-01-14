@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content />
 
 
-<title>Worksheet 2</title>
+<title>Datenanalyse Unit 1 Protocol</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -253,6 +252,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="ex.css" type="text/css" />
 
 
 
@@ -349,52 +349,111 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Worksheet 2</h1>
-<h4 class="author"></h4>
-<h4 class="date">14.12.2023</h4>
+<h1 class="title toc-ignore">Datenanalyse Unit 1 Protocol</h1>
 
 </div>
 
 
-<div id="hydropsyche-width-mass-relationship" class="section level2">
-<h2>Hydropsyche width-mass relationship</h2>
-<p>The following dataset collects head capsule widths and body masses
-from Hydropsyche (a genus of caddisflies) in the Danube in Austria. Note
-that this data file is tab delimited, not comma delimited, so you will
-need <code>read.table</code>.</p>
-<pre class="r"><code>hydrop = read.table(&quot;data/Hydropsyche.txt&quot;, header = TRUE)</code></pre>
+<div id="guidelines" class="section level2">
+<h2>Guidelines</h2>
+<p>Below you will find a two tasks, similar to exercises we have done in
+class. Your task is to produce a document answering the numbered
+questions below using the tools you’ve learned in unit 1. Please produce
+a word/PDF document or similar with the answers organised by Task and
+question. If figures or tables are requested, you can embed them in this
+document. <strong>Note that figures and tables should be near
+publication quality - proper use of colours, labeled axes, units
+included, etc.</strong></p>
+<p>Please do <strong>not</strong> embed code in this document unless
+specifically asked to do so. Instead, please save your code in a
+separate R file. You can mark the task and question number using
+comments in the code. Turn in the code along with the writeup.</p>
+<p>You may work on this individually or in small groups (maximal 3
+students). Please turn this in to Lauren (<a href="mailto:lauren.talluto@uibk.ac.at" class="email">lauren.talluto@uibk.ac.at</a>) by <strong>February 14,
+2025</strong> at the latest. If you are stuck, please get in touch by
+email to make an appointment <strong>well in advance</strong>.</p>
+</div>
+<div id="task-1-understanding-natal-and-breeding-bird-dispersal" class="section level2">
+<h2>Task 1: Understanding natal and breeding bird dispersal</h2>
+<p>We will use a dataset (from <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13838">Fandos
+et al. 2022</a>) of dispersal distances of European birds. One important
+question is whether birds overall have greater dispersal requirements
+when first leaving the nest where they hatched (<strong>natal
+dispersal</strong>) or when dispersing as adults among different
+breeding sites (<strong>breeding dispersal</strong>).</p>
+<p>Here is some code to load the data (which is located in
+<code>vu_datenanalyse_students/unit_1/data/</code>):</p>
+<pre class="r"><code># assumes your working directory is already unit_1
+bird_disp = read.csv(&quot;data/birddisp.csv&quot;)</code></pre>
+<p>Note that, because we don’t have breeding and natal values for all
+species, we will have slightly different sample sizes for each.</p>
+<p>This dataset has three columns:</p>
+<ul>
+<li><code>species</code>: The species under consideration</li>
+<li><code>type</code>: Whether the dispersal distance concerns breeding
+or natal dispersal</li>
+<li><code>disp_dist</code>: The dispersal distance, in km.</li>
+</ul>
+<p>The original paper details many important factors that might
+influence dispersal distance, but we will focus on a relatively simple
+hypothesis: <strong>Averaging across all species, natal dispersal
+exceeds breeding dispersal</strong>.</p>
+<p>With that in mind, please do the following:</p>
 <ol style="list-style-type: decimal">
-<li>As before, do some data exploration; plot the variables against each
-other, examine histograms, and possibly boxplots as well. How do you
-interpret these plots? Can you say anything about the relationship
-between these variables?</li>
-<li>Use <code>lm</code> to fit a simple linear model (one variable, no
-transformations), using body mass as the response (y) variable, and
-width as the predictor. Is the regression significant? Report the
-statistics as shown in the lecture.</li>
+<li>Choose one or two plots that are appropriate for exploring the data.
+These plots should focus on revealing features in the data that might
+inform us about the hypothesis.</li>
+<li>Compute basic summary statistics for each dispersal type: mean, sd,
+standard error.</li>
+<li>Construct a 95% confidence interval for the mean for both dispersal
+types. Do the intervals overlap? Please describe how you constructed the
+interval (using an equation or a single line of code).</li>
+<li>Choose (and run) a statistical test to test the hypothesis. What
+test have you selected, and why? What are the assumptions of the test,
+and how did you evaluate them? Report the relevant information from the
+test (test statistic, degrees of freedom, p-value). Did you choose a
+one-sided or two-sided test? Have you changed any of the other options
+for the test?</li>
+<li>Based on the result of number 4, what do you conclude about the
+hypothesis?</li>
 </ol>
-<pre class="r"><code># use the formula syntax within lm to describe the model you want to fit
-mod1 = lm(weight ~ width, data = hydrop)
-
-# use the summary function to get information from your model
-# how do you interpret the output?
-summary(mod1)</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li>Produce some diagnostic plots of your model (see slide 18:
-Regression in R: diagnostics, or use <code>plot(mod)</code>). Is this an
-adequate model? Does it meet the assumptions of the linear model?</li>
-<li>Based on what you learned in 3, produce a new model, this time using
-a transformation of <span class="math inline">\(x\)</span> and/or <span class="math inline">\(y\)</span>. Repeat 2 and 3 for the new model. Is
-the new model better? What does the new model imply about the
-relationship between mass and size? Is it testing the same hypothesis as
-the previous model?</li>
+</div>
+<div id="task-2-environmental-values-and-environmental-education" class="section level2">
+<h2>Task 2: Environmental values and environmental education</h2>
+<p>Load the environmental values dataset (<a href="https://doi.org/10.5061/dryad.wdbrv15kn">Pinder et al,
+2020</a>).</p>
+<pre class="r"><code>env = read.csv(&quot;data/env_values.csv&quot;)</code></pre>
+<p>University students in Australia were asked various questions about
+their environmental values, desires for conservation careers, and
+educational background. We will examine two variables to address the
+hypothesis that <strong>students from families that value the
+environment rate more highly the quality of their education about
+environmental values.</strong></p>
+<p>The data has two variables:</p>
+<ul>
+<li><code>env_education</code> contains responses to the question,
+“Thinking back to your schooling overall, how adequate was your
+education about environmental problems?”, ranging from 0 (extremely
+inadequate) to 5 (extremely adequate).</li>
+<li><code>value_of_env_protection</code> has responses for, “How
+important is protecting the environment in your family?”, ranging from 0
+(not important) to 7 (very important)… note that one student indicated
+-1 – you might have to deal with this somehow.</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>Produce a histogram for each variable and a scatterplot for both
+variables. Are these plots interpretable? Are they useful?
+<strong>Bonus</strong>: Can you come up with an improvement on this
+figure for visualising these data? If so, include it!</li>
+<li>Produce summary statistics for both variables (mean/median, standard
+deviation, first and third quartiles, etc).</li>
+<li>Choose a test to evaluate the hypothesis (above) that these two
+variables are <strong>correlated</strong>. Which test did you choose,
+and why? What are the assumptions of the test? What are the results of
+the test? Note that there are NAs in the data, so you will probably need
+to deal with these before running your analysis.</li>
+<li>What do you conclude about the hypothesis above?</li>
 </ol>
-<p><strong>Bonus</strong>: Produce a scatterplot of width (x-axis) and
-mass (y-axis), on the original scale with no transformations. Add the
-regression curve from question 3 to your plot.</p>
-<pre class="r"><code># to get you started
-ggplot(hydrop, aes(x = ?, y = ?)) + geom_point() + 
-    geom_smooth(method = &quot;lm&quot;, formula = ?)</code></pre>
 </div>
 
 
@@ -437,7 +496,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
