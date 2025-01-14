@@ -72,7 +72,7 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
 		</td>
-		<td rowspan = 3>P
+		<td rowspan = 3>
 			<p><a href="unit_1/protocol_1.html">Protocol 1</a></p>
 		</td>
 	</tr>
