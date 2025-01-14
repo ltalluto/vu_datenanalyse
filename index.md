@@ -66,7 +66,7 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm">Populations, samples</p>
 			<p class="sm">Descriptive statistics</p>
 		</td>
-		<td>
+		<td rowspan = 2>
 			<p><a href="unit_1/worksheet_1i.html">Exercises 1.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
@@ -85,9 +85,6 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm">Confidence intervals</p>
 			<p class="sm">Significance tests</p>
 			<p class="sm">Type I and II errors</p>
-		</td>
-		<td>
-			<p><a href="unit_1/worksheet_1ii.html">Exercises 1.2</a></p>
 		</td>
 	</tr>
 	<tr>
