@@ -96,7 +96,7 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr18">G1: 20.01 13:45–18:30, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_1/lec_1_iii_basics2.html">The Basics part II</a></p>
+			<p><a href="unit_1/lec_1iii_more_basics.html">The Basics part II</a></p>
 			<p class="sm">Data structures</p>
 			<p class="sm">Visualisation</p>
 			<p class="sm">Association and Correlation</p>
