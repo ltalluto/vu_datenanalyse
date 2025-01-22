@@ -113,16 +113,18 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr18">G1: 23.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_2/lec_2_i_regression.html">Linear Models I</a></p>
+			<p><a href="unit_2/lec_2i_regression.html">Linear Models I</a></p>
 			<p class="sm">Linear regression</p>
 		</td>
 		<td>
-			<p><a href="unit_2/worksheet_2_i.html">Exercises 2.1</a></p>
+			<p><a href="unit_2/worksheet_2i.html">Exercises 2.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
 		</td>
-		<td rowspan = 3>Protocol 2</td>
+		<td rowspan = 3>
+			<p><a href="unit_2/protocol_2.html">Protocol 2</a></p>
+		</td>
 	</tr>
 	<tr>
 		<td>
@@ -131,12 +133,12 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr19">G1: 24.01 14:30–18:45, RR19</p>
 		</td>
 		<td>
-			<p><a href="unit_2/lec_2_ii_mlr.html">Linear Models II</a></p>
+			<p><a href="unit_2/lec_2ii_mlr.html">Linear Models II</a></p>
 			<p class="sm">Multiple linear regression</p>
 			<p class="sm">Model selection</p>
 		</td>
 		<td>
-			<p><a href="unit_2/worksheet_2_2.html">Exercises 2.2</a></p>
+			<p><a href="unit_2/worksheet_2ii.html">Exercises 2.2</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -146,13 +148,13 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr18">G1: 27.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_2/lec_2_iii_anova.html">Analysis of Variance</a></p>
+			<p><a href="unit_2/lec_2iii_AnovaAncova.html">Analysis of Variance</a></p>
 			<p class="sm">ANOVA</p>
 			<p class="sm">ANCOVA</p>
 			<p class="sm">Nonparametric location tests</p>
 		</td>
 		<td>
-			<p><a href="unit_2/worksheet_2_iii.html">Exercises 2.3</a></p>
+			<p><a href="unit_2/worksheet_2iii.html">Exercises 2.3</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -166,17 +168,19 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr21">G1: 29.01 13:00–17:15, RR21</p>
 		</td>
 		<td>
-			<p><a href="unit_3/lec_3_i_pca.html">Multivariate Stats I</a></p>
+			<p><a href="unit_3/5_multivariate.html">Multivariate Stats I</a></p>
 			<p class="sm">Principle components analysis (PCA)</p>
 			<p class="sm">Redundancy analysis (RDA)</p>
 		</td>
 		<td>
-			<p><a href="unit_3/worksheet_3_1.html">Exercises 3.1</a></p>
+			<p><a href="unit_3/worksheet_5.html">Exercises 3.1</a></p>
 <!-- 			<p class="sm">R Base Graphics</p>
 			<p class="sm">Programming basics</p>
 			<p class="sm">Sampling</p> -->
 		</td>
-		<td rowspan = 3>Protocol 3</td>
+		<td rowspan = 3>
+			<p><a href="unit_3/protocol_3.html">Protocol 3</a></p>
+		</td>
 	</tr>
 	<tr>
 		<td>
@@ -185,12 +189,12 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr18">G1: 30.01 8:00–11:45, RR18</p>
 		</td>		
 		<td>
-			<p><a href="unit_3/lec_3_ii_rda.html">Multivariate Stats II</a></p>
+			<p><a href="unit_3/5_multivariate.html">Multivariate Stats II</a></p>
 			<p class="sm">RDA continued</p>
 			<p class="sm">Permutation tests</p>
 		</td>
 		<td>
-			<p><a href="unit_3/worksheet_3_2.html">Exercises 3.2</a></p>
+			<p><a href="unit_3/worksheet_5.html">Exercises 3.2</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -200,11 +204,11 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr18">G1: 31.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_3/lec_3_iii_nmds.html">Multivariate Stats III</a></p>
+			<p><a href="unit_3/6_distance.html">Multivariate Stats III</a></p>
 			<p class="sm">Nonmetric multidimensional scaling (NMDS)</p>
 		</td>
 		<td>
-			<p><a href="unit_3/worksheet_3_iii.html">Exercises 3.3</a></p>
+			<p><a href="unit_3/worksheet_6.html">Exercises 3.3</a></p>
 		</td>
 	</tr>
 	<tr>
