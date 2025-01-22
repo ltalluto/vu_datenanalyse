@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Gabriel Singer" />
+  <title>Multiple regression</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.29/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="../assets/rmd_style.css" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Multiple regression</h1>
+  <p class="author">
+Gabriel Singer
+  </p>
+  <p class="date">21.01.2025</p>
+</div>
+<div id="multiple-linear-regression-model" class="slide section level2">
+<h1>Multiple linear regression model</h1>
+<div class="left lt">
+<p>Multiple metric continuous independent predictors are used to predict
+<em>one</em> metric response variable.</p>
+<p>Model formulation: linear combination of <em>k</em> predictors: <span
+class="math display">\[
+\mathbb{E}(y) =\beta_0+\beta_1X_1+\beta_2X_2+...+\beta_pX_p
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span> is the intercept</li>
+<li><span class="math inline">\(\beta_1...\beta_p\)</span> are
+<em>partial</em> regression coefficients for <span
+class="math inline">\(X_1...X_p\)</span></li>
+<li>The change in <span class="math inline">\(\mathbb{E}(y)\)</span> per
+unit change in an <span class="math inline">\(X_j\)</span> holding all
+other <span class="math inline">\(X\)</span>-variables constant</li>
+<li><span class="math inline">\(\beta_0...\beta_p\)</span> are estimated
+by <span class="math inline">\(b_0...b_p\)</span> from the sample.</li>
+</ul>
+<h3 id="why-doing-a-mlr-two-fundamentally-different-motivations">Why
+doing a MLR? Two fundamentally different motivations:</h3>
+<ul>
+<li>Hypothesis testing: I have clear hypotheses about every individual
+variable <span class="math inline">\(X_i\)</span>, potentially even
+including interactions.</li>
+<li>Predictive model building: I have little idea about relationships of
+relationships but seek a “good” model. This includes explorative
+approaches where “potential” predictors are identified.</li>
+</ul>
+</div>
+<div class="right rt">
+<p><img src="img/mlr.png" style="width:90.0%" /></p>
+</div>
+</div>
+<div id="multiple-linear-regression-model-1"
+class="slide section level2">
+<h1>Multiple linear regression model</h1>
+<div class="left lt">
+<p>Using matrix notation:</p>
+<p><span class="math display">\[
+\hat{y} = \mathbf{X}\mathbf{B}
+\]</span></p>
+<p><span class="math inline">\(\mathbf{B}\)</span> is the
+<strong>parameter vector</strong></p>
+<p><span class="math inline">\(\mathbf{X}\)</span> is the <strong>design
+matrix</strong></p>
+<p><span class="math display">\[
+\mathbf{X} = \begin{bmatrix}
+1 &amp; x_{1,1} &amp; x_{1,2} &amp; \dots &amp; x_{1,p} \\
+1 &amp; x_{2,1} &amp; x_{2,2} &amp; \dots &amp; x_{2,p} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \dots &amp; \vdots \\
+1 &amp; x_{n,1} &amp; x_{n,2} &amp; \dots &amp; x_{n,p} \\
+\end{bmatrix}
+\]</span></p>
+<p><br/></p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}(y) = \hat{y} &amp; = \mathbf{X}\mathbf{B} \\
+y &amp;= \mathbf{X}\mathbf{B} + \epsilon  \\
+\epsilon &amp; \sim \mathcal{N}(0, s_\epsilon)
+\end{aligned}
+\]</span></p>
+<p>The equation is a <strong>linear system</strong> and can be solved
+with linear algebra by OLS, minimizing the sum of squared residuals:</p>
+<p><span class="math display">\[
+\mathrm{min}: \sum \epsilon^2 = \sum \left (\mathbf{X}\mathbf{B} - y
+\right)^2
+\]</span></p>
+</div>
+<div class="right rt">
+<p><img src="img/mlr.png" style="width:90.0%" /></p>
+</div>
+</div>
+<div id="multiple-linear-regression-hypotheses"
+class="slide section level2">
+<h1>Multiple linear regression: Hypotheses</h1>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\mathbf{H_{0,regression}}\)</span>:
+<strong>All partial regression coefficients are zero</strong>.
+<ul>
+<li>The model (i.e., the linear system <span
+class="math inline">\(\mathbf{XB}\)</span>) does not explain any of the
+variation in <span class="math inline">\(y\)</span>.</li>
+<li>Test with ANOVA as with linear regression against a null model (with
+no predictors).</li>
+</ul></li>
+<li><span class="math inline">\(\mathbf{H_{0,coef_j}}\)</span>:
+<strong>An individual partial regression coefficient, the slope of the
+relationship between <span class="math inline">\(y\)</span> and <span
+class="math inline">\(x_j\)</span>, is zero</strong>.
+<ul>
+<li>with <span class="math inline">\(p\)</span> predictors, there are
+<span class="math inline">\(p\)</span> such hypotheses.</li>
+<li>test with a <span class="math inline">\(t\)</span>-statistic</li>
+<li>build a confidence limit for the slope of <span
+class="math inline">\(x_j\)</span></li>
+</ul></li>
+</ol>
+</div>
+<div id="multiple-linear-regression-hypotheses-1"
+class="slide section level2">
+<h1>Multiple linear regression: Hypotheses</h1>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\mathbf{H_{0,regression}}\)</span>:
+<strong>All partial regression coefficients are zero</strong>.
+<ul>
+<li>The model (i.e., the linear system <span
+class="math inline">\(\mathbf{XB}\)</span>) does not explain any of the
+variation in <span class="math inline">\(y\)</span>.</li>
+<li>Test with ANOVA as with linear regression against a null model (with
+no predictors).</li>
+</ul></li>
+<li><span class="math inline">\(\mathbf{H_{0,coef_j}}\)</span>:
+<strong>An individual partial regression coefficient, the slope of the
+relationship between <span class="math inline">\(y\)</span> and <span
+class="math inline">\(x_j\)</span>, is zero</strong>.
+<ul>
+<li>with <span class="math inline">\(p\)</span> predictors, there are
+<span class="math inline">\(p\)</span> such hypotheses.</li>
+<li>test with a <span class="math inline">\(t\)</span>-statistic</li>
+<li>build a confidence limit for the slope of <span
+class="math inline">\(x_j\)</span></li>
+</ul></li>
+</ol>
+<h3 id="comparing-effects-using-slopes">Comparing effects using
+slopes</h3>
+<p>Do <strong>not</strong> compare p-values to determine which predictor
+is “better”</p>
+<p>Rather, compare <strong>standardized effects</strong></p>
+<p>Either standardize all predictors (especially if <span
+class="math inline">\(s_{x_1} &gt;&gt; s_{x_2}\)</span>) or standardize
+the coefficients.</p>
+<p><span class="math display">\[
+{b_j}^*=b_j\frac{s_{X_j}}{s_Y}
+\]</span></p>
+<p>Higher <span class="math inline">\({b_j}^*\)</span> means stronger
+influence of <span class="math inline">\(x_j\)</span>. Note that in
+software output <span class="math inline">\({b_j}^*\)</span> is often
+referred to as <span class="math inline">\(\beta_j\)</span>.</p>
+<p>To express uncertainty for a regression slope, use confidence
+intervals. For the t-statistic use <span
+class="math inline">\(d.f.=n-(p+1)\)</span> where <span
+class="math inline">\(n\)</span> is sample size and <span
+class="math inline">\(p\)</span> is the number of involved predictors in
+the model.</p>
+</div>
+<div id="multiple-linear-regression-goodness-of-fit"
+class="slide section level2">
+<h1>Multiple linear regression: Goodness of fit</h1>
+<ul>
+<li>Explained variance: <strong>multiple <span
+class="math inline">\(R^2\)</span></strong></li>
+<li>Similar interpretation as with simple LR: the percentage of
+variation of Y explained by <em>all</em> X variables.</li>
+</ul>
+<p>BUT: adding predictors (even random numbers) will always increase
+<span class="math inline">\(R^2\)</span> (by making the model more
+flexible)</p>
+<p>One solution is <strong>Adjusted</strong> <span
+class="math inline">\(R^2\)</span>: penalises <span
+class="math inline">\(R^2\)</span> for additional model complexity.</p>
+<p><span class="math display">\[
+{R^2}_{adj}=1-\frac{SS_{res}}{SS_{tot}}\times\frac{n-1}{n-p}
+\]</span></p>
+<h3 id="comparing-effects-using-r2-partitioning">Comparing effects using
+<span class="math inline">\(R^2\)</span> partitioning</h3>
+<p>May be useful in particular cases, examples: <span
+class="math display">\[
+Flux=k \cdot \Delta C
+\]</span> <span class="math display">\[
+\log Flux=\log k + \log \Delta C
+\]</span> Fitting a model to a dataset here gives <span
+class="math inline">\(R^2=1\)</span> with two fractions partitioned for
+<span class="math inline">\(\log k\)</span> and <span
+class="math inline">\(\log \Delta C\)</span>.</p>
+</div>
+<div id="assumptions-for-mlr" class="slide section level2">
+<h1>Assumptions for MLR</h1>
+<ul>
+<li>All <span class="math inline">\(X_j\)</span> measured with
+no/minimal error</li>
+<li>Linearity between <span class="math inline">\(Y\)</span> and <span
+class="math inline">\(BX\)</span>, in other words linear relationships
+are assumed between <span class="math inline">\(Y\)</span> and every
+<span class="math inline">\(X_j\)</span> adjusted for all other <span
+class="math inline">\(X\)</span>-variables (hard to check!)</li>
+<li>Normally distributed residuals with constant variance
+<ul>
+<li>use <code>qqnorm(residuals(mod))</code>,
+<code>qqline(residuals(mod))</code>, and <code>plot(mod)</code></li>
+<li>plot <span class="math inline">\(|res|\)</span> or <span
+class="math inline">\(res^2\)</span> against <span
+class="math inline">\(\hat{Y}\)</span> to detect variance heterogeneity
+(no trend!)</li>
+<li>examine residuals for high leverage/influence</li>
+</ul></li>
+<li>Limited multicollinearity
+<ul>
+<li>quick test: run <code>cor</code> on predictor matrix, check for
+large correlations</li>
+<li>formal test: Variance Inflation Factors (VIF) &lt; 10 (ish)</li>
+</ul></li>
+</ul>
+<h3 id="dealing-with-multicollinearity">Dealing with
+multicollinearity</h3>
+<p>Why is this a problem?</p>
+<ul>
+<li>Numerical instability (hard to find parameter estimates)</li>
+<li>large CIs for regression slopes</li>
+<li>unsure importance of predictors (but could still be good overall
+model).</li>
+</ul>
+</div>
+<div id="variance-inflation-factors" class="slide section level2">
+<h1>Variance inflation factors</h1>
+<p>Ignoring <span class="math inline">\(y\)</span> for a moment, we can
+perform regressions of the <span class="math inline">\(x\)</span>
+variables against each other:</p>
+<p><span class="math display">\[
+x_i = b_0 + b_1x_1 \dots b_kx_k +\epsilon \mathrm{~;~excluding~x_i}
+\]</span></p>
+<p>Large <span class="math inline">\(R^2_i\)</span> would argue for
+redundancy of <span class="math inline">\(x_i\)</span> (its information
+is already contained in a linear combination of all other <span
+class="math inline">\(x\)</span>-variables).</p>
+<p><span class="math inline">\(VIF_i\)</span> is a transformation of
+<span class="math inline">\(R^2_i\)</span>:</p>
+<p><span class="math display">\[
+\mathrm{VIF}_i = \frac{1}{1-R^2_i}
+\]</span> The VIF (name!) tells you by how much the SE of a regression
+coefficient increases due to inclusion of additional <span
+class="math inline">\(x\)</span>-variables:</p>
+<p><span class="math display">\[
+s_b = s_{b,\rho=0}\sqrt{\mathrm{VIF}}
+\]</span></p>
+<p><span class="math inline">\(s_{b,\rho=0}\)</span> is the standard
+error of a regression coefficient, assuming that all predictors are
+uncorrolated</p>
+<h3 id="vif-in-r">VIF in R</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(car) # install the package, only need to do this once!</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">## Loading required package: carData</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>full_mod <span class="ot">=</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> </span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>                body_mass_g <span class="sc">+</span> sex, <span class="at">data =</span> penguins)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">## Error in eval(mf, parent.frame()): object &#39;penguins&#39; not found</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">vif</span>(full_mod)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">## Error: object &#39;full_mod&#39; not found</span></span></code></pre></div>
+<p>Procedure: if any VIF &gt; 10, drop the variable with the largest
+VIF, repeat</p>
+</div>
+<div id="choosing-predictors-models" class="slide section level2">
+<h1>Choosing predictors (models)</h1>
+<p>Simplest approach: fit a full model with all predictors, then drop
+anything that is non-significant - at once or stepwise ;-)</p>
+<p>Alternatively:</p>
+<ul>
+<li>start simple and add predictors</li>
+<li>do both, i.e. consider addition and removal of individual variables
+at any point to result in an ‘optimized’ model</li>
+</ul>
+<h3 id="caveats">Caveats:</h3>
+<ul>
+<li>Predictors may represent important hypotheses</li>
+<li>Predictors can influence other predictors!
+<ul>
+<li><span class="math inline">\(x_2\)</span> is significant only if
+<span class="math inline">\(x_1\)</span> is in the model, but <span
+class="math inline">\(x_1\)</span> is never significant</li>
+</ul></li>
+<li>Interactions must include all main effects:
+<ul>
+<li><span class="math inline">\(\mathbb{E}(y) = b_0 + b_1x_1 + b_2x_2 +
+b_3x_1x_2\)</span></li>
+<li>A model with <span class="math inline">\(b_3\)</span> must include
+<span class="math inline">\(b_1\)</span> and <span
+class="math inline">\(b_2\)</span>, even if non-significant!</li>
+</ul></li>
+<li>High-order terms (e.g., polynomials) must also include all
+lower-order terms
+<ul>
+<li><span class="math inline">\(\mathbb{E}(y) = b_0 + b_1x_1 +
+b_2x_1^2\)</span></li>
+<li>A model with <span class="math inline">\(b_2\)</span> must include
+<span class="math inline">\(b_1\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div id="choosing-predictors-models-based-on-information-theory"
+class="slide section level2">
+<h1>Choosing predictors (models) based on information theory</h1>
+<p>The best model in a set is the one that lets you accurately predict
+the value of a new unobserved outcome <span
+class="math inline">\(y_*\)</span> based on the vector of
+inputs/predictors <span class="math inline">\(\mathbf{X}_*\)</span>.</p>
+<p>We want to minimize the <strong>expected prediction
+error</strong></p>
+<p><span class="math display">\[
+    \mathbb{E}(\epsilon_*) = | \hat{y}_* - \mathbf{BX}^* |
+\]</span></p>
+<p>We usually do not measure it, rather we approximate it with Akaike’s
+Information Criterion (AIC)</p>
+<p><span class="math display">\[
+AIC = n \cdot \ln SS_{err}+ 2(p+1)-n \cdot \ln n
+\]</span> Like adjusted <span class="math inline">\(R^2\)</span>, it
+penalises models for complexity.</p>
+<p>Lower AIC is better. The model with lowest AIC is called the most
+<strong>parsimonious</strong> model. Models that differ by &lt;2 units
+in AIC are considered “equivalent” and usually reported as well.</p>
+</div>
+<div id="choosing-predictors-models-based-on-information-theory-1"
+class="slide section level2">
+<h1>Choosing predictors (models) based on information theory</h1>
+<p><strong>Question</strong>: What measurements can be used to predict
+bill length?</p>
+<div class="left lt">
+<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-2-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>full_mod <span class="ot">=</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                body_mass_g <span class="sc">+</span> sex, <span class="at">data =</span> penguins)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">summary</span>(full_mod)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">## Call:</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="do">## lm(formula = bill_length_mm ~ bill_depth_mm + flipper_length_mm + </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="do">##     body_mass_g + sex, data = penguins)</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="do">## Residuals:</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="do">##     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="do">## -5.6273 -1.4293 -0.0548  1.1696  7.2860 </span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="do">##                    Estimate Std. Error t value Pr(&gt;|t|)   </span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="do">## (Intercept)       0.6106378  8.6416123   0.071  0.94379   </span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="do">## bill_depth_mm     0.6735216  0.3385003   1.990  0.04902 * </span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="do">## flipper_length_mm 0.1331484  0.0466317   2.855  0.00511 **</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="do">## body_mass_g       0.0015048  0.0007275   2.069  0.04085 * </span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="do">## sexmale           0.5253570  0.7310479   0.719  0.47384   </span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="do">## Residual standard error: 2.136 on 114 degrees of freedom</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.543,  Adjusted R-squared:  0.5269 </span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="do">## F-statistic: 33.86 on 4 and 114 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
+</div>
+</div>
+<div id="choosing-predictors-models-based-on-information-theory-2"
+class="slide section level2">
+<h1>Choosing predictors (models) based on information theory</h1>
+<p><strong>Question</strong>: What measurements can be used to predict
+bill length?</p>
+<p>Does sex matter? Or can a sex effect be more simply explained by
+size?</p>
+<div class="left lt">
+<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>simple_mod <span class="ot">=</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                    body_mass_g, <span class="at">data =</span> penguins)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">AIC</span>(full_mod) <span class="sc">-</span> <span class="fu">AIC</span>(simple_mod)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="do">## [1] 1.46213</span></span></code></pre></div>
+</div>
+</div>
+<div id="model-building" class="slide section level2">
+<h1>Model building</h1>
+<ul>
+<li>Stepwise model selection, implemented <code>step</code> in R will
+build a model for you automatically, adding or dropping terms in an
+attempt to find a model that minimises AIC</li>
+<li>“Exhaustive” model building: Computation of all possible models =
+all predictor combinations</li>
+<li>Any of these are ok approaches for <strong>exploration</strong> but
+not for <strong>hypothesis testing</strong></li>
+<li>p-values resulting from such a model are not useful</li>
+<li>We should view such models as hypotheses to be explored with further
+data collection</li>
+<li>Unwise to speak of significance</li>
+</ul>
+<p>Such models are prone to <strong>Overfitting</strong>:” irrelevant
+predictors that correlate with the outcomes by chance result in a model
+that fits the dataset well, but performs poorly when challenged with new
+data (low <strong>transferability</strong>).</p>
+<h3 id="validation-to-ensure-a-model-is-fit-for-prediction">Validation
+to ensure a model is fit for prediction</h3>
+<ul>
+<li>Usage of additional or new data (or data formerly set aside) to
+validate a model</li>
+<li>Leave-one-out cross-validation: Using a dataset with n cases, this
+procedure repeats the model finding process n times leaving out 1 case
+at a time. A predicted value is computed for each left-out case using
+the respective model built without this case. A final plot of observed
+vs. predicted values allows to assess the predictive capacity of the
+model.</li>
+</ul>
+</div>
+<div id="pitfalls-model-flexibility" class="slide section level2">
+<h1>Pitfalls: Model flexibility</h1>
+<div class="left lt">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>hom <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    <span class="at">body_mass_kg =</span> <span class="fu">c</span>(<span class="fl">34.5</span>, <span class="fl">35.5</span>, <span class="dv">37</span>, <span class="fl">41.5</span>, <span class="fl">55.4</span>, <span class="fl">53.4</span>, <span class="fl">60.9</span>), </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="at">brain_volume_cc =</span> <span class="fu">c</span>(<span class="fl">652.4</span>, <span class="fl">464.5</span>, <span class="fl">448.8</span>, <span class="fl">549.3</span>, <span class="fl">819.9</span>, <span class="fl">1540.4</span>, <span class="fl">963.2</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>mod1 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg, <span class="at">data =</span> hom)</span></code></pre></div>
+</div>
+<div class="right rt">
+<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="pitfalls-model-flexibility-1" class="slide section level2">
+<h1>Pitfalls: Model flexibility</h1>
+<div class="left lt">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mod1 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg, <span class="at">data =</span> hom)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mod2 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> hom)</span></code></pre></div>
+</div>
+<div class="right rt">
+<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="pitfalls-model-flexibility-2" class="slide section level2">
+<h1>Pitfalls: Model flexibility</h1>
+<div class="left lt">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>mod1 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg, <span class="at">data =</span> hom)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>mod2 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> hom)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>mod3 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">3</span>), <span class="at">data =</span> hom)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>mod4 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">4</span>), <span class="at">data =</span> hom)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>mod5 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">4</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">5</span>), <span class="at">data =</span> hom)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>mod6 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">4</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">6</span>), <span class="at">data =</span> hom)</span></code></pre></div>
+</div>
+<div class="right rt">
+<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="the-curse-of-dimensionality" class="slide section level2">
+<h1>The curse of dimensionality</h1>
+<ul>
+<li>High dimensional spaces (lots of <span
+class="math inline">\(x\)</span> variables) require lots of data</li>
+<li>Rule-of-thumb minimum: <span class="math inline">\(n &gt;
+5k\)</span>
+<ul>
+<li>with large <span class="math inline">\(k\)</span>, even more is
+needed (as the necessary n to cover multidimensional space increases as
+a power law of k).</li>
+</ul></li>
+</ul>
+<p><br/></p>
+<p>Assume predictors <span class="math inline">\(X_1\)</span> and <span
+class="math inline">\(X_2\)</span> and limited sampling effort of
+n=16:</p>
+<ol style="list-style-type: decimal">
+<li>When studying only one predictor, we can cover its entire range of
+interest well.</li>
+<li>When studying two predictors with the same effort, our samples are
+dispersed in the 2D-space. We can´t get the same density but still cover
+the entire 2D-space in a regular grid.</li>
+<li>The more likely reality produces a dispersed distribution over the
+2D-space with well and less well covered areas. The data becomes
+<strong>sparse</strong>. Maintaining high sampling density becomes
+increasingly difficult when more than two 2 dimensions are involved. We
+don´t cover our predictors well enough anymore!</li>
+</ol>
+<p><br/></p>
+<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-12-1.png" width="1344" style="display: block; margin: auto;" /></p>
+</div>
+<div id="presenting-results" class="slide section level2">
+<h1>Presenting Results</h1>
+<h3 id="always">Always:</h3>
+<ol style="list-style-type: decimal">
+<li>A complete description of the model, all variables, and whatever
+variable selection method</li>
+<li>A table of regression parameters, std errors or confidence
+intervals, p-values</li>
+<li><span class="math inline">\(R^2\)</span> or another metric of
+goodness of fit</li>
+</ol>
+<h3 id="graphical-options">Graphical options</h3>
+<ol style="list-style-type: decimal">
+<li>Scatterplot-like representations not possible for &gt;2
+predictors</li>
+<li>Diagnostics (qq-plots, residulas vs fits) are even more
+important!</li>
+<li><strong>Partial response curves</strong>: effect of each variable,
+holding others constant</li>
+</ol>
+<p>When <span class="math display">\[
+Y = b_0+b_1 \cdot X_1+b_2*X_2
+\]</span> <span class="math display">\[
+Y_{adj} = Y-b_0-b_2*X_2
+\]</span> then <span class="math inline">\(Y_{adj}\)</span> is adjusted
+for the effect of <span class="math inline">\(X_2\)</span> (and the
+intercept <span class="math inline">\(b_0\)</span>) and may be
+meaningfully plotted against <span class="math inline">\(X_1\)</span>
+(when this variable is considered more important).</p>
+<p><img src="img/partial_response.png" style="width:50.0%" /></p>
+</div>
+<div id="last-example" class="slide section level2">
+<h1>Last example</h1>
+<ul>
+<li>Hypothesis tests give us false confidence about <span
+class="math inline">\(H_A\)</span>!</li>
+</ul>
+</div>
+<div id="last-example-1" class="slide section level2">
+<h1>Last example</h1>
+<p>One in 100,000 people have a condition, sigmocogititis, that causes
+you to think too much about statistics.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I do not have the
+disease</li>
+<li><span class="math inline">\(H_A\)</span>: I have it!</li>
+</ul>
+<p>We have a test with a type 1 error rate (<span
+class="math inline">\(\alpha\)</span>) = 0.05, and a type 2 error rate
+(<span class="math inline">\(\beta\)</span>) of 0.</p>
+</div>
+<div id="last-example-2" class="slide section level2">
+<h1>Last example</h1>
+<p>One in 100,000 people have a condition, sigmocogititis, that causes
+you to think too much about statistics.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I do not have the
+disease</li>
+<li><span class="math inline">\(H_A\)</span>: I have it!</li>
+</ul>
+<p>We have a test with a type 1 error rate (<span
+class="math inline">\(\alpha\)</span>) = 0.05, and a type 2 error rate
+(<span class="math inline">\(\beta\)</span>) of 0.</p>
+<p>I take the test, p &lt; 0.05, and so I begin treating my
+condition.</p>
+</div>
+<div id="last-example-3" class="slide section level2">
+<h1>Last example</h1>
+<p>One in 100,000 people have a condition, sigmocogititis, that causes
+you to think too much about statistics.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I do not have the
+disease</li>
+<li><span class="math inline">\(H_A\)</span>: I have it!</li>
+</ul>
+<p>We have a test with a type 1 error rate (<span
+class="math inline">\(\alpha\)</span>) = 0.05, and a type 2 error rate
+(<span class="math inline">\(\beta\)</span>) of 0.</p>
+<p>I take the test, p &lt; 0.05, and so I begin treating my
+condition.</p>
+<p><strong>Problem</strong>: The probability that I have the disease is
+only 0.0002!</p>
+<p>If we test 100,000 people with unknown status, 5% (5000) will test
+positive, but only one will have the condition. We made the wrong
+decision in 4999/5000 of these cases!</p>
+</div>
+<div id="last-example-4" class="slide section level2">
+<h1>Last example</h1>
+<p>One in 100,000 people have a condition, sigmocogititis, that causes
+you to think too much about statistics.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I do not have the
+disease</li>
+<li><span class="math inline">\(H_A\)</span>: I have it!</li>
+</ul>
+<p>We have a test with a type 1 error rate (<span
+class="math inline">\(\alpha\)</span>) = 0.05, and a type 2 error rate
+(<span class="math inline">\(\beta\)</span>) of 0.</p>
+<p>I take the test, p &lt; 0.05, and so I begin treating my
+condition.</p>
+<p><strong>Problem</strong>: The probability that I have the disease is
+only 0.0002!</p>
+<p>If we test 100,000 people with unknown status, 5% (5000) will test
+positive, but only one will have the condition. We made the wrong
+decision in 4999/5000 of these cases!</p>
+<ul>
+<li>In statistics, often called the <strong>base rate
+fallacy</strong></li>
+<li>In science, we call this <strong>the replication
+crisis</strong></li>
+<li>Considering only <span class="math inline">\(\alpha\)</span> and
+<span class="math inline">\(H_0\)</span> means we neglect to consider
+the plausibility of <span class="math inline">\(H_A\)</span></li>
+</ul>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>

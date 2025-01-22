@@ -1,0 +1,62 @@
+---
+title: "Worksheet 4"
+author: "Gabriel Singer"
+date: "12.12.2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE)
+```
+
+## Stoichiometry of microbes
+
+[Hall et al. (2010)](https://www.nature.com/articles/ismej2010115) report microbial biomass stoichiometry measured on a per cell basis using Raman microspectroscopy. The experiment uses 2 species measured in 2 growth phases on 4 media differing in stoichiometry. Verrucomicrobia are slow-growing soil and limnic bacteria, Pectobacterium is an opportunistic fast-growing detritivore isolated from carrots. The experiment is a complete full-factorial design and the original work actually has even a fourth factor in the design (which we here ignore). There are independently replicated bottles for each cell of the design, but replication is a bit various. Extreme N:P media (0.5 and 500) are replicated a bit less than the intermediate N:P levels 5 and 50. In addition, in each bottle 20 specimens were actually measured under the microscope. The factor `all.treat` is a *combined* factor created by **bacterium_growth phase_medium_bottle** and codes for the independent replicates in the experimental design.
+
+The response variables in this design are signatures extracted from Raman spectra collected from individual bacterial cells. These are proxies for specific macromolecules: 8 carbohydrates, 4 nucleic acids, 3 proteins (coded by `ca_` and `na_`, `pr_`.)
+
+```{r}
+mic = read.table("data/MicrobesStoichiometry.txt", header = TRUE)
+```
+
+1. The dataset is fairly large ;-), i.e. *exploration* could take you a while. Therefore start with filtering a subset of intermediate stoichiometry in the medium (either level 5 or 50).
+
+```{r}
+mic$NP = factor(mic$NP)
+mic = subset(mic, subset = (NP==5 | NP==50))
+```
+
+2. The dataset is multivariate, we are mainly interested in abundance of *nucleic acids*. Could all the nucleic acid Raman signatures be considered to inform about the same property *nucleic acid abundance*? If so, average the signatures to create a new *metavariable*. Consider using `scale` before averaging. 
+3. Measurements of individual bacterial cells are replicates **within** each bottle. The experimental design in fact requires a mixed model analysis that accounts for the dependency of measurements within each bottle. As an alternative, the dataset could be collapsed to the level it is actually independently replicated, i.e. the bottle. This could be done by computing means per bottle, forming a new dataset with only 1 *average* bacterium per bottle. It may be worthwhile to explore distribution of measurements within a bottle - maybe a different measure should be used to get an average *location*. Not collapsing the dataset to bottle means would mean to use a **pseudoreplicated** dataset.
+
+```{r}
+mic = mic[, -2] # aggregation will make this factor meaningless
+mic2 = aggregate(. ~ all.treat + species + phase + NP + bottle, data = mic, FUN = median)
+# compare shape and size of mic vs. mic2!
+```
+
+4. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
+5. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+
+
+
+## Hucho record captures in Austrian rivers
+
+Fishermen like to catch record-breaking large fish and if successful will do a bit of effort to document their historic achievement in the local pub ;-) This dataset contains sizes of such record catches of Hucho in various Austrian streams and rivers of various size, the data was collected from various sources including the eventual black-and-white photograph hanging in a pub.
+
+Here is one such picture from the author of the study:
+s
+![](img/Hucho.jpg)
+
+The Danube salmon is an endangered species in now dwindling populations. It needs intact river corridors for migration. Hydropower facilities should have a fish ladder allowing the fish to bypass turbines. The size of such a fish ladder is a cost issue AND an ecological issue - it needs to be large enough to accommodate the expected fish size in any given system. Usually large rivers host large fish. So, river size could be taken as a proxy of fish size to be expected.
+
+```{r}
+hucho = read.table("data/HuchoRatschan2012.txt", header = TRUE)
+```
+
+1. Look for a reasonable relationship of a river size measure with a fish size measure. Deliver a model that could guide construction of fish passes. Consider transformations to linearize relationships.
+2. A potential confounding variable could be population size. When a population of Hucho is very small, it is less likely to contain large specimens. The dataset includes an estimate of population size based on expert (= fishermen) opinion. Explore differences in maximum Hucho body size captured in the various systems depending on population size. Test for differences and produce a publishable final graph showing average maximum fish size in dependence from population size. Don´t forget to check assumptions before running your statistical analysis and justify your choice of method.
+3. You will find that both river size and population size affect maximum Hucho size. How can you test both predictors at once? Which would be the best model for fish ladder builders if they wanted to improve the conservation status of Danube salmon in the future?
+
+
+

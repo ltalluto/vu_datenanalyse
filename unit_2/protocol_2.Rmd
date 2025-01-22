@@ -1,0 +1,78 @@
+---
+title: "Datenanalyse Unit 2 Protocol"
+date: ""
+output: 
+  html_document:
+    self_contained: true
+    css: ex.css
+    mathjax: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Guidelines
+
+Below you will find a two tasks, similar to exercises we have done in class. Your task is to produce a document answering the numbered questions below using the tools you've learned in unit 2. Please produce a word/PDF document or similar with the answers organised by Task and question. If figures or tables are requested, you can embed them in this document. **Note that figures and tables should be near publication quality - proper use of colours, labeled axes, units included, etc.**
+
+Please do **not** embed code in this document. Instead, please save your code in a separate R file. You can mark the task and question number using comments in the code. Turn in the code along with the writeup.
+
+You may work on this individually or in small groups (maximal 3 students). Please turn this in to Gabriel (gabriel.singer@uibk.ac.at) by **February 14, 2025** at the latest. If you are stuck, please get in touch by email to make an appointment **well in advance**.
+
+## Dataset: Water chemistry of 54 streams of the Mara basin (Kenia)
+
+We will use an unpublished dataset from Fred Omengo´s master thesis. You will meet the same dataset again when practicing multivariate methods.
+
+Dataset description: 54 streams in the Mara River basin were investigated for water chemical conditions with a focus on quantity and quality of dissolved organic matter. In addition CO2-concentrations in the water were computed from pH and alkalinity. The streams were selected to vary in dominant landuse of their catchments and in stream size. In addition there were differences between streams in sampling time (arbitrary) and canopy cover (somewhat related to landuse). The water chemical variables include a range of anions and cations, specifically fractions of the most important nutrients N and P, besides conductivity and turbidity. Quantity of carbon available for microbial respiration is measured as DOC. Then there is a range of optical descriptors of dissolved organic matter (DOM) quality, these are all based on absorbance or fluorescence measurements. We here cannot go into detail of describing those DOM quality variables, just understand them as informing about molecular size, humification, proteinabundance, algal or soil origin, etc. For a slightly more detailed variable description see sheet metadata in Excel file.
+
+Here is some code to load the data (which is located in `vu_datenanalyse_students/unit_2/data/`):
+
+```{r data_load, eval = FALSE}
+data = read.table("data/MaraRiver_full.txt", header = TRUE)
+names(data)
+dim(data)
+
+```
+
+## Task 1: Does landuse affect water chemistry?
+
+Start with investigating effects of landuse, which is coded as a three-level factor: Catchments of streams were classified into categories A (=agriculture), M (=mixed) and F (=forest) depending on dominant landuse. Test whether landuse affects canopy cover (removal of vegetation!), TSS (soil erosion!), epCO2 (high respiration or lots of CO2 input if high). Note that the factor landuse can be considered as an "ordered factor", plots should reflect this order. 
+
+1. Explore variables, consider transformations. 
+2. Run multiple ANOVAs (or analogue procedures) to test for landuse effects on these 3 (eventually transformed) responses.
+3. Choose an appropriate way to graph data and report test results alongside the graphs.
+4. Report test results in a table.
+
+## Task 2: Consider stream size as covariate in an analysis targetting landuse effects
+
+In a second step of analysis, consider that stream size is a major influence for many variables and may have to be simultaneously accounted for in an analysis targeting landuse. The best proxy for stream size in this dataset is discharge (variable name: Q). Your aim should be to use ANCOVA.
+
+1. Plot data appropriately, check if data transformation may be helpful.
+2. Decide if an interaction term should be considered and why (ecological reasoning)?
+3. Run ANCOVA and report results efficiently in graphical form for **one** selected response variable.
+4. Report confidence intervals for the slopes of the selected response variable for the various landuse categories. Again try to find an efficient way of presenting your results.
+5. Did your analysis of landuse effects become more powerful by considering stream size as covariate?
+6. Did inclusion of the covariate stream size allow interesting new conclusions?
+
+## Task 3: Build a predictive model for CO2-concentration
+
+Some streams are quite super-saturated in CO2, others less so. Identify potential controls among the available variables and build a model allowing to predict epCO2. Some indicators are straightforward and should be chosen, e.g. the amount of metabolizable DOC. Others have the character of a covariate (e.g. difference to solar noon indicating lack of light for primary production at the time of sampling). 
+
+1. Choose a reasonably subset of variables as potential predictors. Your choice may first and foremeost be guided by ecological reasoning. Second, you may explore collinearity among predictors and select "key" predictors (rather than just use "all").
+2. Use multiple linear regression and an appropriate model building strategy to build a parsimonious model.
+3. Report approach and results (in written text and table).
+
+## Bonus 1: Use leave-one-out cross-validation to assess predictive capacity (i.e. model transferability).
+
+1. Report results of validation using a plot of predicted vs. observed epCO2 and a correlation analysis.
+
+## Bonus 2: Come back to this exercise after having learned about PCA
+
+The dataset has quite a high number of variables. Choosing predictors to predict epCO2 was not an easy task. Consider that some predictors could be condensed using PCA and then expressed in potentially meaningful **metavariables** (i.e. PCA scores), e.g. "anorganic chemistry" or "DOM quality". As PCA-axes are orthogonal to each other (i.e. they are not correlated), they are well suited as input for MLR.
+
+1. Condense anorganic water chemical data to an appropriate number of PCA-axes (try to give these a meaning).
+2. Condense dissolved organic matter descriptors to an appropriate number of PCA-axes (try to give these a meaning).
+3. Rerun your model building to predict epCO2 with these new metavariables and other key predictors.
+4. Report PCAs and final MLR model.
