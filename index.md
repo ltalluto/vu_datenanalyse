@@ -167,16 +167,14 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm srb">G0: 27.01 9:00–13:15, SRB</p>
 			<p class="sm rr21">G1: 29.01 13:00–17:15, RR21</p>
 		</td>
-		<td>
-			<p><a href="unit_3/5_multivariate.html">Multivariate Stats I</a></p>
+		<td rowspan = 2>
+			<p><a href="unit_3/5_multivariate_WS2425.html">Multivariate Stats I</a></p>
 			<p class="sm">Principle components analysis (PCA)</p>
 			<p class="sm">Redundancy analysis (RDA)</p>
+			<p class="sm">Permutation tests</p>
 		</td>
-		<td>
-			<p><a href="unit_3/worksheet_5.html">Exercises 3.1</a></p>
-<!-- 			<p class="sm">R Base Graphics</p>
-			<p class="sm">Programming basics</p>
-			<p class="sm">Sampling</p> -->
+		<td rowspan = 2>
+			<p><a href="unit_3/worksheet_5_WS2425.html">Exercises 3.1</a></p>
 		</td>
 		<td rowspan = 3>
 			<p><a href="unit_3/protocol_3.html">Protocol 3</a></p>
@@ -188,14 +186,6 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr20">G0: 28.01 8:00–11:45, RR20</p>
 			<p class="sm rr18">G1: 30.01 8:00–11:45, RR18</p>
 		</td>		
-		<td>
-			<p><a href="unit_3/5_multivariate.html">Multivariate Stats II</a></p>
-			<p class="sm">RDA continued</p>
-			<p class="sm">Permutation tests</p>
-		</td>
-		<td>
-			<p><a href="unit_3/worksheet_5.html">Exercises 3.2</a></p>
-		</td>
 	</tr>
 	<tr>
 		<td>
@@ -204,11 +194,13 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr18">G1: 31.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<p><a href="unit_3/6_distance.html">Multivariate Stats III</a></p>
+			<!-- <p><a href="unit_3/6_distance.html">Multivariate Stats II</a></p> -->
+			<p>Multivariate Stats II</p>
 			<p class="sm">Nonmetric multidimensional scaling (NMDS)</p>
 		</td>
 		<td>
-			<p><a href="unit_3/worksheet_6.html">Exercises 3.3</a></p>
+			<p>Exercises 3.2</p>
+			<!-- <p><a href="unit_3/worksheet_6.html">Exercises 3.2</a></p> -->
 		</td>
 	</tr>
 	<tr>
