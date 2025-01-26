@@ -1,6 +1,6 @@
 ---
 title: "Multivariate statistics (classical methods)"
-author: "Thomas Fuß/Gabriel Singer"
+author: "Thomas Fuß"
 date: "WS24/25"
 output:
   slidy_presentation:
@@ -26,25 +26,40 @@ library(kableExtra)
 
 ## Multivariate statistics - in R
 What you have learned so far (among other things):
-![](img/test table.png){width=80}
 
+A multitude of analyses how to describe the effect of one or multiple variables on **one** response/dependent variable 
+![](img/test table.png){width=60%}
 
-However, ecological datasets often have one or both of these datasets (if not more):
+<br/>
 
-![](img/mv_table.png){width=800%}
+However, what can we do if we have **more than one** response/dependent variable?  
+Ecological datasets often have one or both of these datasets (if not more):
+
+![](img/mv_table.png){width=80%}
 
 
 
 ## A short intro to classical ordination methods - in R
 **Ordination** is an umbrella term for multivariate methods which arrange data along a
-gradient (axis, scale). A sloppy explanation is "putting things in order".
+gradient (axis, scale).
 
-**Ordination** is a word almost exclusively used by ecologists. Outside most of these methods are known as **scaling techniques**. The phrase **gradient analysis** makes a bit more sense in ecology.
+A sloppy explanation is "putting things in order".
+
+**Ordination** is a word almost exclusively used by ecologists. Outside most of these methods are known as **scaling techniques**. 
+<br/>
 
 ![](img/ordinations_table.png)
 
 
 ## Principal component analysis (PCA)
+
+PCA reduces the dimensionality of a dataset while retaining most of its variability. Hence, reduces the complexity of high-dimensonal data and can identify hidden patterns.
+
+PCA converts the original set of variables into a new set of variables called principal components (PCs), which represent the main patterns of variation.
+
+
+
+![](img/PCA_explained.png){width=100%}
 
 PCA can be understood as a MLR on theoretical (latent) instead of observed dependent variables.
 
@@ -62,10 +77,6 @@ $$
 There must be as many PCs as original variables. The factor loading matrix translates p $X$-variables into p $PCs$.
 
 PCA can be understood as a rotation of the original coordinate system made up of p $X$-variables into a new coordinate system defined by p $PCs$.
-
-<br/>
-
-![](img/pca_rotation.png)
 
 
 ## Principal component analysis (PCA) in R
@@ -86,87 +97,163 @@ mara<-mara[-6,] #delete row with NAs
 landuse<-mara$landuse
 wc<-mara[,-1]
 
-apply(wc, 2, hist) #check normal distribution
+#apply(wc, 2, hist) #check normal distribution
 wc[,-2]<-log(wc[,-2]) #log-transform concentration data (not pH)
-apply(wc, 2, hist) #check normal distribution
+#apply(wc, 2, hist) #check normal distribution again
 
 plot(wc) # check potential for PCA by correlation plot
 
-pca<-prcomp(scale(wc),center=F,scale.=F)
-pca<-prcomp(wc,center=T,scale.=T)   # equivalent to line above
 
-summary(pca)
 
-pca$sdev # stdevs of PCs (squares are eigenvalues); eigenvalues correspond to the variance of their respective principal component (PC)
-eigenvals(pca)==pca$sdev^2
+#scaling/standardizing (= subtract mean and divide by standard deviation) is necessary to account for different units
+apply (wc, 2, var)
+stand.wc <- scale(wc)
+stand.wc.var <- apply (stand.wc, 2, var)
+stand.wc.var
 
-head(scores<-pca$x) # site scores on all PCs
+# PCA using the rda function from the vegan package
+pca<-rda(X=wc,scale=TRUE)
+pca<-rda(stand.wc,scale=FALSE)   # equivalent to line above
 
-head(scale(wc) %*% pca$rotation) # to manually compute scores from variables and loadings
-head(loadings<-pca$rotation) # the variable loadings
+plot(pca)
+biplot(pca)
 
+scores<-scores(pca, choices=c(1:18), display="sites", scaling=1)
+loadings<-scores(pca, choices=c(1:18), display="species", scaling=1) #species in our case are environmental variables
+
+#quick sorting reveals which variables have the highest absolute correlation to the first and second axis: 
+sort (abs (loadings[,1]), decreasing = TRUE)
+sort (abs (loadings[,2]), decreasing = TRUE)
+
+eigenvals(pca)
 
 # how many axes should be kept?
 #there is not the one well-accepted method
 #1. visual examination
 #looking for a point at which the proportion of variance explained by each subsequent principal component drops off (elbow of scree plot)
-screeplot(pca, npcs=length(pca$sdev), type = "lines") # plots eigenvalues vs. principal components (PCs) #
+screeplot(pca, npcs=length(eigenvals(pca)), type="lines") # plots eigenvalues vs. principal components (PCs) #
 #2 Kaiser-Guttman criterion
-# retain PCs with eigenvalues>1, PCs with eigenvalues<1 contain less informatin than one original variable
+# retain PCs with eigenvalues>1, PCs with eigenvalues<1 contain less information than one original variable
 abline(h=1,col="red")
 # eigenvalue of PC5<1
 #3. variance explained method: set an "arbitrary" threshold of explained variance (e.g. 70%, 80%, 90%) and choose as many PCs till threshold is reached.
 summary(pca)
-
 # -> the first 3-4 PCs seem useful, and just PC1 and PC2 alone are already explaining a lot of overall variance
 
 
+#Different scaling produces different plots
+#Either species/environmental variables (2) or site (1) scores are scaled by eigenvalues, and the other set of scores is left unscaled, or with 3 both are scaled symmetrically by square root of eigenvalues.
 # for a DISTANCE BIPLOT (focus is on sites, "scaling 1")
-# each principal component has variance given by eigenvalue, loadings remain unscaled
-str(landuse)
-landuse<-as.factor(landuse)
-plot(scores[,1:2],asp=1,pch=21, cex=2, bg=landuse) # note asp=1
-arrows<-loadings*15 # with extension factor
-Arrows(x0=0,y0=0,x1=arrows[,1],y1=arrows[,2],col="darkgreen")
-text(x=arrows[,1]*1.2,y=arrows[,2]*1.2,labels=names(wc),cex=0.8)
-#text(scores[,1:2], rownames(wc), pos=2)
-legend("bottomright", legend=c("Agriculture", "Mixed", "Forest"), pch=21, pt.cex=2, pt.bg=c("black","green","darkred"), cex=1.5)
-
-biplot(pca,scale=0)
 # in this plot:
 # 1) distances among sites are approximating true Euclidean distances in multivariate space
 # 2) angles between arrows do not reflect correlations among variables
 # 3) projecting site on descriptor at right angle gives its appr. descriptor value
+# each principal component has variance given by eigenvalue, loadings remain unscaled
+str(landuse)
+landuse<-as.factor(landuse)
+
+plot(scores[,1:2],asp=1,pch=21, cex=2, bg=landuse) # note asp=1
+arrows<-loadings[,1:2]*0.7 # with extension/reduction factor
+Arrows(x0=0,y0=0,x1=arrows[,1],y1=arrows[,2],col="darkgreen")
+text(x=arrows[,1]*1.2,y=arrows[,2]*1.2,labels=names(wc),cex=0.8)
+#text(scores[,1:2], rownames(wc), pos=2)
+legend("bottomright", legend=c("Agriculture", "Mixed", "Forest"), pch=21, pt.cex=1, pt.bg=c("black","green","darkred"), cex=0.8)
+
+#biplot(pca,scaling=1)
 
 # for a CORRELATION BIPLOT (focus is on variables, "scaling 2")
-# each principal component is weighted by 1/sqrt(eigenvalue), so it has variance 1
-var(scores[,1]/pca$sdev[1]) # just demo
-plot(scores[,1]/pca$sdev[1],scores[,2]/pca$sdev[2],pch=21,bg=landuse,asp=1)
-# loadings are weighted by sqrt(eigenvalues)
-arrows<-loadings*matrix(pca$sdev,nrow=nrow(loadings),ncol=ncol(loadings),byrow=TRUE)
-arrows<-arrows*2 # choose extension factor
-Arrows(x0=0,y0=0,x1=arrows[,1],y1=arrows[,2],col="purple")
-# as alternative just compute correlation of scores with original data ("structure coefficients")
-(structure<-cor(wc,scores))
-structure<-2*structure
-Arrows(x0=0,y0=0,x1=structure[,1],y1=structure[,2],col="red")
-text(x=arrows[,1]*1.3,y=arrows[,2]*1.2,labels=names(wc),cex=0.7)
-
-biplot(pca,scale=1)
 # in this plot
 # 1) distances among sites are not approximating true Euclidean distances in multivariate space
 # 2) angles between arrows reflect correlations among variables (NOT proximity of arrow heads)
 # 3) projecting site on descriptor at right angle gives its appr. descriptor value
+# each principal component is weighted by 1/sqrt(eigenvalue), so it has variance 1
+scores<-scores(pca, choices=c(1:18), display="sites", scaling=2)
+loadings<-scores(pca, choices=c(1:18), display="species", scaling=2) #species in our case are environmental variables
 
-# PCA using the rda function from the vegan package
-pca2<-rda(X=wc,scale=TRUE)
-summary(pca2,scaling=1)
-summary(pca2,scaling=2)
+plot(scores[,1:2],asp=1,pch=21, cex=2, bg=landuse) # note asp=1
+arrows<-loadings[,1:2] 
+Arrows(x0=0,y0=0,x1=arrows[,1],y1=arrows[,2],col="darkgreen")
+text(x=arrows[,1]*1.2,y=arrows[,2]*1.2,labels=names(wc),cex=0.8)
+#text(scores[,1:2], rownames(wc), pos=2)
+legend("bottomright", legend=c("Agriculture", "Mixed", "Forest"), pch=21, pt.cex=1, pt.bg=c("black","green","darkred"), cex=0.8)
 
-layout(matrix(1:2, nrow=1))
-biplot(pca2,scaling=1)
-biplot(pca2,scaling=2)
-# note different scaling factors, but solution remains same
+#biplot(pca,scaling=2)#distances among objects are not approximations of Euclidean distances; angles between descriptor (species) vectors reflect their correlations.
+# Descriptors at 180 degrees of each other are negatively correlated;
+# Descriptors at 90 degrees of each other have zero correlation;
+# Descriptors at 0 degrees of each other are positively correlated.
+
+
+
+#Scaling 3 is a compromise
+scores<-scores(pca, choices=c(1:18), display="sites", scaling=3)
+loadings<-scores(pca, choices=c(1:18), display="species", scaling=3) #species in our case are environmental variables
+
+plot(scores[,1:2],asp=1,pch=21, cex=2, bg=landuse) # note asp=1
+arrows<-loadings[,1:2] 
+Arrows(x0=0,y0=0,x1=arrows[,1],y1=arrows[,2],col="darkgreen")
+text(x=arrows[,1]*1.2,y=arrows[,2]*1.2,labels=names(wc),cex=0.8)
+#text(scores[,1:2], rownames(wc), pos=2)
+legend("bottomright", legend=c("Agriculture", "Mixed", "Forest"), pch=21, pt.cex=1, pt.bg=c("black","green","darkred"), cex=0.8)
+
+#biplot(pca,scaling=3)
+
+
+# Alternatively:
+# #Run PCA with R basic
+# pca<-prcomp(scale(wc),center=F,scale.=F) #scaling (= subtract mean and divide by standard deviation) is necessary to account for different units
+# pca<-prcomp(wc,center=T,scale.=T)   # equivalent to line above
+# 
+# summary(pca)
+# str(pca)
+# 
+# pca$sdev # stdevs of PCs (squares are eigenvalues)
+# eigenvals(pca)==pca$sdev^2 #eigenvalues correspond to the variance (=sd^2) of their respective principal component (PC)
+# sum(eigenvals(pca)) #total variance of the dataset
+# 
+# head(scores<-pca$x) # site scores on all PCs
+# #head(scale(wc) %*% pca$rotation) # to manually compute scores from variables and loadings
+# 
+# head(loadings<-pca$rotation) # the variable loadings
+# 
+# 
+# # for a DISTANCE BIPLOT (focus is on sites, "scaling 1")
+# # in this plot:
+# # 1) distances among sites are approximating true Euclidean distances in multivariate space
+# # 2) angles between arrows do not reflect correlations among variables
+# # 3) projecting site on descriptor at right angle gives its appr. descriptor value
+# # each principal component has variance given by eigenvalue, loadings remain unscaled
+# str(landuse)
+# landuse<-as.factor(landuse)
+# 
+# layout(matrix(1:2, nrow=1))
+# plot(scores[,1:2],asp=1,pch=21, cex=2, bg=landuse) # note asp=1
+# arrows<-loadings*15 # with extension factor
+# Arrows(x0=0,y0=0,x1=arrows[,1],y1=arrows[,2],col="darkgreen")
+# text(x=arrows[,1]*1.2,y=arrows[,2]*1.2,labels=names(wc),cex=0.8)
+# #text(scores[,1:2], rownames(wc), pos=2)
+# legend("bottomright", legend=c("Agriculture", "Mixed", "Forest"), pch=21, pt.cex=1, pt.bg=c("black","green","darkred"), cex=0.8)
+# 
+# biplot(pca,scale=0)
+# 
+# # for a CORRELATION BIPLOT (focus is on variables, "scaling 2")
+# # in this plot
+# # 1) distances among sites are not approximating true Euclidean distances in multivariate space
+# # 2) angles between arrows reflect correlations among variables (NOT proximity of arrow heads)
+# # 3) projecting site on descriptor at right angle gives its appr. descriptor value
+# # each principal component is weighted by 1/sqrt(eigenvalue), so it has variance 1
+# var(scores[,1]/pca$sdev[1]) # just demo
+# plot(scores[,1]/pca$sdev[1],scores[,2]/pca$sdev[2],pch=21,bg=landuse,asp=1)
+# # loadings are weighted by sqrt(eigenvalues)
+# arrows<-loadings*matrix(pca$sdev,nrow=nrow(loadings),ncol=ncol(loadings),byrow=TRUE)
+# arrows<-arrows*2 # choose extension factor
+# Arrows(x0=0,y0=0,x1=arrows[,1],y1=arrows[,2],col="purple")
+# # as alternative just compute correlation of scores with original data ("structure coefficients")
+# (structure<-cor(wc,scores))
+# structure<-2*structure
+# Arrows(x0=0,y0=0,x1=structure[,1],y1=structure[,2],col="red")
+# text(x=arrows[,1]*1.3,y=arrows[,2]*1.2,labels=names(wc),cex=0.7)
+# 
+# biplot(pca,scale=1)
 
 
 ##############################
@@ -174,46 +261,47 @@ biplot(pca2,scaling=2)
 # test PCA-axes for effect of landuse or stream size (as log(Q)) using ANOVA or ANCOVA
 # correlate PCA-axes with other potential "controlling" variables (e.g. canopy cover) to give "meta-dimensions" more meaning
 # useful function envfit() to relate additional variables to the ordination space
+
+# The function envfit calculates multiple regression of environmental variable with ordination axes (environmental variable is used as dependent and selected ordination axes as explanatory variables). Significance is tested by permutation test. Vectors (for continual variables) and centroids (for categorical variables) can be projected onto ordination diagram using plot function. 
 ```
 
 
-## Redundancy analysis (RDA) in R
-The classical ordination methods always target **dimension reduction**
+## Direct (constrained) ordination
+The classical ordination methods always target **dimension reduction** and may involve **indirect** (unconstrained) reconstruction of gradients from a single data matrix (e.g. PCA) or **direct** (constrained) regression on a 2nd matrix of explanatory variables (e.g. RDA).
 
-* are based on **linear or unimodal** relationships, and
-* may involve **direct** regression on a 2nd matrix of explanatory variables (as opposed to **indirectly** reconstructing gradients from a single data matrix)
+Constrained ordinations aim to explain the variation in a set of response variables using a set of explanatory variables.
+
+<br/>
 
 ![](img/ordinations_table.png)
 
-
-## Redundancy analysis (RDA) in R
+## Redundancy analysis (RDA)
 <div class="left lt">
 
-Two involved matrices: one dependent, one independent.
+**Direct ordinations** identify the relationship between a multivariate response matrix and a multivariate explanatory matrix by combining regressino and ordination concepts.
 
-(Note: For correlation of two matrices see CCorA (Canonical correlation analysis) $\neq$ CCA.)
+**Two involved matrices**: one dependent, one independent.
 
-**Redundancy**: The proportion of total variance of in the response variables that can be explained linear combinations of predictors.
+Steps in RDA
 
-Two steps:
+1. Multiple linear regression relate each dependent/response variable (eg. species abundances, DOM descriptors) to the independent/explanatory matrix (e.g. environmental variables, land use) and predict the response.
 
-1. MLRs relate each response variable to the independent matrix and predict the response.
-2. The matrix of predicted response variables (same size as original: n objects * p variables) is subject to PCA.
+2. The matrix of predicted response variables (same size as original: number of sites/samples/objects * number of variables) is used in PCA to extract constrained ordination axes. Hence, RDA is a canonical version of PCA where the PCs are constrained to be linear combinations of the explanatory variables.
 
-The response variables are **constrained** to be linear combinations of the predictors first! The PCA can only "ordinate" variation of the responses that is relatable to predictors.
+3. The matrix of the residuals is also used in PCA to extract unconstrained axes.
 
-Significance tests for the overall model, for the various RDA-axes and for the individual predictors are available (permutation-based).
+Differences to PCA: 
+
+1. The RDA can only "ordinate" variation of the responses that is relatable to predictors. Hence, gradients in the response matrix, which cannot be related to the explanatory matrix (as linear combinations), cannot be identified. Assume the most important environmental variable was not measured in the sampling campaign -> compare PCA to RDA.
+
+2. Often we are interested in the amount and significance of variation in the response matrix (e.g. species composition) that can be explained by the explanatory matrix (e.g. environmental variables). Significance tests are available (permutation-based).
 
 </div>
 
 <div class="right rt">
 
 ![](img/RDA_Zeleny.png){width=90%}
-
-Site scores:
-
-* One set of *unconstrained* scores (site scores), $YU$.
-* One set of *constrained* scores (LC scores), $\hat{Y}U$.
+<font size="5"> For simplicity, the green (=independent) matrix only contains one variable, normally you have more than one</font>
 
 </div>
 
@@ -222,21 +310,35 @@ Site scores:
 ```{r}
 zwc<-scale(wc) # must at least be centered even if dimensionally homogeneous!
 xmat<-data.frame(logQ=log(mara.raw$Q),logTDN=log(mara.raw$TDN),canopy=mara.raw$canopy)[-6,]
+xmat<-data.frame(scale(xmat))
 
 rda<-rda(zwc~logQ+logTDN+canopy,data=xmat) # take care: confusing X and Y argument names
 
 # actual RDA output check
 summary(rda)
-str(rda)
-?cca.object
-RsquareAdj(rda) # redundancy statistic (fractional amount of variation of the response data matrix explained by constraints)
+
+
+#Break it down:
+# Constrained Proportion: variance of Y explained by X (36%)
+sum(eigenvals(rda)[1:3])/sum(eigenvals(rda))
+# Unconstrained Proportion: unexplained variance in Y (64%)
+
+# How would you report these results? You could say: “The included predictors explain 36% of the variation in water chemistry across sites.”
+# 
+# Summary also contains:
+# Eigenvalues, and their contribution to the variance
+# Scores for species, sites, and the explanatory variables, which are the coordinates of each of these objects in the RDA space. The default scaling is of type 2.
+# 
+# 
+
+RsquareAdj(rda) # Adjusted R2 measures the strength of the relationship between Y and X (fractional amount of variation of the response data matrix explained by constraints), and applies a correction of the R2 to take into account the number of explanatory variables. This is the statistic that should be reported.
 
 # hypothesis tests #
 # testing the first axis (global test)
 anova(rda)
 anova(rda,first=TRUE)
 
-# testing all axes sequentially (preceding axes are taken as constraints)
+# testing all axes sequentially 
 anova(rda,by="axis",model="direct",perm.max=9999,step=1000)
 
 # testing the individual terms=constraints
@@ -248,12 +350,19 @@ anova(rda,by="margin",model="direct",perm.max=9999,step=1000) # tests each term 
 
 # again various types of scaling for the plotting step:
 # scaling 1 "distance triplot"
+# shows similarities between objects/sites in the response matrix because distances among sites reflect their Euclidean distances
 # only angles between constraints and responses reflect their correlations (not angles among responses)
-# distances among sites reflect their Euclidean distances
+# possible conclusions from a "distance triplot":
+# Sites that are closer together have more similar communities/water chemistry/DOM composition.
+# Species that are closer together occupy more sites in common.
 
 # scaling 2 "correlation triplot"
-# all angles between constraints and responses reflect correlations 
+# shows the effects of constraints/explanatory variables, because all angles between constraints and responses reflect their correlations 
 # distances among sites do not reflect their Euclidean distances
+# possible conclusions from a "correlation triplot"
+# Longer arrows mean this variable strongly drives the variation in the community matrix/water chemistry/DOM composition.
+# Arrows pointing in opposite directions have a negative relationship.
+# Arrows pointing in the same direction have a positive relationship.
 
 # in both scaling types sites can be projected on constraints and on responses
 # factor constraints are shown as centroids instead of arrows, projecting works identical 
@@ -265,13 +374,18 @@ plot(rda,scaling=1)
 
 (sites<-scores(rda,choices=c(1,2),display="sites",scaling=1)) 
 
-(lcs<-scores(rda,choices=c(1,2),display="lc",scaling=1)) # fitted/constrained site scores
+#(lcs<-scores(rda,choices=c(1,2),display="lc",scaling=1)) # fitted/constrained site scores
 
-(species<-scores(rda,choices=c(1,2),display="sp",scaling=1)*0.5)
+(species<-scores(rda,choices=c(1,2),display="species",scaling=1)*0.5)
 
 (constraints<-scores(rda,choices=c(1,2),display="bp",scaling=1)*2)
 
-plot(sites,asp=1,pch=21,bg=landuse,ylim=c(-1.5,1.5))
+perc <- round(100*(summary(rda)$cont$importance[2, 1:2]), 2) #check str(rda) to find such information
+
+plot(sites,asp=1,pch=21,bg=landuse,ylim=c(-1.5,1.5),
+     xlab = paste0("RDA1 (", perc[1], "%)"), 
+     ylab = paste0("RDA2 (", perc[2], "%)"))
+     
 Arrows(x0=0,y0=0,x1=constraints[,1],y1=constraints[,2],lwd=1.5,col="blue")
 text(constraints[,1:2]*1.1,label=rownames(constraints),pos=4,cex=0.8,col="blue")
 
@@ -279,15 +393,44 @@ Arrows(x0=0,y0=0,x1=species[,1],y1=species[,2],lwd=1,arr.length=0)
 text(species[,1:2]*1.1,label=rownames(species),pos=4,cex=0.6)
 ```
 
-## Correspondence Analysis (CA)
+## Unimodal relationships
+The classical ordination methods always target **dimension reduction** 
 
+* They may involve **indirect** (unconstrained) reconstruction of gradients from a single data matrix (e.g. PCA) or **direct** (constrained) regression on a 2nd matrix of explanatory variables (e.g. RDA)
+
+* They are based on **linear** or **unimodal** relationships.
+
+
+<div class="left rt">
+
+![](img/LinearUnimodal.JPG){width=80%}
+<font size="5"> Paliy and Shankar in Molecular Ecology 2016</font>
+
+
+</div>
+
+<div class="right rt">
+
+![](img/ordinations_table.png){width=90%}
+
+</div>
+
+## Correspondence Analysis (CA)
 <div class="left lt">
 
-Based on one matrix (usually a *species* or *community* matrix).
+Based on **one** matrix (usually a *species* or *community* matrix).
 
-Considers unimodal responses to (unknown) environmental variables.
+Considers **unimodal** responses to (unknown) environmental variables.
 
-An *indirect* GA, resulting gradients are synthetic environmental gradients.
+**Indirect** gradient analysis, resulting gradients are synthetic environmental gradients.
+
+PCA on datasets with many zeros produces artefacts (horseshoe effects). Such datasets need ‘unimodal’ methods (e.g. CA) or transform-based PCA or distance-based methods.
+
+CA does not take into account cases where the value of a variable in two different objects is zero.
+
+</div>
+
+<div class="right rt">
 
 The basis for CA is **weighted averaging** from environmental and species tables. If *env* exists, then this can be done to extract *bioindicatory information*:
 
@@ -296,14 +439,19 @@ u^*=\frac{y_1x_1+y_2x_2+...+y_nx_n}{y_1+y_2+...+y_n}
 $$
 A *species optimum* $u^*$ is computed as an abundance-weighted means of a specific environmental variable over all sites at which a specific species is present.
 
+
+
+![](img/CA_species_optimum.png){width=60%}
+
+
 This approach works best when:
 
 * Species have narrow amplitude.
-* Environmental variable spans the whole range of the species´ tolerance curve with good spacing.
-
+* Environmental variable spans the whole range of the species´ tolerance curve.
 </div>
 
-<div class="right rt">
+## Correspondence Analysis (CA)
+<div class="left lt">
 
 CA uses a *two-way weighted averaging* with a theoretical environmental variable iteratively in several steps:
 
@@ -322,48 +470,53 @@ $$
 
 </div>
 
+<div class="right rt">
+For studying at home. ;)
+![](img/CA_algorithm.JPG){width=100%}
+<font size="5"> https://www.davidzeleny.net/anadat-r/doku.php/en:ca_dca </font>
 
-## Canonical Correspondence Analysis (CCA)
+</div>
 
-Two involved matrices: one dependent, one independent.
 
-In the reciprocal averaging of CA a constraint is included:
-
-* Site scores are linearly (!) regressed on the independent dataset (environment).
-* Predicted values for the site scores are then used to compute the species scores. 
-
-The result are axes which inform about **species-site relationships**, but which also have **maximized correlation with linear combinations of (environmental) predictors**.
-
-Site scores:
-
-* One set of *unconstrained* scores (WA scores), similar but not identical to CA-results
-* One set of *constrained* scores (LC scores), usually the ones of interest
+## Correspondence Analysis (CA) in R
 
 ```{r}
 data(varespec) # a R dataset on vegetation
 data(varechem) # soil chemistry
-head(varespec)
+head(varespec) #lichen species
 head(varechem)
 apply(varespec,1,sum) # approximate 100 (total cover), "absolute" abundance data
+
+plot(varechem[,4], varespec[,1])
 
 # correspondence analysis #
 # run a CA just based on the species data (unconstrained!)
 vare.ca<-cca(X=varespec) # function also used for CCA, but here only one matrix X is supplied
 
 summary(vare.ca,scaling=1)
+
+# As in PCA, the Kaiser-Guttman criterion can be applied to determine the significant axes of a CA.
+# Identify the significant axes
+ev <- vare.ca$CA$eig
+ev[ev > mean(ev)]
+n = length(ev)
+barplot(ev, main = "Eigenvalues", col = "grey", las = 2)
+abline(h = mean(ev), col = "red")
+legend("topright", "Average eigenvalue", lwd = 1, col = 2, bty = "n")
+
 # summary(vare.ca,scaling=2)
 # again two different types of scaling are possible for biplots
 
 # scaling 1 (distances among sites matter)
-# distances among sites approximate their chi^2 distance
+# distances among sites approximate their chi^2 distance (=weighted Euclidean distances)
 # close sites have similar species abundances
-# a site, which is near a specific species, has a high contribution of that species 
+# a site, which is near a specific species, has a high contribution/abundance of that species 
 
 # scaling 2 (relationships among species matter)
 # distances among species approximate their chi^2 distance
 # close species have similar abundances across sites
 # a species, which is near a specific site, is more likely to be found at that site
-
+#layout(matrix(1:2, nrow=1))
 plot(vare.ca,scaling=1)
 plot(vare.ca,scaling=2)
 plot(vare.ca,scaling=3) # a compromise
@@ -376,20 +529,45 @@ site.scores<-scores(vare.ca,display="sites",scaling=2)
 
 plot(site.scores,col="black",pch=21,xlim=c(-2,2),ylim=c(-2,2))
 text(species.scores,col="red",label=names(varespec),cex=0.7)
+# Species symbols represent their respective optima with regard to the sites, expected abundance of the species decreases with distance from the symbols in all directions (assumption of unimodal distribution). There are no arrows in such a plot because species may have a non-monotonic behaviour across the ordination space!
 
 # post-hoc fitting of an environmental variable
 names(varechem)
 (ef<-envfit(vare.ca,varechem[,12:13],permutations=1999))
 plot(ef)
+```
 
-###########################
+## Canonical Correspondence Analysis (CCA)
+
+**Unimodal constraint** ordination method
+
+**Two involved matrices**: one dependent, one independent.
+
+In the reciprocal averaging of CA a constraint (e.g. environmental variable) is included:
+
+* Site scores are linearly (!) regressed on the independent dataset (environment).
+* Predicted values for the site scores are then used to compute the species scores. 
+
+The result are axes which inform about **species-site relationships**, but which also have **maximized correlation with linear combinations of (environmental) predictors**.
+
+<br/>
+
+Site scores:
+
+* One set of *unconstrained* scores (WA scores), similar but not identical to CA-results
+* One set of *constrained* scores (LC scores), usually the ones of interest
+
+</div>
+
+## Canonical Correspondence Analysis (CCA) in R
+```{r}
 # canonical correspondence analysis #
-vare.cca<-cca(Y=varespec,X=varechem) # note strange terminology of X and Y in vegan (don´t ask)
+vare.cca<-cca(Y=varespec,X=varechem) 
 vare.cca<-cca(varespec~.,varechem) # hypothesis tests need formula interface (don´t ask)
 
 summary(vare.cca,scaling=1)
 summary(vare.cca,scaling=2)
-# again two different types of scaling are possible for triplots
+# again different types of scaling are possible for triplots
 
 # hypothesis tests #
 # testing the first axis (global test)
@@ -430,7 +608,6 @@ plot(vare.cca,scaling=3) # a compromise
 # these are "everywhere" or have optimum right at the origin (i.e., optimum with regard to both axis shown)
 
 # for more controlled plotting compute scores individually
-
 (species<-scores(vare.cca,display="species",scaling=2))
 
 (lcs<-scores(vare.cca,display="lc",scaling=2)) # fitted site scores
@@ -440,7 +617,8 @@ plot(vare.cca,scaling=3) # a compromise
 (constraints<-scores(vare.cca,choices=c(1,2),display="bp",scaling=2))
 
 plot(sites,col="black",pch=21,xlim=c(-2,2),ylim=c(-2,2))
-text(species,col="red",label=names(varespec),cex=0.7)
+#text(species,col="red",label=names(varespec),cex=0.7)
+text(lcs,col="red",label=names(varespec),cex=0.7)
 Arrows(x0=0,y0=0,x1=constraints[,1],y1=constraints[,2],lwd=1.5,col="blue")
 text(constraints[,1:2]*1.1,label=rownames(constraints),pos=4,cex=0.8,col="blue")
 ```
