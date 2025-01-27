@@ -64,7 +64,7 @@ The Danube salmon is an endangered species in now dwindling populations. It need
 
 ```{r}
 hucho = read.table("data/HuchoRatschan2012.txt", header = TRUE)
-names(data)
+names(hucho)
 # river: name of river
 # population: categorical, size and health of adult fish population
 # length: largest fish caught since 1970, body length given in cm
