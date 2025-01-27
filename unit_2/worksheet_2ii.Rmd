@@ -85,10 +85,12 @@ Try a leave-one-out cross validation approach to test the model's predictive abi
 2. Drop the first data point from the lakes data frame.
 3. Fit both models on the new dataset with n-1 rows.
 4. Use the models to predict $y$ for the left out case.
-5. Compute the squared error for the left out case for both models: $sqerr = (y_{predicted} - y_{measured})^2$
-6. Use a loop to repeat steps 2—5 $n$ times, each time dropping a different data point. Save the error each time.
+5. Use a loop to repeat steps 2—5 $n$ times, each time dropping a different data point. Save the predicted spm each time.
+6. Compute squared errors for each case for both models: $sqerr = (y_{predicted} - y_{measured})^2$
 7. Compute the root mean square error (RMSE) for each model: $RMSE=\sqrt{\mathrm{mean}(sqerr)}$
 8. Plot the observed vs the predicted values for each left-out case and both models
+
+Is the "most parsimonious" really the one with the lowest prediction error? 
 
 Some syntax to get you started
 ```{r eval = FALSE}
@@ -99,14 +101,15 @@ preds_2 = numeric(n)
 # loop over every data point
 for(i in 1:n) {
 	# drop data point i
-	lakes_sm = lakes[-i, ]
+	one.lake <- lakes[i, ]
+	other.lakes <- lakes[-i, ]
 	
 	# fit the models
 	m1 = ??
 		
 	# use the predict() function to get a model prediction
 	# see ?predict.lm for clues
-	preds_1[i] = predict(m1, ??)
+	preds_1[i] = predict(m1, newdata=?)
 }
 ```
 

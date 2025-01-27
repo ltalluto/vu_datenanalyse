@@ -194,6 +194,9 @@ other <span class="math inline">\(X\)</span>-variables constant</li>
 <li><span class="math inline">\(\beta_0...\beta_p\)</span> are estimated
 by <span class="math inline">\(b_0...b_p\)</span> from the sample.</li>
 </ul>
+</div>
+<div class="right rt">
+<p><img src="img/mlr.png" style="width:100.0%" /></p>
 <h3 id="why-doing-a-mlr-two-fundamentally-different-motivations">Why
 doing a MLR? Two fundamentally different motivations:</h3>
 <ul>
@@ -204,9 +207,6 @@ including interactions.</li>
 relationships but seek a “good” model. This includes explorative
 approaches where “potential” predictors are identified.</li>
 </ul>
-</div>
-<div class="right rt">
-<p><img src="img/mlr.png" style="width:90.0%" /></p>
 </div>
 </div>
 <div id="multiple-linear-regression-model-1"
@@ -245,7 +245,7 @@ with linear algebra by OLS, minimizing the sum of squared residuals:</p>
 \]</span></p>
 </div>
 <div class="right rt">
-<p><img src="img/mlr.png" style="width:90.0%" /></p>
+<p><img src="img/mlr.png" style="width:100.0%" /></p>
 </div>
 </div>
 <div id="multiple-linear-regression-hypotheses"
@@ -302,8 +302,8 @@ class="math inline">\(x_j\)</span></li>
 <h3 id="comparing-effects-using-slopes">Comparing effects using
 slopes</h3>
 <p>Do <strong>not</strong> compare p-values to determine which predictor
-is “better”</p>
-<p>Rather, compare <strong>standardized effects</strong></p>
+is “better”!</p>
+<p>Rather, compare <strong>standardized effects</strong>.</p>
 <p>Either standardize all predictors (especially if <span
 class="math inline">\(s_{x_1} &gt;&gt; s_{x_2}\)</span>) or standardize
 the coefficients.</p>
@@ -420,9 +420,9 @@ uncorrolated</p>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>full_mod <span class="ot">=</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> </span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>                body_mass_g <span class="sc">+</span> sex, <span class="at">data =</span> penguins)</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">## Error in eval(mf, parent.frame()): object &#39;penguins&#39; not found</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">vif</span>(full_mod)</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">## Error: object &#39;full_mod&#39; not found</span></span></code></pre></div>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">vif</span>(full_mod)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">##     bill_depth_mm flipper_length_mm       body_mass_g               sex </span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">##          2.909163          4.939170          5.645711          2.523157</span></span></code></pre></div>
 <p>Procedure: if any VIF &gt; 10, drop the variable with the largest
 VIF, repeat</p>
 </div>
@@ -491,7 +491,7 @@ class="slide section level2">
 <p><strong>Question</strong>: What measurements can be used to predict
 bill length?</p>
 <div class="left lt">
-<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-2-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="lec_2ii_mlr_2025_files/figure-slidy/unnamed-chunk-2-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div class="right rt">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>full_mod <span class="ot">=</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> </span>
@@ -529,7 +529,7 @@ bill length?</p>
 <p>Does sex matter? Or can a sex effect be more simply explained by
 size?</p>
 <div class="left lt">
-<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="lec_2ii_mlr_2025_files/figure-slidy/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div class="right rt">
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>simple_mod <span class="ot">=</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> </span>
@@ -553,7 +553,7 @@ not for <strong>hypothesis testing</strong></li>
 data collection</li>
 <li>Unwise to speak of significance</li>
 </ul>
-<p>Such models are prone to <strong>Overfitting</strong>:” irrelevant
+<p>Such models are prone to <strong>Overfitting</strong>: irrelevant
 predictors that correlate with the outcomes by chance result in a model
 that fits the dataset well, but performs poorly when challenged with new
 data (low <strong>transferability</strong>).</p>
@@ -566,8 +566,8 @@ validate a model</li>
 procedure repeats the model finding process n times leaving out 1 case
 at a time. A predicted value is computed for each left-out case using
 the respective model built without this case. A final plot of observed
-vs. predicted values allows to assess the predictive capacity of the
-model.</li>
+vs. predicted values (plus eventual correlation) allows to assess the
+predictive capacity of the model.</li>
 </ul>
 </div>
 <div id="pitfalls-model-flexibility" class="slide section level2">
@@ -580,7 +580,7 @@ model.</li>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>mod1 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg, <span class="at">data =</span> hom)</span></code></pre></div>
 </div>
 <div class="right rt">
-<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="lec_2ii_mlr_2025_files/figure-slidy/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="pitfalls-model-flexibility-1" class="slide section level2">
@@ -590,7 +590,7 @@ model.</li>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mod2 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> hom)</span></code></pre></div>
 </div>
 <div class="right rt">
-<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="lec_2ii_mlr_2025_files/figure-slidy/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="pitfalls-model-flexibility-2" class="slide section level2">
@@ -604,7 +604,7 @@ model.</li>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>mod6 <span class="ot">=</span> <span class="fu">lm</span>(brain_volume_cc <span class="sc">~</span> body_mass_kg <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">4</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">I</span>(body_mass_kg<span class="sc">^</span><span class="dv">6</span>), <span class="at">data =</span> hom)</span></code></pre></div>
 </div>
 <div class="right rt">
-<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="lec_2ii_mlr_2025_files/figure-slidy/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="the-curse-of-dimensionality" class="slide section level2">
@@ -613,11 +613,11 @@ model.</li>
 <li>High dimensional spaces (lots of <span
 class="math inline">\(x\)</span> variables) require lots of data</li>
 <li>Rule-of-thumb minimum: <span class="math inline">\(n &gt;
-5k\)</span>
+5p\)</span>
 <ul>
-<li>with large <span class="math inline">\(k\)</span>, even more is
+<li>with large <span class="math inline">\(p\)</span>, even more is
 needed (as the necessary n to cover multidimensional space increases as
-a power law of k).</li>
+a power law of p).</li>
 </ul></li>
 </ul>
 <p><br/></p>
@@ -637,7 +637,7 @@ increasingly difficult when more than two 2 dimensions are involved. We
 don´t cover our predictors well enough anymore!</li>
 </ol>
 <p><br/></p>
-<p><img src="lec_2ii_mlr_files/figure-slidy/unnamed-chunk-12-1.png" width="1344" style="display: block; margin: auto;" /></p>
+<p><img src="lec_2ii_mlr_2025_files/figure-slidy/unnamed-chunk-12-1.png" width="1344" style="display: block; margin: auto;" /></p>
 </div>
 <div id="presenting-results" class="slide section level2">
 <h1>Presenting Results</h1>
@@ -645,7 +645,7 @@ don´t cover our predictors well enough anymore!</li>
 <ol style="list-style-type: decimal">
 <li>A complete description of the model, all variables, and whatever
 variable selection method</li>
-<li>A table of regression parameters, std errors or confidence
+<li>A table of regression parameters, standard errors or confidence
 intervals, p-values</li>
 <li><span class="math inline">\(R^2\)</span> or another metric of
 goodness of fit</li>
@@ -654,11 +654,14 @@ goodness of fit</li>
 <ol style="list-style-type: decimal">
 <li>Scatterplot-like representations not possible for &gt;2
 predictors</li>
-<li>Diagnostics (qq-plots, residulas vs fits) are even more
+<li>Diagnostics (qq-plots, residuals vs fits) are even more
 important!</li>
+<li>Plotting observed vs. predicted (ideally with a separate dataset,
+validation)</li>
 <li><strong>Partial response curves</strong>: effect of each variable,
 holding others constant</li>
 </ol>
+<p><br/></p>
 <p>When <span class="math display">\[
 Y = b_0+b_1 \cdot X_1+b_2*X_2
 \]</span> <span class="math display">\[
@@ -668,7 +671,9 @@ for the effect of <span class="math inline">\(X_2\)</span> (and the
 intercept <span class="math inline">\(b_0\)</span>) and may be
 meaningfully plotted against <span class="math inline">\(X_1\)</span>
 (when this variable is considered more important).</p>
-<p><img src="img/partial_response.png" style="width:50.0%" /></p>
+<p><br/></p>
+<p>Example for partial response curves: <img
+src="img/partial_response.png" style="width:50.0%" /></p>
 </div>
 <div id="last-example" class="slide section level2">
 <h1>Last example</h1>
