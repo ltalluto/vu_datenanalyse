@@ -278,7 +278,7 @@ Constrained ordinations aim to explain the variation in a set of response variab
 ## Redundancy analysis (RDA)
 <div class="left lt">
 
-**Direct ordinations** identify the relationship between a multivariate response matrix and a multivariate explanatory matrix by combining regressino and ordination concepts.
+**Direct ordinations** identify the relationship between a multivariate response matrix and a multivariate explanatory matrix by combining regression and ordination concepts.
 
 **Two involved matrices**: one dependent, one independent.
 

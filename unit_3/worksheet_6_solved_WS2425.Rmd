@@ -1,0 +1,72 @@
+---
+title: "Worksheet 6"
+author: "Thomas Fuß"
+date: "WS24/25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE)
+```
+
+## Membrane composition of bacteria
+
+Data source: Hall, Singer, Kainz & Lennon 2010. Functional Ecology 24: 898-908
+Bacteria isolates were exposed to two different cultivation temperatures (6 and 28 °C). Fatty acid composition of their membranes was measured to investigate which fatty acids can be interpreted as adaptation and acclimation to temperature. The 17 fatty acids are proportional data ("relative abundances of various FAs).
+
+
+```{r}
+library(vegan)
+library(MASS)
+
+lipids<-read.table(file="data/BacterialMembrane.txt",header=TRUE)
+names(lipids)
+```
+
+The names of these fatty acids point to (un)saturation and branched molecule structure with the
+abbreviations: MU = mono-unsaturated, SA = saturated, nb = non-branched, b = branched. More double bonds and branched molecules require more space and increase membrane fluidity at cold temperature.
+
+1. Try to find the "best" reproduction of dissimilarities among samples in a 2 dimensional space. For non-metric dissimilarities an  appropriate ordination is created by searching for a low-dimensional configuration whose distances reproduce the **rank order** of observed dissimilarities. Use such a non-metric multidimensional scaling on Bray-Curtis dissimilarity matrix. Produce a nice graph demonstrating differences between temperatures. More double-bonds in unsaturated lipids increase membrane fluidity at cold temperatures. Are they more expressed in bacteria cultivated at cold temperatures? (Use the variable sum_MU in envfit(), which describes the sum of unsaturated FAs).
+
+```{r}
+lipids2<-lipids[,grep("FA",names(lipids))] # choose only FA columns
+apply(lipids2,1,sum) # confirm proportional data
+
+dmat = vegdist(lipids2, method = "bray") # compute a dissimilarity matrix
+
+mds_lipids = metaMDS(comm = lipids2, distance = "bray", k = 2) # to run a NMDS, $points to get scores, $stress to get information about fit
+mds_lipids$stress
+## % of dissimilarities unrepresented
+
+stressplot(mds_lipids) # to compare configuration distances with dissimilarities
+goodness(mds_lipids) # sample-specific goodness of fit
+
+plot(mds_lipids, type="t")
+
+pch.temperature <- as.integer(as.character(lipids$temperature))
+pch.temperature[pch.temperature==6]<-21
+pch.temperature[pch.temperature==28]<-23
+
+plot(mds_lipids$points,asp=1,pch=pch.temperature)
+fit<-envfit(mds_lipids,env=lipids$sum_MU)
+plot(fit)
+ordihull(mds_lipids,lipids$temperature)
+legend("topleft",pch=c(21,23), legend=c("6°C","28°C"),cex=0.7)
+
+ordispider(mds_lipids,lipids$temperature)
+```
+
+3. The results clearly suggest differences in fatty acid composition due to temperature. Specify hypotheses for this effect. Test using PERMANOVA. Just like in ANOVA, where variance homogeneity is of interest, here we should check multivariate variance (*cloud shape*) known as *dispersion*.
+
+> H0 Temperature affects fatty acid composition
+
+##############################################
+
+```{r}
+bd<-betadisper(dmat, group=lipids$temperature) # to test dispersion, works only with one factor
+anova(bd) # test for dispersion differences
+boxplot(bd)
+adonis2(dmat~temperature,data=lipids) # PERMANOVA, just use like aov() or lm()
+```
+
+> Conclude that fatty acid composition is affected by temperature.
