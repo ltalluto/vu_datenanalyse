@@ -194,13 +194,11 @@ You can get student files for the course, as well as instructions for setting up
 			<p class="sm rr18">G1: 31.01 8:00–11:45, RR18</p>
 		</td>
 		<td>
-			<!-- <p><a href="unit_3/6_distance.html">Multivariate Stats II</a></p> -->
-			<p>Multivariate Stats II</p>
+			<p><a href="unit_3/6_distance_WS2425.html">Multivariate Stats II</a></p>
 			<p class="sm">Nonmetric multidimensional scaling (NMDS)</p>
 		</td>
 		<td>
-			<p>Exercises 3.2</p>
-			<!-- <p><a href="unit_3/worksheet_6.html">Exercises 3.2</a></p> -->
+			<p><a href="unit_3/worksheet_6_WS2425.html">Exercises 3.2</a></p>
 		</td>
 	</tr>
 	<tr>
