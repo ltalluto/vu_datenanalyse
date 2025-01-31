@@ -32,8 +32,6 @@ abbreviations: MU = mono-unsaturated, SA = saturated, nb = non-branched, b = bra
 lipids2<-lipids[,grep("FA",names(lipids))] # choose only FA columns
 apply(lipids2,1,sum) # confirm proportional data
 
-dmat = vegdist(lipids2, method = "bray") # compute a dissimilarity matrix
-
 mds_lipids = metaMDS(comm = lipids2, distance = "bray", k = 2) # to run a NMDS, $points to get scores, $stress to get information about fit
 mds_lipids$stress
 ## % of dissimilarities unrepresented
@@ -50,10 +48,11 @@ pch.temperature[pch.temperature==28]<-23
 plot(mds_lipids$points,asp=1,pch=pch.temperature)
 fit<-envfit(mds_lipids,env=lipids$sum_MU)
 plot(fit)
-ordihull(mds_lipids,lipids$temperature)
 legend("topleft",pch=c(21,23), legend=c("6°C","28°C"),cex=0.7)
 
 ordispider(mds_lipids,lipids$temperature)
+#ordihull(mds_lipids,lipids$temperature)
+
 ```
 
 3. The results clearly suggest differences in fatty acid composition due to temperature. Specify hypotheses for this effect. Test using PERMANOVA. Just like in ANOVA, where variance homogeneity is of interest, here we should check multivariate variance (*cloud shape*) known as *dispersion*.
@@ -63,6 +62,7 @@ ordispider(mds_lipids,lipids$temperature)
 ##############################################
 
 ```{r}
+dmat = vegdist(lipids2, method = "bray") # compute a dissimilarity matrix
 bd<-betadisper(dmat, group=lipids$temperature) # to test dispersion, works only with one factor
 anova(bd) # test for dispersion differences
 boxplot(bd)
