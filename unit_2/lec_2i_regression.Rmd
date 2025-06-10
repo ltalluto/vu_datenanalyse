@@ -166,7 +166,23 @@ Confidence intervals for a particular parameter may also be computed for subsets
 
 $\mathbf{H_0}$: The slope $\beta$ = 0 (i.e., no variation in $y$ is explained by variation in $x$)
 
-The ratio of variance explained to residual variance follows an $F$ distribution with $d.f._1=1$ and $d.f._2=n-2$.
+* Test with a t-statistic
+* Use confidence interval for $\beta$ and check if 0 included
+* Test if model can explain more variance of $y$ than expected by chance --> ANOVA
+
+### ANOVA in linear regression
+
+In linear regression total variance of $y$ is partitioned into a fraction explained by the model and a fraction attributed to residual error. This works by computing a sum of squares for the (i) regression, (ii) residuals, (iii) the total. Division of $SS$ by appropriate $d.f.$ results in mean squares, which are variance estimates. The ratio of variance explained to residual variance follows an $F$ distribution with $d.f._1=1$ and $d.f._2=n-2$ and can be used to compute a probability (i.e. P-value).
+
+<br/>
+
+![](img/linreg_anovatable.png){width=80%}
+
+<br/>
+
+![](img/linreg_graph.png){width=50%}
+
+<br/>
 
 \begin{aligned}
 F & = \frac{MS_{model}}{MS_{err}} \\

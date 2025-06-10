@@ -25,7 +25,7 @@ You may work on this individually or in small groups (maximal 3 students). Pleas
 
 We will use an unpublished dataset from Fred Omengo´s master thesis. You will meet the same dataset again when practicing multivariate methods.
 
-Dataset description: 54 streams in the Mara River basin were investigated for water chemical conditions with a focus on quantity and quality of dissolved organic matter. In addition CO2-concentrations in the water were computed from pH and alkalinity. The streams were selected to vary in dominant landuse of their catchments and in stream size. In addition there were differences between streams in sampling time (arbitrary) and canopy cover (somewhat related to landuse). The water chemical variables include a range of anions and cations, specifically fractions of the most important nutrients N and P, besides conductivity and turbidity. Quantity of carbon available for microbial respiration is measured as DOC. Then there is a range of optical descriptors of dissolved organic matter (DOM) quality, these are all based on absorbance or fluorescence measurements. We here cannot go into detail of describing those DOM quality variables, just understand them as informing about molecular size, humification, proteinabundance, algal or soil origin, etc. For a slightly more detailed variable description see sheet metadata in Excel file.
+Dataset description: 54 streams in the Mara River basin were investigated for water chemical conditions with a focus on quantity and quality of dissolved organic matter. In addition CO2-concentrations in the water were computed from pH and alkalinity. The streams were selected to vary in dominant landuse of their catchments and in stream size. Catchments of streams were then classified into categories A (=agriculture), M (=mixed) and F (=forest) depending on dominant landuse. In addition there were differences between streams in sampling time (arbitrary) and canopy cover (somewhat related to landuse). The water chemical variables include a range of anions and cations, specifically fractions of the most important nutrients N and P, besides conductivity and turbidity. Quantity of carbon available for microbial respiration is measured as DOC. Then there is a range of optical descriptors of dissolved organic matter (DOM) quality, these are all based on absorbance or fluorescence measurements. We here cannot go into detail of describing those DOM quality variables, just understand them as informing about molecular size, humification, proteinabundance, algal or soil origin, etc. For a slightly more detailed variable description see sheet metadata in Excel file.
 
 Here is some code to load the data (which is located in `vu_datenanalyse_students/unit_2/data/`):
 
@@ -36,9 +36,9 @@ dim(data)
 
 ```
 
-## Task 1: Does landuse affect water chemistry?
+## Task 1: Test selected variables for effects by landuse
 
-Start with investigating effects of landuse, which is coded as a three-level factor: Catchments of streams were classified into categories A (=agriculture), M (=mixed) and F (=forest) depending on dominant landuse. Test whether landuse affects canopy cover (removal of vegetation!), TSS (soil erosion!), epCO2 (high respiration or lots of CO2 input if high). Note that the factor landuse can be considered as an "ordered factor", plots should reflect this order. 
+Start with investigating effects of landuse, which is coded as a three-level factor: Test whether landuse affects canopy cover (removal of vegetation!), TSS (soil erosion!), epCO2 (high respiration or lots of CO2 input if high). Note that the factor landuse can be considered as an "ordered factor", plots should reflect this order. 
 
 1. Explore variables, consider transformations. 
 2. Run multiple ANOVAs (or analogue procedures) to test for landuse effects on these 3 (eventually transformed) responses.

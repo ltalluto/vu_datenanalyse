@@ -38,7 +38,7 @@ names(mic)
 ```
 
 
-1. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P relative to N or C, to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
+1. The growth rate hypothesis links stoichiometry of biomass, specifically the amount of P (usually expressed relative to N or C), to growth rate of organisms. Small, fast growing organisms have lower C:P and N:P ratios as higher growth means more "growth machinery" = ribosomes, that contain a lot of P. Consequently, microbial cells growing exponentially should have higher nucleic acid content. Test whether this is true for the two bacterial species and create an appropriate graph showing differences in means.
 
 Start with selecting only one level of stoichiometry in the medium (either level 5 or 50).
 ```{r}
@@ -48,7 +48,7 @@ mic<-droplevels(mic)
 
 ```
 
-2. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P equally well into more growth? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
+2. Assume nucleic acid abundance as indicating growth. Can both bacterial species translate increased availability of P in the supplied medium into more growth equally well? Use the N:P levels 5 and 50 and data from the logarithmic growth phase.
 
 
 

@@ -446,15 +446,16 @@ for comparison.</li>
 <li>Fit both models on the new dataset with n-1 rows.</li>
 <li>Use the models to predict <span class="math inline">\(y\)</span> for
 the left out case.</li>
-<li>Compute the squared error for the left out case for both models:
-<span class="math inline">\(sqerr = (y_{predicted} -
-y_{measured})^2\)</span></li>
 <li>Use a loop to repeat steps 2—5 <span class="math inline">\(n\)</span> times, each time dropping a different
-data point. Save the error each time.</li>
+data point. Save the predicted spm each time.</li>
+<li>Compute squared errors for each case for both models: <span class="math inline">\(sqerr = (y_{predicted} -
+y_{measured})^2\)</span></li>
 <li>Compute the root mean square error (RMSE) for each model: <span class="math inline">\(RMSE=\sqrt{\mathrm{mean}(sqerr)}\)</span></li>
 <li>Plot the observed vs the predicted values for each left-out case and
 both models</li>
 </ol>
+<p>Is the “most parsimonious” really the one with the lowest prediction
+error?</p>
 <p>Some syntax to get you started</p>
 <pre class="r"><code>n = nrow(lakes)
 # create empty vectors to store predicted cases
@@ -463,14 +464,15 @@ preds_2 = numeric(n)
 # loop over every data point
 for(i in 1:n) {
     # drop data point i
-    lakes_sm = lakes[-i, ]
+    one.lake &lt;- lakes[i, ]
+    other.lakes &lt;- lakes[-i, ]
     
     # fit the models
     m1 = ??
         
     # use the predict() function to get a model prediction
     # see ?predict.lm for clues
-    preds_1[i] = predict(m1, ??)
+    preds_1[i] = predict(m1, newdata=?)
 }</code></pre>
 </div>
 </div>

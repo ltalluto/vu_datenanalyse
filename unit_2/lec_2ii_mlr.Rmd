@@ -15,6 +15,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.width=5, fig.height=5, fig.align="center", collapse = TRUE, comment = "##", dev="png", error = TRUE)
 library(RColorBrewer)
+library(palmerpenguins)
 cols = brewer.pal(8, "Set1")
 
 ## to use tables
@@ -38,17 +39,20 @@ $$
 * The change in $\mathbb{E}(y)$ per unit change in an $X_j$ holding all other $X$-variables constant
 * $\beta_0...\beta_p$ are estimated by $b_0...b_p$ from the sample.
 
-### Why doing a MLR? Two fundamentally different motivations:
-* Hypothesis testing: I have clear hypotheses about every individual variable $X_i$, potentially even including interactions.
-* Predictive model building: I have little idea about relationships of relationships but seek a "good" model. This includes explorative approaches where "potential" predictors are identified.
-
 </div>
 
 <div class="right rt">
-![](img/mlr.png){width=90%}
+![](img/mlr.png){width=100%}
 </div>
 
+## Why doing a MLR? Two fundamentally different motivations:
 
+<br/>
+
+* Hypothesis testing: I have clear hypotheses about every individual variable $X_i$, potentially even including interactions.
+* Predictive model building: I have little idea about relationships of relationships but seek a "good" model. This includes explorative approaches where "potential" predictors are identified.
+
+<br/>
 
 ## Multiple linear regression model
 
@@ -83,15 +87,17 @@ y &= \mathbf{X}\mathbf{B} + \epsilon  \\
 \end{aligned}
 $$
 
+</div>
+<div class="right rt">
+![](img/mlr.png){width=100%}
+
+<br/>
+
 The equation is a **linear system** and can be solved with linear algebra by OLS, minimizing the sum of squared residuals:
 
 $$
 \mathrm{min}: \sum \epsilon^2 = \sum \left (\mathbf{X}\mathbf{B} - y \right)^2
 $$
-</div>
-<div class="right rt">
-![](img/mlr.png){width=90%}
-
 
 </div>
 
@@ -106,22 +112,11 @@ $$
 	- test with a $t$-statistic
 	- build a confidence limit for the slope of $x_j$
 
-## Multiple linear regression: Hypotheses
+## Comparing effects using slopes
 
-1. $\mathbf{H_{0,regression}}$: **All partial regression coefficients are zero**. 
-	- The model (i.e., the linear system $\mathbf{XB}$) does not explain any of the variation in $y$.
-	- Test with ANOVA as with linear regression against a null model (with no predictors).
+Do **not** compare p-values to determine which predictor is "better"!
 
-2. $\mathbf{H_{0,coef_j}}$: **An individual partial regression coefficient, the slope of the relationship between $y$ and $x_j$, is zero**. 
-	- with $p$ predictors, there are $p$ such hypotheses.
-	- test with a $t$-statistic
-	- build a confidence limit for the slope of $x_j$
-
-### Comparing effects using slopes
-
-Do **not** compare p-values to determine which predictor is "better"
-
-Rather, compare **standardized effects**
+Rather, compare **standardized effects**.
 
 Either standardize all predictors (especially if $s_{x_1} >> s_{x_2}$) or standardize the coefficients.
 
@@ -146,18 +141,10 @@ $$
 {R^2}_{adj}=1-\frac{SS_{res}}{SS_{tot}}\times\frac{n-1}{n-p}
 $$
 
-### Comparing effects using $R^2$ partitioning
-
-May be useful in particular cases, examples:
-$$
-Flux=k \cdot \Delta C
-$$
-$$
-\log Flux=\log k + \log \Delta C
-$$
-Fitting a model to a dataset here gives $R^2=1$ with two fractions partitioned for $\log k$ and $\log \Delta C$.
 
 ## Assumptions for MLR
+
+<div class="left lt">
 
 * All $X_j$ measured with no/minimal error
 * Linearity between $Y$ and $BX$, in other words linear relationships are assumed between $Y$ and every $X_j$ adjusted for all other $X$-variables (hard to check!)
@@ -170,6 +157,10 @@ Fitting a model to a dataset here gives $R^2=1$ with two fractions partitioned f
    - quick test: run `cor` on predictor matrix, check for large correlations
    - formal test: Variance Inflation Factors (VIF) < 10 (ish)
 
+</div>
+
+<div class="right rt">
+
 ### Dealing with multicollinearity
 
 Why is this a problem?
@@ -177,6 +168,8 @@ Why is this a problem?
 * Numerical instability (hard to find parameter estimates)
 * large CIs for regression slopes
 * unsure importance of predictors (but could still be good overall model).
+
+</div>
 
 ## Variance inflation factors
 
@@ -199,7 +192,7 @@ $$
 s_b = s_{b,\rho=0}\sqrt{\mathrm{VIF}}
 $$
 
-$s_{b,\rho=0}$ is the standard error of a regression coefficient, assuming that all predictors are uncorrolated
+$s_{b,\rho=0}$ is the standard error of a regression coefficient, assuming that all predictors are uncorrelated
 
 ### VIF in R
 
@@ -217,12 +210,9 @@ Procedure: if any VIF > 10, drop the variable with the largest VIF, repeat
 
 ## Choosing predictors (models)
 
-Simplest approach: fit a full model with all predictors, then drop anything that is non-significant - at once or stepwise ;-)
-
-Alternatively:
-
-* start simple and add predictors
-* do both, i.e. consider addition and removal of individual variables at any point to result in an 'optimized' model
+1. Simplest approach: fit a full model with all predictors, then drop anything that is non-significant - at once or stepwise ;-)
+2. start simple and add predictors
+3. do both, i.e. consider addition and removal of individual variables at any point to result in an 'optimized' model
 
 ### Caveats:
 
@@ -305,8 +295,8 @@ plot(penguins[, 3:7])
 ```{r}
 simple_mod = lm(bill_length_mm ~ bill_depth_mm + flipper_length_mm + 
 					body_mass_g, data = penguins)
-AIC(full_mod) - AIC(simple_mod)
-
+AIC(full_mod)
+AIC(simple_mod)
 ```
 </div>
 
@@ -316,17 +306,16 @@ AIC(full_mod) - AIC(simple_mod)
 * Stepwise model selection, implemented `step` in R will build a model for you automatically, adding or dropping terms in an attempt to find a model that minimises AIC
 * "Exhaustive" model building: Computation of all possible models = all predictor combinations
 * Any of these are ok approaches for **exploration** but not for **hypothesis testing**
-* p-values resulting from such a model are not useful
+* P-values resulting from such a model are not useful, unwise to speak of significance
 * We should view such models as hypotheses to be explored with further data collection
-* Unwise to speak of significance
 
-Such models are prone to **Overfitting**:" irrelevant predictors that correlate with the outcomes by chance result in a model that fits the dataset well, but performs poorly when challenged with new data (low **transferability**).
+Such models are prone to **Overfitting**: irrelevant predictors that correlate with the outcomes by chance result in a model that fits the dataset well, but performs poorly when challenged with new data (low **transferability**).
 
-### Validation to ensure a model is fit for prediction
+## Validation to ensure a model is fit for prediction
 
 * Usage of additional or new data (or data formerly set aside) to validate a model
 * Leave-one-out cross-validation: Using a dataset with n cases, this procedure repeats the model finding process n times leaving out 1 case at a time. A predicted value is computed for each left-out case using the respective model built without this case.
-A final plot of observed vs. predicted values allows to assess the predictive capacity of the model.
+A final plot of observed vs. predicted values (plus eventual correlation) allows to assess the predictive capacity of the model.
 
 ## Pitfalls: Model flexibility
 
@@ -434,8 +423,8 @@ text(xt, yt, paste(expression(R^2), "=", round(summary(mod6)$r.squared, 2)), pos
 ## The curse of dimensionality
 
 * High dimensional spaces (lots of $x$ variables) require lots of data
-* Rule-of-thumb minimum: $n > 5k$
-   - with large $k$, even more is needed (as the necessary n to cover multidimensional space increases as a power law of k).
+* Rule-of-thumb minimum: $n > 5p$
+   - with large $p$, even more is needed (as the necessary n to cover multidimensional space increases as a power law of p).
 
 <br/>
 
@@ -473,25 +462,31 @@ plot(runif(16, -3, 3), runif(16, -3, 3), pch = 16, bty='n',
 ### Always:
 
 1. A complete description of the model, all variables, and whatever variable selection method
-2. A table of regression parameters, std errors or confidence intervals, p-values
+2. A table of regression parameters, standard errors or confidence intervals, p-values
 3. $R^2$ or another metric of goodness of fit
 
 ### Graphical options
 
 1. Scatterplot-like representations not possible for >2 predictors
-2. Diagnostics (qq-plots, residulas vs fits) are even more important!
+2. Diagnostics (qq-plots, residuals vs fits) are even more important!
+3. Plotting observed vs. predicted (ideally with a separate dataset, validation)
 3. **Partial response curves**: effect of each variable, holding others constant
+
+<br/>
 
 When
 $$
-Y = b_0+b_1 \cdot X_1+b_2*X_2
+Y = b_0+b_1 \cdot X_1+b_2 \cdot X_2
 $$
 $$
-Y_{adj} = Y-b_0-b_2*X_2
+Y_{adj} = Y-b_0-b_2 \cdot X_2=b_2 \cdot X_1 
 $$
 then $Y_{adj}$ is adjusted for the effect of $X_2$ (and the intercept $b_0$) and may be meaningfully plotted against $X_1$ (when this variable is considered more important).
 
-![](img/partial_response.png){width=50%}
+<br/>
+
+Example for partial response curves:
+![](img/partial_response.png){width=80%}
 
 
 

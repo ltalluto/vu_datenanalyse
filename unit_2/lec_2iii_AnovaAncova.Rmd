@@ -244,30 +244,53 @@ legend(1,0.65,legend=c(expression("F"["4,19"]),expression("F"["19,4"]),expressio
 
 ## ANalysis Of VAriance: Graphical scheme
 
-Remember $H_0$ is true :-).
+You have: 3 (# groups=Z) random samples of equal size n.
+
+<br/>
+
+![](img/anova1.png){width=60%}
+
+
+## ANalysis Of VAriance: Graphical scheme
+
+You have: 3 (# groups=Z) random samples of equal size n.
+Remember $H_0$ is true :-). 
 Task: Estimate variance from the **ONE** underlying population!
 
+<br/>
+
 1. Ignore groups, pool data and compute a **total** variance.  
+<br/>
+Requires calculation of sum of squares from pooled data, i.e. the sum of the squared differences between each data point and the grand mean (computed ignoring groups).
+<br/>
+$$
+SS_{t(total)}=\sum_{z=1}^Z\sum_{i=1}^n(x_{iz}-\bar{x})^2
+$$
+$$
+\sigma^2 \approx MS_t=\frac{SS_t}{Z\cdot{n}-1}
+$$
+<br/>
+
 2. Compute average of variances **within** each group.
+<br/>
+Requires calculation of sum of squares **within** the groups, i.e. the sum of the squared differences between each data point and the respective group mean.
+<br/>
+$$
+SS_{w(within)}=\sum_{z=1}^Z\sum_{i=1}^n(x_{iz}-\bar{x}_z)^2
+$$
+$$
+\sigma^2 \approx MS_w=\frac{SS_w}{Z\cdot{(n-1)}}
+$$
+
+<br/>
+
+![](img/anova2.png){width=60%}
+<br/>
+
 3. Compute **between** (**among**) variance from SEM = standard deviation of group means from grand mean. 
-
 <br/>
-
-![](img/anova1.png)
-
+Requires calculation of sums of squares **between** the groups, i.e. the sum of the squared differences between the **group means** and the **grand mean**.
 <br/>
-
-<br/>
-
-For step 2: Calculation of sum of squares **within** the groups, i.e. the sum of the squared differences between each data point and the respective group mean.
-
-<br/>
-
-![](img/anova2.png)
-<br/>
-
-For step 3: Calculation of sums of squares **between** the groups, i.e. the sum of the squared differences between the **group means** and the **grand mean**.
-
 $$
 S.E.M.=\sigma_{\bar x}=\frac{\sigma}{\sqrt n}
 $$
@@ -276,14 +299,22 @@ $$
 \sigma ^2=n \cdot \sigma_{\bar x}^2
 $$
 
+$$
+SS_{b(between)}=n\cdot\sum_{z=1}^Z(\bar{x}_z-\bar{x})^2
+$$
+
+$$
+\sigma^2 \approx MS_b=\frac{SS_b}{Z-1}
+$$
+
 <br/>
 
-![](img/anova3.png)
+![](img/anova3.png){width=60%}
 
 <br/>
 
 
-## ANalysis Of VAriance: Partitioning sums of squares
+## ANalysis Of VAriance = Partitioning sums of squares
 
 <div class="left lt">
 
@@ -352,9 +383,7 @@ $$
 
 <br/>
 
-All mean squares are **variance estimates**!
-
-Recall that $SEM^2=\frac{s^2}{n}$. As in $SS_b$ the sum of squared group mean deviations from the grand mean was already multiplied with $n$, $MS_b$ estimates $\sigma^2$.
+All mean squares are **variance estimates**! They should all be similar ;-).
 
 </div>
 
@@ -388,7 +417,7 @@ $F\approx1$ under a true $H_0$, but $F>>1$ when $MS_b$ includes a group effect. 
 </div>
 
 
-## ANalysis Of VAriance in R
+## ANalysis Of VAriance in R (incl. Welch-variant, H-test, post-hoc tests)
 
 ```{r}
 # using the Mara river data
@@ -627,7 +656,7 @@ data$sex<-factor(data$sex)
 # could check ND tediously in each cell of the design
 f1s1<-data$cons[data$food=="1" & data$sex=="male"]
 
-# or after standardisation within each cell
+# or after standardisation within each cell (this is identical to using residuals)
 combfac<-factor(paste(data$food,data$sex,sep="_"))
 z <- unlist(tapply(data$cons, INDEX=combfac, scale))
 
@@ -750,22 +779,6 @@ summary(m1)
 # could differ between landuses
 m2<-lm(log(TDN)~log(Q)*landuse,data=data)
 anova(m2) # no interaction
-
-# adjusted means only make sense when slopes are homogeneous!
-common.slope<-coefficients(m1)[2]
-adj.m<-tapply(log(data$TDN),INDEX=data$landuse,FUN=mean)-
-  common.slope*
-  (tapply(log(data$Q),INDEX=data$landuse,FUN=mean)-mean(log(data$Q)))
-adj.m
-adj.m-adj.m[1] # these are the differences to reference level=A
-# same as in the summary(m1) output
-
-# compare with unadjusted means
-m<-tapply(X=log(data$TDN),INDEX=data$landuse,FUN=mean)
-m-m[1] # these are the differences of unadjusted means to reference level=large
-
-# --> the inclusion of the covariate has reduced 
-# the "apparent" differences a bit
 
 # checking assumptions
 shapiro.test(m1$res)

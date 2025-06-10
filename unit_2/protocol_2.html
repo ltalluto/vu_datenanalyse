@@ -384,7 +384,9 @@ investigated for water chemical conditions with a focus on quantity and
 quality of dissolved organic matter. In addition CO2-concentrations in
 the water were computed from pH and alkalinity. The streams were
 selected to vary in dominant landuse of their catchments and in stream
-size. In addition there were differences between streams in sampling
+size. Catchments of streams were then classified into categories A
+(=agriculture), M (=mixed) and F (=forest) depending on dominant
+landuse. In addition there were differences between streams in sampling
 time (arbitrary) and canopy cover (somewhat related to landuse). The
 water chemical variables include a range of anions and cations,
 specifically fractions of the most important nutrients N and P, besides
@@ -402,13 +404,11 @@ see sheet metadata in Excel file.</p>
 names(data)
 dim(data)</code></pre>
 </div>
-<div id="task-1-does-landuse-affect-water-chemistry" class="section level2">
-<h2>Task 1: Does landuse affect water chemistry?</h2>
+<div id="task-1-test-selected-variables-for-effects-by-landuse" class="section level2">
+<h2>Task 1: Test selected variables for effects by landuse</h2>
 <p>Start with investigating effects of landuse, which is coded as a
-three-level factor: Catchments of streams were classified into
-categories A (=agriculture), M (=mixed) and F (=forest) depending on
-dominant landuse. Test whether landuse affects canopy cover (removal of
-vegetation!), TSS (soil erosion!), epCO2 (high respiration or lots of
+three-level factor: Test whether landuse affects canopy cover (removal
+of vegetation!), TSS (soil erosion!), epCO2 (high respiration or lots of
 CO2 input if high). Note that the factor landuse can be considered as an
 “ordered factor”, plots should reflect this order.</p>
 <ol style="list-style-type: decimal">
