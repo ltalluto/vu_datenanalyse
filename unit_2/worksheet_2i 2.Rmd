@@ -1,0 +1,65 @@
+---
+title: "Worksheet 2.1"
+author: "VU Datenanalyse/Gabriel Singer"
+date: "21.1.2025"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE)
+```
+
+## Hydropsyche width-mass relationship
+
+The following dataset collects head capsule widths and body masses from Hydropsyche (a genus of caddisflies) in the Danube in Austria. Note that this data file is tab delimited, not comma delimited, so you will need `read.table`.
+
+```{r eval = FALSE}
+hydrop = read.table("data/Hydropsyche.txt", header = TRUE)
+```
+
+1. Do some data exploration; plot the variables against each other, examine histograms, and possibly boxplots as well. How do you interpret these plots? Can you say anything about the relationship between these variables?
+2. Use `lm` to fit a simple linear model (one variable, no transformations), using body mass as the response (y) variable, and width as the predictor. Is the regression significant? Report the statistics as shown in the lecture.
+
+```{r eval = FALSE}
+# use the formula syntax within lm to describe the model you want to fit
+mod1 = lm(weight ~ width, data = hydrop)
+
+# use the summary function to get information from your model
+# how do you interpret the output?
+summary()
+coefficients()
+anova()
+residuals()
+```
+
+3. Produce some diagnostic plots of your model (see slide 18: Regression in R: diagnostics, or use `plot(mod)`). Is this an adequate model? Does it meet the assumptions of the linear model?
+
+```{r eval = FALSE}
+# some useful functions
+residuals()
+plot(mod1$fitted.values,mod1$residuals)                # check if model adequate, should not show any trend
+hist(mod1$residuals)                                    # check ND of residuals
+qqnorm(mod1$residuals); qqline(mod1$residuals)         # check ND of residuals
+plot(mod1$fitted.values,mod1$residuals^2)              # check variance homogeneity, should not show any trend
+```
+
+4. Based on what you learned in 3, produce a new model, this time using a transformation of $x$ and/or $y$. Repeat 2 and 3 for the new model. Is the new model better? What does the new model imply about the relationship between mass and size? Is it testing the same hypothesis as the previous model?
+5. Produce a publication-quality scatterplot for your final model with transformed data and add key regression statistics. Compute confidence intervals for the regression parameters and present alongside the graph. Use the function predict() to also include a graphical representation of the confidence intervals of the regression model.
+
+```{r eval = FALSE}
+# Predicted values with confidence and prediction limits #
+conf<-predict(model,interval="confidence",level=0.95)
+pred<-predict(model,interval="prediction",level=0.95,newdata=data)
+# What is the difference between confidence and prediction intervals?
+
+# perhaps useful
+matlines(data$age,conf,lty=c(1,2,2),col="black")
+text(locator(1),paste("R2 = ",r2,", P<0.001",sep=""))
+
+```
+
+**Bonus**: Produce a scatterplot of width (x-axis) and mass (y-axis), on the original scale with no transformations. Add the regression **curve** from question 4 to your plot with confidence limits.
+
+
+
+
